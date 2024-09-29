@@ -1,3 +1,4 @@
+import { zeroPads } from "@/util";
 import { Tabs, Tab, Paper } from "@mui/material";
 import { ReactNode, useState, BaseSyntheticEvent } from "react";
 interface TabGroupProps {
@@ -17,8 +18,8 @@ const useTabGroup = (props:TabGroupProps) => {
   const handleChangeTab = (_:BaseSyntheticEvent,newVal:number) => setTabSelect(newVal)
   const TabGroup = () => {
     return (<Paper>
-      <Tabs value={tabSelect} onChange={handleChangeTab}>
-        {labelList.map((label,idx)=><Tab key={`tabId-${idx}`} label={`${(idx+1).toString().padStart(2,"0")}:${label}`} id={idx.toString()} />)}
+      <Tabs variant="fullWidth" centered value={tabSelect} onChange={handleChangeTab}>
+        {labelList.map((label,idx)=><Tab key={`tabId-${idx}`} label={`${zeroPads(idx+1)}:${label}`} id={idx.toString()} />)}
       </Tabs>
     </Paper>)
   }
