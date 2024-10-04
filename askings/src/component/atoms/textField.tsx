@@ -1,6 +1,7 @@
 import { TextField } from "@mui/material";
+import { BaseSyntheticEvent } from "react";
 
-const OrdersField = (props:{text:string}) => {
+export const OrdersField = (props:{text:string}) => {
   const onFocusInvalid = (e: React.FocusEvent<HTMLInputElement>) => {
     e.preventDefault();
     e.target.blur();
@@ -21,4 +22,15 @@ const OrdersField = (props:{text:string}) => {
 ></TextField>)
 }
 
-export default OrdersField
+export const PromptField = (props:{value:string, onChange: (e:BaseSyntheticEvent)=>void}) => {
+  const { value, onChange } = props
+  return (<TextField onChange={onChange} value={value}
+    fullWidth
+    size="small"
+    slotProps={{
+      htmlInput: {
+        sx: { paddingY:"2px", overflow: 'auto', fontSize: 10, lineHeight: '1.2' },
+      },
+    }}/>)
+}
+

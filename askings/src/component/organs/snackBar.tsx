@@ -11,17 +11,15 @@ type SnackBarReturnType = [
 const useSnackBar = (props:SnackBarProps) => {
   const [snack, setSnack] = useState(false)
   const onOpenSnack = () => setSnack(true)
-  const onCloseSnack = (_:any,reason?:SnackbarCloseReason) => (reason==='clickaway') ? ()=>{} : setSnack(false)
-  const snackBar = () => {
-    return (<Snackbar
+  const onCloseSnack = (reason?:SnackbarCloseReason) => (reason==='clickaway') ? ()=>{} : setSnack(false)
+  const snackBar = (<Snackbar
       open={snack}
       color="primary"
       autoHideDuration={1000}
-      onClose={onCloseSnack}
+      onClose={(_,reason)=>onCloseSnack(reason)}
       message={props.message}
-      action={<IconButton onClick={onCloseSnack}><CloseIcon/></IconButton>}/>)
-  }
-  return [ snackBar, onOpenSnack ] as SnackBarReturnType
+      action={<IconButton onClick={()=>setSnack(false)}><CloseIcon/></IconButton>}/>)
+  return [ ()=>snackBar, onOpenSnack ] as SnackBarReturnType
 }
 
 export default useSnackBar

@@ -5,10 +5,10 @@ interface TabGroupProps {
   initial:number
   labelList:string[]
 }
-type TabGroupReturnType = {
+type TabGroupReturnType = [
   TabGroup: ()=>ReactNode,
   tabSelect: number
-}
+]
 const useTabGroup = (props:TabGroupProps) => {
   const {
     initial,
@@ -23,7 +23,7 @@ const useTabGroup = (props:TabGroupProps) => {
       </Tabs>
     </Paper>)
   }
-  return { TabGroup, tabSelect } as TabGroupReturnType
+  return [ TabGroup, tabSelect ] as TabGroupReturnType
 }
 
 export default useTabGroup;

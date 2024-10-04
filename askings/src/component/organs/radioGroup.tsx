@@ -22,7 +22,7 @@ const useRadioGroup = (props:RadioGroupProps) => {
   const RadioGroupField = () => {
     return (
     <RadioGroup defaultValue={initial}>
-      {itemList.map((item,idx)=><Box padding={"0.1em"} display={"flex"} flexDirection={"row"}>
+      {itemList.map((item,idx)=><Box key={`radio${idx}`} padding={"0.1em"} display={"flex"} flexDirection={"row"}>
         <FormControlLabel key={idx}
           checked={idx === radioSelect}
           onChange={()=>handleChangeRadio(idx)}
