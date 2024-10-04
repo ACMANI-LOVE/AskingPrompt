@@ -1,0 +1,373 @@
+[
+  {
+    "basicSettings": {
+      "character": "獣人（メス）",
+      "model": "犬",
+      "raceOrSpecies": "サモエド",
+      "mind": "秩序／邪悪",
+      "genitalSettings": {
+        "maleGenital": "なし",
+        "genitalSize": "なし"
+      },
+      "situation": {
+        "period_setting": "未来",
+        "weather_setting": "快晴",
+        "time_setting": "朝から夕方までの間"
+      },
+      "background": {
+        "location": "未来都市の公園",
+        "job": "セキュリティガード",
+        "outfit": "未来的なセキュリティ制服",
+        "item1": "ホロフォン",
+        "item2": "レーザーガン",
+        "item3": "セキュリティバッジ"
+      }
+    },
+    "characterSettings": {
+      "looksOfFace": "熟年",
+      "looksOfEyes": "糸目",
+      "hairSettings": {
+        "hairSize": "ロング",
+        "hairStyle": "ストレート",
+        "bangSize": "サイドに分けた前髪",
+        "bangStyle": "サイドに分けた前髪"
+      },
+      "bodySettings": {
+        "skinType": "毛皮",
+        "figureType": "細身",
+        "bustSize": "大",
+        "waistSize": "筋肉質",
+        "hipsSize": "普通",
+        "legsSize": "太い"
+      }
+    },
+    "colorSettings": {
+      "groupA1": "白",
+      "groupA2": "クリーム",
+      "groupA3": "グレー",
+      "groupB1": "ブラック",
+      "groupB2": "ダークグレー",
+      "groupC1": "ベージュ",
+      "groupC2": "ライトブラウン"
+    },
+    "title": "未来の都市で警備に従事するサモエドのセキュリティガード"
+  },
+  {
+    "basicSettings": {
+      "character": "人型（両性）",
+      "model": "妖怪",
+      "raceOrSpecies": "山の精霊",
+      "mind": "混沌／中立",
+      "desire": "普通",
+      "genitalSettings": {
+        "maleGenital": "あり",
+        "genitalSize": "大"
+      },
+      "situation": {
+        "period_setting": "古代",
+        "weather_setting": "快晴",
+        "time_setting": "朝から夕方までの間"
+      },
+      "background": {
+        "location": "古代の神殿の近くの森",
+        "job": "森の守り手",
+        "outfit": "古代の儀式用のローブ",
+        "item1": "神秘的な杖",
+        "item2": "古代の巻物",
+        "item3": "霊的な護符"
+      }
+    },
+    "characterSettings": {
+      "looksOfFace": "熟年",
+      "looksOfEyes": "タレ目",
+      "hairSettings": {
+        "hairSize": "ロング",
+        "hairStyle": "ウェーブ",
+        "bangStyle": "前髪は長めでサイドに流す"
+      },
+      "bodySettings": {
+        "skinType": "皮膚",
+        "figureType": "普通",
+        "bustSize": "普通",
+        "waistSize": "筋肉質",
+        "hipsSize": "大",
+        "legsSize": "太い"
+      }
+    },
+    "colorSettings": {
+      "groupA1": "深緑",
+      "groupA2": "淡い緑",
+      "groupA3": "ブラウン",
+      "groupB1": "ダークグリーン",
+      "groupB2": "ゴールド",
+      "groupC1": "アイボリー",
+      "groupC2": "スモーキーグレー"
+    },
+    "title": "古代の森を守る山の精霊"
+  },
+  {
+    "basicSettings": {
+      "character": "人型（両性）",
+      "model": "ゾンビ",
+      "raceOrSpecies": "腐敗した貴族",
+      "mind": "秩序／邪悪",
+      "desire": "普通",
+      "genitalSettings": {
+        "maleGenital": "あり",
+        "genitalSize": "普通"
+      },
+      "situation": {
+        "period_setting": "現代",
+        "weather_setting": "快晴",
+        "time_setting": "夜から朝方までの間"
+      },
+      "background": {
+        "location": "古びた屋敷の地下室",
+        "job": "秘宝を守る者",
+        "outfit": "破れた貴族の衣装",
+        "item1": "魔法の鏡",
+        "item2": "錆びた剣",
+        "item3": "呪われた書物"
+      }
+    },
+    "characterSettings": {
+      "looksOfFace": "熟年",
+      "looksOfEyes": "糸目",
+      "hairSettings": {
+        "hairSize": "メディアム",
+        "hairStyle": "ボブ",
+        "bangStyle": "前髪は揃えている"
+      },
+      "bodySettings": {
+        "skinType": "皮膚",
+        "figureType": "細身",
+        "bustSize": "巨大",
+        "waistSize": "ぽっちゃり",
+        "hipsSize": "大",
+        "legsSize": "普通"
+      }
+    },
+    "colorSettings": {
+      "groupA1": "灰色",
+      "groupA2": "青緑",
+      "groupA3": "黒",
+      "groupB1": "赤紫",
+      "groupB2": "血のような赤",
+      "groupC1": "黄土色",
+      "groupC2": "青白"
+    },
+    "title": "現代の夜にひそかに秘宝を守る腐敗した貴族のゾンビ"
+  },
+  {
+    "basicSettings": {
+      "character": "人型（両性）",
+      "model": "褐色系",
+      "raceOrSpecies": "砂漠の守護者",
+      "mind": "中立／善良",
+      "desire": "強い",
+      "genitalSettings": {
+        "maleGenital": "あり",
+        "genitalSize": "普通"
+      },
+      "situation": {
+        "period_setting": "古代",
+        "weather_setting": "雨天",
+        "time_setting": "夕から深夜までの間"
+      },
+      "background": {
+        "location": "古代の砂漠の遺跡",
+        "job": "遺跡の守り手",
+        "outfit": "砂漠の守護者の儀式用衣装",
+        "item1": "神秘のアミュレット",
+        "item2": "古代の地図",
+        "item3": "雷の杖"
+      }
+    },
+    "characterSettings": {
+      "looksOfFace": "熟年",
+      "looksOfEyes": "糸目",
+      "hairSettings": {
+        "hairSize": "ロング",
+        "hairStyle": "ウェーブ",
+        "bangStyle": "前髪は長めでサイドに流す"
+      },
+      "bodySettings": {
+        "skinType": "皮膚",
+        "figureType": "細身",
+        "bustSize": "大",
+        "waistSize": "筋肉質",
+        "hipsSize": "巨大",
+        "legsSize": "太い"
+      }
+    },
+    "colorSettings": {
+      "groupA1": "深いブラウン",
+      "groupA2": "サンドベージュ",
+      "groupA3": "オリーブグリーン",
+      "groupB1": "ダークブラウン",
+      "groupB2": "ゴールド",
+      "groupC1": "黒",
+      "groupC2": "スモーキーグレー"
+    },
+    "title": "古代砂漠の守護者、強い意志を持つ優れた戦士"
+  },
+  {
+    "basicSettings": {
+      "character": "人型（両性）",
+      "model": "アジア系",
+      "raceOrSpecies": "未来のエリート戦士",
+      "mind": "中立／中立",
+      "desire": "普通",
+      "genitalSettings": {
+        "maleGenital": "あり",
+        "genitalSize": "巨大"
+      },
+      "situation": {
+        "period_setting": "未来",
+        "weather_setting": "降雪",
+        "time_setting": "夜から朝方までの間"
+      },
+      "background": {
+        "location": "未来の都市の高層ビルの屋上",
+        "job": "セキュリティオペレーター",
+        "outfit": "未来的な防寒スーツ",
+        "item1": "ホログラフィックデバイス",
+        "item2": "エナジーシールド",
+        "item3": "冷却ジェルパック"
+      }
+    },
+    "characterSettings": {
+      "looksOfFace": "若々しい",
+      "looksOfEyes": "糸目",
+      "hairSettings": {
+        "hairSize": "ロング",
+        "hairStyle": "ストレート",
+        "bangStyle": "前髪は軽く流す"
+      },
+      "bodySettings": {
+        "skinType": "皮膚",
+        "figureType": "細身",
+        "bustSize": "大",
+        "waistSize": "普通",
+        "hipsSize": "大",
+        "legsSize": "普通"
+      }
+    },
+    "colorSettings": {
+      "groupA1": "シルバー",
+      "groupA2": "ホワイト",
+      "groupA3": "アイスブルー",
+      "groupB1": "ブラック",
+      "groupB2": "ダークグレー",
+      "groupC1": "ライトグレー",
+      "groupC2": "クリスタルブルー"
+    },
+    "title": "未来都市の雪の中で戦うエリート戦士"
+  },
+  {
+    "basicSettings": {
+      "character": "人型（両性）",
+      "model": "エルフ",
+      "raceOrSpecies": "雪のエルフ",
+      "mind": "秩序／善良",
+      "desire": "普通",
+      "genitalSettings": {
+        "maleGenital": "あり",
+        "genitalSize": "普通"
+      },
+      "situation": {
+        "period_setting": "現代",
+        "weather_setting": "降雪",
+        "time_setting": "夕から深夜までの間"
+      },
+      "background": {
+        "location": "雪に覆われたエルフの森",
+        "job": "自然の守護者",
+        "outfit": "エルフの防寒ローブ",
+        "item1": "氷の杖",
+        "item2": "精霊の護符",
+        "item3": "雪の中の隠し刃"
+      }
+    },
+    "characterSettings": {
+      "looksOfFace": "若々しい",
+      "looksOfEyes": "ジト目",
+      "hairSettings": {
+        "hairSize": "ロング",
+        "hairStyle": "ストレート",
+        "bangStyle": "前髪は長めで片側に流す"
+      },
+      "bodySettings": {
+        "skinType": "皮膚",
+        "figureType": "普通",
+        "bustSize": "普通",
+        "waistSize": "ぽっちゃり",
+        "hipsSize": "普通",
+        "legsSize": "太い"
+      }
+    },
+    "colorSettings": {
+      "groupA1": "アイスブルー",
+      "groupA2": "ホワイト",
+      "groupA3": "シルバー",
+      "groupB1": "ライトグレー",
+      "groupB2": "ミスティブルー",
+      "groupC1": "ダークブルー",
+      "groupC2": "ブラック"
+    },
+    "title": "雪のエルフ、冬の精霊の守り手"
+  },
+  {
+    "basicSettings": {
+      "character": "獣人（両性）",
+      "model": "ドラゴン",
+      "raceOrSpecies": "霜龍",
+      "mind": "秩序／中立",
+      "desire": "強い",
+      "genitalSettings": {
+        "maleGenital": "あり",
+        "genitalSize": "普通"
+      },
+      "situation": {
+        "period_setting": "現代",
+        "weather_setting": "曇天",
+        "time_setting": "夕から深夜までの間"
+      },
+      "background": {
+        "location": "山間の古代の遺跡",
+        "job": "守護者",
+        "outfit": "装飾の施された防寒具",
+        "item1": "氷の杖",
+        "item2": "龍の牙の首飾り",
+        "item3": "古代の巻物"
+      }
+    },
+    "characterSettings": {
+      "looksOfFace": "年相応",
+      "looksOfEyes": "糸目",
+      "hairSettings": {
+        "hairSize": "ショート",
+        "hairStyle": "スパイキー",
+        "bangStyle": "前髪は無く、全体的に立っている"
+      },
+      "bodySettings": {
+        "skinType": "鱗",
+        "figureType": "普通",
+        "bustSize": "大",
+        "waistSize": "筋肉質",
+        "hipsSize": "巨大",
+        "legsSize": "太い"
+      }
+    },
+    "colorSettings": {
+      "groupA1": "氷の青",
+      "groupA2": "白銀",
+      "groupA3": "霜の青",
+      "groupB1": "グレー",
+      "groupB2": "ブラック",
+      "groupC1": "淡い青緑",
+      "groupC2": "深い青"
+    },
+    "title": "氷の守護者、霜龍の誇り"
+  }
+]
