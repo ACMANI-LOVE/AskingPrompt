@@ -1,4 +1,3 @@
-import { ContextProvider } from "@/component/context";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,7 +13,7 @@ export default function RootLayout({
   return (
     <html lang="jp">
       <body className={"AskingPrompt-Body"}>
-        <ContextProvider>{children}</ContextProvider>
+        {children}
       </body>
     </html>
   );

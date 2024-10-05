@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: '/AskingPrompt',
+  assetPrefix: '/AskingPrompt/',
+  distDir: "out",
   output: "export",
-  distDir: "./out"
+  trailingSlash: true,
 };
 
 export default nextConfig;
