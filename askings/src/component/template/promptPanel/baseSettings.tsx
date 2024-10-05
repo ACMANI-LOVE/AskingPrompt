@@ -2,32 +2,45 @@ import { LabelText, ItemText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
 import { SummaryPromptContext } from "@/component/context"
 import { ViewItem, EditItem, DisplayItem, Order, OrderWithCheckBox, BlocItem, AdditionalItem } from "@/component/molecules/promptItem"
-import { getModelsData } from "@/const/cons_promptOrder"
 import { BaseSettingsProps } from "@/const/cons_promptProps"
 import { Box, Divider } from "@mui/material"
-import { useState, BaseSyntheticEvent, useEffect, useContext } from "react"
+import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
 
 const BaseSettings    = () => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property = summaryPrompt.baseProps as BaseSettingsProps
+  const property      = useRef<BaseSettingsProps>(summaryPrompt.baseProps)
+  const onUpdateProps = useRef((prompts:string[])=>{
+  const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
+    setDisplay(summaryPrompt)
+    setSummaryPrompt(prev=>({
+    ...prev, baseProps: {
+      ...prev.baseProps,
+      base      : baseInput    ,
+      nsfw      : chkNsfw      ,
+      solo      : chkSolo      ,
+      cute      : chkCute      ,
+      additional: additional   ,
+      prompts   : summaryPrompt,
+    },
+  }))})
 
-  const storyOrder     = property.story
-  const modelOrder     = getModelsData({enums:property.model}).order
-  const characterOrder = property.character
-  const speciesOrder   = property.species
+  const storyOrder     = property.current.story
+  const modelOrder     = property.current.model
+  const characterOrder = property.current.character
+  const speciesOrder   = property.current.species
 
-  const [baseInput , setBaseInput ] = useState(property.base       ?? ""  )
-  const [chkNsfw   , setChkNsfw   ] = useState(property.nsfw       ?? true)
-  const [chkSolo   , setChkSolo   ] = useState(property.solo       ?? true)
-  const [chkCute   , setChkCute   ] = useState(property.cute       ?? true)
-  const [additional, setAdditional] = useState(property.additional ?? ""  )
+  const [baseInput , setBaseInput ] = useState(property.current.base      )
+  const [chkNsfw   , setChkNsfw   ] = useState(property.current.nsfw      )
+  const [chkSolo   , setChkSolo   ] = useState(property.current.solo      )
+  const [chkCute   , setChkCute   ] = useState(property.current.cute      )
+  const [additional, setAdditional] = useState(property.current.additional)
 
-  const [display, setDisplay] = useState(property.prompts ?? "")
+  const [display, setDisplay] = useState(property.current.prompts)
 
   const handleChangeNsfwCheck  = ()=>setChkNsfw(!chkNsfw)
   const handleChangeSoloCheck  = ()=>setChkSolo(!chkSolo)
   const handleChangeCuteCheck  = ()=>setChkCute(!chkCute)
-  const handleBasePromptChange = (e:BaseSyntheticEvent) => setBaseInput(e.target.value)
+  const handleBasePromptChange = (e:BaseSyntheticEvent) => setBaseInput (e.target.value)
   const handleAdditionalChange = (e:BaseSyntheticEvent) => setAdditional(e.target.value)
 
   useEffect(()=>{
@@ -38,26 +51,13 @@ const BaseSettings    = () => {
       baseInput,
       additional,
     ]
-    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
-    setDisplay(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, baseProps: {
-        ...prev.baseProps,
-        base     : baseInput    ,
-        nsfw      : chkNsfw      ,
-        solo      : chkSolo      ,
-        cute      : chkCute      ,
-        additional  : additional   ,
-        prompts   : summaryPrompt,
-      },
-    }))
+    onUpdateProps.current(prompts)
   },[
     baseInput ,
     chkNsfw   ,
     chkSolo   ,
     chkCute   ,
     additional,
-    setSummaryPrompt,
   ])
 
   return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>

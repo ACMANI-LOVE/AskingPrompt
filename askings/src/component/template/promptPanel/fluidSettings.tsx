@@ -4,54 +4,47 @@ import { EditItem, OrderWithCheckBox, MultiAdditional, MultiDisplay } from "@/co
 import { FluidSettingsProps } from "@/const/cons_promptProps"
 import { eightString } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { useContext, useState, useEffect } from "react"
+import { useContext, useState, useEffect, useRef } from "react"
 
 const FluidSettings   = () => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property = summaryPrompt.fluidProps as FluidSettingsProps
-  const emptyPrompt = Array.from({length:5},()=>"")
-
-  const [tier           , setTier           ] = useState(property.fluidTier      ?? 0   )
-  const [fluidsInputList, setFluidsInputList] = useState(property.fluidsList     ?? emptyPrompt  )
-  const [additionalList , setAdditionalList ] = useState(property.additionalList ?? emptyPrompt  )
-
-  const [displayList    , setDisplayList    ] = useState(property.promptList     ?? emptyPrompt  )
-
-  const handleChangeTierSelect = (value:number) => setTier((value!==tier)?value:0)
-  const handleAdditionalChange = (val:string,id:number) => setAdditionalList(prev=>prev.map((prevItem,idx)=>(idx===id)?val:prevItem))
-
-  useEffect(()=>{
-    const fluidsPromptList = fluidsInputList.map(()=>(property.nsfw) ? eightString() : eightString())
-    setFluidsInputList(fluidsPromptList)
+  const property      = useRef<FluidSettingsProps>(summaryPrompt.fluidProps)
+  const onUpdateProps = useRef((summaryPrompt:string[])=>{
     setSummaryPrompt(prev=>({
       ...prev, fluidProps: {
         ...prev.fluidProps,
-        fluidTier  : tier,
-        fluidsList : fluidsPromptList,
-      },
-    }))
-  },[
-    tier,
-    fluidsInputList,
-    property.nsfw,
-    setSummaryPrompt,
-  ])
-  useEffect(()=>{
-    const summaryPrompt = displayList.map((_,idx)=>fluidsInputList[idx]+additionalList[idx])
-    setDisplayList(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, fluidProps: {
-        ...prev.fluidProps,
+        fluidTier     : tier,
+        fluidsList    : fluidsInputList,
         additionalList: additionalList ,
         promptList    : summaryPrompt  ,
       },
     }))
-  },[
+  })
+
+  const [tier           , setTier           ] = useState(property.current.fluidTier     )
+  const [fluidsInputList, setFluidsInputList] = useState(property.current.fluidsList    )
+  const [additionalList , setAdditionalList ] = useState(property.current.additionalList)
+
+  const [displayList    , setDisplayList    ] = useState(property.current.promptList    )
+
+  const handleChangeTierSelect = (value:number) => setTier((value!==tier)?value:0)
+  const handleAdditionalChange = (val:string,id:number) => setAdditionalList(prev=>prev.map((prevItem,idx)=>(idx===id)?val:prevItem))
+
+  const nsfwFlag = property.current.nsfw
+
+  // TODO: Refresh EmotionList
+  useEffect(()=>setFluidsInputList(prev=>prev.map(()=>(nsfwFlag) ? eightString() : eightString()))
+  ,[
+    tier,
+    nsfwFlag,
+  ])
+  useEffect(()=>setDisplayList(prev=>prev.map((_,idx)=>fluidsInputList[idx]+additionalList[idx]))
+  ,[
     fluidsInputList,
     additionalList ,
-    displayList,
-    setSummaryPrompt,
   ])
+  useEffect(()=>onUpdateProps.current(displayList),[displayList])
+
 return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'FluidsSetting Prompt'}/>
     <Divider/>

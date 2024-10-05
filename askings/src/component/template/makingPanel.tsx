@@ -3,7 +3,7 @@ import GetAppIcon from '@mui/icons-material/GetApp';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import UploadIcon from '@mui/icons-material/Upload';
 import { Box, Paper, Divider, IconButton } from '@mui/material';
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useRef } from 'react';
 import { ItemText, LabelText } from '../atoms/text';
 import useRadioGroup from '../organs/radioGroup';
 // import usePromptProperties from '@/hooks/usePromptProperties';
@@ -19,37 +19,38 @@ import EmotionSettings from './promptPanel/emotionSettings';
 import ActionSettings from './promptPanel/actionSettings';
 import PosingSettings from './promptPanel/posingSettings';
 import { OrderChecker, RowDirection } from '../molecules/promptItem';
+import useHiddenUploadForm from '../organs/uploadFIle';
 
 const MakingPanel = () => {
   const {selection, setSelection} = useContext(SelectContext)
   const {dataList,  setDataList } = useContext(DataListContext)
+  const updateOrder = useRef((newOrder:number) => {
+    setSelection(prev=>({...prev, orderSelect:newOrder }))
+    setDataList(prev=>({...prev}))
+  })
+  const updateSettings = useRef((newSettings:number) => {
+    setSelection(prev=>({...prev, settingSelect:newSettings }))
+  })
 
   const ordersLabel = dataList.orderList.map((_,idx)=>`Order:${zeroPads(idx+1)}`)
   const [OrderRadio, selectOrderRadio] = useRadioGroup({
     initial:  selection.orderSelect,
     itemList: ordersLabel
   })
-  useEffect(()=>{
-    setSelection(prev=>({
-      ...prev,
-      orderSelect:selectOrderRadio
-    }))
-    setDataList(prev=>({...prev}))
-  },[selectOrderRadio, setDataList, setSelection])
 
   const [SettingsRadio, selectSettingsRadio] = useRadioGroup({
     initial:  selection.settingSelect,
     itemList: dataList.promptLabel
   })
-  useEffect(()=>setSelection(prev=>({
-    ...prev,
-    settingSelect:selectSettingsRadio
-  })),[selectSettingsRadio, setSelection])
+
+  useEffect(()=>updateOrder   .current(selectOrderRadio   ),[selectOrderRadio   ])
+  useEffect(()=>updateSettings.current(selectSettingsRadio),[selectSettingsRadio])
 
   const OrdersField = () => {
     const onClickSave     = () =>downloadByJson(dataList.orderList)
     const onClickLoad     = () =>{}
-    const onClickUpload   = () =>{}
+    const {UploadForm, onClickUpload} = useHiddenUploadForm({onUpload:()=>{}})
+
     return (<Box>
       <Paper><Box padding={"0.5em 1em 0.5em 0.5em"} display={"flex"} flexDirection={"column"}>
         <LabelText bold text={"3. Select Order"}/>
@@ -63,7 +64,10 @@ const MakingPanel = () => {
         <Divider/>
         <IconButton onClick={onClickSave  }><LabelText bold text={"Save Order: " }/><SaveAltIcon/></IconButton>
         <Divider/>
-        <IconButton onClick={onClickLoad  }><LabelText bold text={"Load Order: " }/><GetAppIcon/></IconButton>
+        <IconButton onClick={onClickLoad  }><LabelText bold text={"Load Order: " }/>
+          <GetAppIcon/>
+          <UploadForm/>
+        </IconButton>
         <IconButton onClick={onClickUpload}><LabelText bold text={"Upload File: "}/><UploadIcon/></IconButton>
       </Box></Paper>
     </Box>)

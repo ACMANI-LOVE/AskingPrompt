@@ -2,30 +2,42 @@ import { LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
 import { SummaryPromptContext } from "@/component/context"
 import { EditItem, OrderWithPrompt, DisplayItem, ViewItem, Order, RowDirection, BlocItem, AdditionalItem } from "@/component/molecules/promptItem"
-import { getSkinData, getFigureData, getBoobSizeData, getBodySizeData, getButtSizeData } from "@/const/cons_promptOrder"
 import { BodySettingsProps } from "@/const/cons_promptProps"
 import { Box, Divider } from "@mui/material"
-import { useContext, useState, BaseSyntheticEvent, useEffect } from "react"
+import { useContext, useState, BaseSyntheticEvent, useEffect, useRef } from "react"
 
 const BodySettings    = () => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property = summaryPrompt.bodyProps as BodySettingsProps
-  const mainColorOrder = property.mainBodyColor
-  const subColorOrder  = property.subBodyColor
-  const skinTypeOrder  = getSkinData    ({enums:property.skinTypeOrder}).order
-  const bodyTypeOrder  = getFigureData  ({enums:property.bodyTypeOrder}).order
-  const bodyTypePrompt = Number(getFigureData({enums:property.bodyTypeOrder}).prompt)
+  const property      = useRef<BodySettingsProps>(summaryPrompt.bodyProps)
+  const onUpdateProps = useRef((prompts:string[])=>{
+    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
+    setDisplay(summaryPrompt)
+    setSummaryPrompt(prev=>({
+      ...prev, bodyProps: {
+        ...prev.bodyProps,
+        skinInput : skinPrompt   ,
+        additional  : additional   ,
+        prompts   : summaryPrompt,
+      },
+    }))
+  })
 
-  const boobSizeOrder  = getBoobSizeData({enums:property.boobSizeOrder}).order[bodyTypePrompt]
-  const bodySizeOrder  = getBodySizeData({enums:property.bodySizeOrder}).order[bodyTypePrompt]
-  const buttSizeOrder  = getButtSizeData({enums:property.buttSizeOrder}).order[bodyTypePrompt]
-  const boobSizePrompt  = getBoobSizeData({enums:property.boobSizeOrder}).prompt[bodyTypePrompt]
-  const bodySizePrompt  = getBodySizeData({enums:property.bodySizeOrder}).prompt[bodyTypePrompt]
-  const buttSizePrompt  = getButtSizeData({enums:property.buttSizeOrder}).prompt[bodyTypePrompt]
-  const [skinPrompt, setSkinPrompt] = useState(property.skinPrompt ?? ""  )
-  const [additional, setAdditional] = useState(property.additional ?? ""  )
+  const mainColorOrder = property.current.mainBodyColor
+  const subColorOrder  = property.current.subBodyColor
+  const skinTypeOrder  = property.current.skinType.order
+  const bodyTypeOrder  = property.current.bodyType.order
+  const bodyTypePrompt = property.current.bodyType.prompt
 
-  const [display, setDisplay] = useState(property.prompts ?? "")
+  const boobSizeOrder  = property.current.boobSize.order [Number(bodyTypePrompt)]
+  const bodySizeOrder  = property.current.bodySize.order [Number(bodyTypePrompt)]
+  const buttSizeOrder  = property.current.buttSize.order [Number(bodyTypePrompt)]
+  const boobSizePrompt = property.current.boobSize.prompt[Number(bodyTypePrompt)]
+  const bodySizePrompt = property.current.bodySize.prompt[Number(bodyTypePrompt)]
+  const buttSizePrompt = property.current.buttSize.prompt[Number(bodyTypePrompt)]
+  const [skinPrompt, setSkinPrompt] = useState(property.current.skinPrompt)
+  const [additional, setAdditional] = useState(property.current.additional)
+
+  const [display, setDisplay] = useState(property.current.prompts)
 
   const handleSkinPromptChange = (e:BaseSyntheticEvent) => setSkinPrompt(e.target.value)
   const handleAdditionalChange = (e:BaseSyntheticEvent) => setAdditional(e.target.value)
@@ -40,16 +52,7 @@ const BodySettings    = () => {
       buttSizePrompt,
       additional,
     ]
-    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
-    setDisplay(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, bodyProps: {
-        ...prev.bodyProps,
-        skinInput : skinPrompt   ,
-        additional  : additional   ,
-        prompts   : summaryPrompt,
-      },
-    }))
+    onUpdateProps.current(prompts)
   },[
     skinPrompt,
     additional,
@@ -57,7 +60,6 @@ const BodySettings    = () => {
     bodySizePrompt,
     boobSizePrompt,
     buttSizePrompt,
-    setSummaryPrompt,
   ])
 
 return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>

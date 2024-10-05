@@ -1,68 +1,119 @@
-import { getRandomPosingData } from "@/const/cons_promptOrder"
+import { getAgesData, getBangsSizeData, getBodySizeData, getBoobSizeData, getButtSizeData, getEyesShapeData, getFigureData, getGenitalData, getGenitalSizeData, getHairSizeData, getMindData, getModelsData, getPeriodData, getRandomPosingData, getSkinData, getTimesData, getWeatherData } from "@/const/cons_promptOrder"
 import { ActionSettingsProps, BaseSettingsProps, BodySettingsProps, EmotionSettingsProps, FaceSettingsProps, FluidSettingsProps, GenitalSettingsProps, HairSettingsProps, PosingSettingsProps, SceneSettingsProps, SummaryPromptType } from "@/const/cons_promptProps"
 
 const usePromptProperties = (props:{order?:string}) => {
   const order = props.order ?? undefined
   const emptyPrompt = (!order) ? Array.from({length:5},()=>"") : []
-
+  const emptyStrings = "- empty -"
   const baseProps   :BaseSettingsProps    = {
-    story    : "@@@empty story@@@",
-    model    : 0,
-    character: "@@@empty character@@@",
-    species  : "@@@empty species@@@"
+    story    : emptyStrings,
+    model    : getModelsData({ enums: 0 }).order,
+    character: emptyStrings,
+    species  : emptyStrings,
+    base       : "",
+    nsfw       : false,
+    solo       : false,
+    cute       : false,
+    additional : "",
+    prompts    : ""
   }
   const hairProps   :HairSettingsProps    = {
-    hairColor : "@@@empty hairColor@@@",
-    hairSize  : 0,
-    bangsSize : 0,
-    hairStyle : "@@@empty hairStyle@@@",
-    bangsStyle: "@@@empty bangsStyle@@@"
+    hairColor : emptyStrings,
+    hairSize  : getHairSizeData ({ enums: 0 }),
+    bangsSize : getBangsSizeData({ enums: 0 }),
+    hairStyle : emptyStrings,
+    bangsStyle: emptyStrings,
+    hairColorPrompt : "",
+    hairStylePrompt : "",
+    bangsStylePrompt: "",
+    additional     : "",
+    prompts        : ""
   }
   const faceProps   :FaceSettingsProps    = {
-    faceLooks   : 0,
-    personalityOrder : 0,
-    eyesShapeOrder   : 0,
-    eyesColorOrder   : "@@@empty eyesColor@@@"
+    faceLooks       : getAgesData({ enums: 0 }),
+    personality: getMindData({ enums: 0 }),
+    eyesShape  : getEyesShapeData({ enums: 0 }),
+    eyesColor  : emptyStrings,
+    eyesColorPrompt : "",
+    random    : false,
+    closeEyes : false,
+    openMouth : false,
+    tongueOut : false,
+    additional: "",
+    prompts   : ""
   }
   const bodyProps   :BodySettingsProps    = {
-    skinTypeOrder: 0,
-    mainBodyColor: "@@@main color@@@",
-    subBodyColor:  "@@@sub color@@@",
-    bodyTypeOrder: 0,
-    boobSizeOrder: 0,
-    bodySizeOrder: 0,
-    buttSizeOrder: 0
+    skinType     : getSkinData({ enums: 0 }),
+    bodyType     : getFigureData({ enums: 0 }),
+    mainBodyColor: emptyStrings,
+    subBodyColor : emptyStrings,
+    boobSize     : getBoobSizeData({ enums: 0 }),
+    bodySize     : getBodySizeData({ enums: 0 }),
+    buttSize     : getButtSizeData({ enums: 0 }),
+    skinPrompt: "",
+    additional: "",
+    prompts   : ""
   }
   const sceneProps  :SceneSettingsProps   = {
-    periodOrder     : 0,
-    weatherOrder    : 0,
-    timesOrder      : 0,
-    mainColorOrder  : "@@@empty mainColorOrder@@@",
-    subColorOrder   : "@@@empty subColorOrder@@@",
-    accentColorOrder: "@@@empty accentColorOrder@@@",
-    locationOrder   : "@@@empty locationOrder@@@",
-    jobOrder        : "@@@empty jobOrder@@@",
-    outfitOrder     : "@@@empty outfitOrder@@@",
-    itemsOrder      : "@@@empty itemsOrder@@@"
+    location   : emptyStrings,
+    job        : emptyStrings,
+    outfit     : emptyStrings,
+    items      : emptyStrings,
+    mainColor  : emptyStrings,
+    subColor   : emptyStrings,
+    accentColor: emptyStrings,
+    period     : getPeriodData({ enums: 0 }),
+    weather    : getWeatherData({ enums: 0 }),
+    times      : getTimesData({ enums: 0 }),
+    simple        : false,
+    locationPrompt: "",
+    outfitPrompt  : "",
+    condition     : "",
+    equip         : "",
+    additional    : "",
+    prompts       : ""
   }
   const genitalProps:GenitalSettingsProps = {
-    maleGenitalsOrder    : 0,
-    maleGenitalsSizeOrder: 0,
-    genitalsColorOrder   : "@@@empty genitalsColorOrder@@@"
+    maleGenitals    : getGenitalData({ enums: 0 }),
+    maleGenitalsSize: getGenitalSizeData({ enums: 0 }),
+    genitalsColor   : emptyStrings,
+    nsfw           : false,
+    random         : false,
+    publicHair     : false,
+    invertNipple   : false,
+    sheathPenis    : false,
+    genitalColor   : "",
+    pussyDetails   : "",
+    anusDetails    : "",
+    genitalsDetails: "",
+    additional     : "",
+    prompts        : ""
   }
   const fluidProps  :FluidSettingsProps   = {
-    nsfw: false
+    nsfw          : false,
+    fluidTier     : 0,
+    fluidsList    : emptyPrompt,
+    additionalList: emptyPrompt,
+    promptList    : emptyPrompt
   }
   const emotionProps:EmotionSettingsProps = {
-    nsfw: false
+    nsfw          : false,
+    emoteTier     : 0,
+    additionalList: emptyPrompt,
+    emotesList    : emptyPrompt,
+    promptList    : emptyPrompt
   }
   const posingProps :PosingSettingsProps  = {
-    posingList: emptyPrompt.map(()=>getRandomPosingData()),
+    posingList    : emptyPrompt.map(()=>getRandomPosingData()),
     additionalList: emptyPrompt,
-    promptList: emptyPrompt
+    promptList    : emptyPrompt
   }
   const actionProps :ActionSettingsProps  = {
-    nsfw: false
+    nsfw          : false,
+    actionTier    : 0,
+    actionsList   : emptyPrompt,
+    additionalList: emptyPrompt,
+    promptList    : emptyPrompt
   }
   return {
     baseProps   ,

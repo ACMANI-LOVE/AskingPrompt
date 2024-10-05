@@ -2,35 +2,51 @@ import { LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
 import { SummaryPromptContext } from "@/component/context"
 import { ViewItem, Order, EditItem, DisplayItem, OrderWithCheckBox, RowDirection, OrderWithPrompt, AdditionalItem, BlocItem } from "@/component/molecules/promptItem"
-import { getPeriodData, getTimesData, getWeatherData } from "@/const/cons_promptOrder"
 import { SceneSettingsProps } from "@/const/cons_promptProps"
+import { randBetween } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { useContext, useState, BaseSyntheticEvent, useEffect } from "react"
+import { useContext, useState, BaseSyntheticEvent, useEffect, useRef } from "react"
 
 const SceneSettings   = () => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property = summaryPrompt.sceneProps as SceneSettingsProps
+  const property      = useRef<SceneSettingsProps>(summaryPrompt.sceneProps)
+  const onUpdateProps = useRef((prompts:string[])=>{
+    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
+    setDisplay(summaryPrompt)
+    setSummaryPrompt(prev=>({
+      ...prev, sceneProps: {
+        ...prev.sceneProps,
+          simple        : chkSimple    ,
+          conditionInput: condition    ,
+          locationInput : locationInput,
+          outfitInput   : outfitInput  ,
+          equipInput    : equipInput   ,
+          additional    : additional   ,
+          prompts       : summaryPrompt,
+      },
+    }))
+  })
 
-  const periodOrder   = getPeriodData ({enums:property.periodOrder }).order
-  const weatherOrder  = getWeatherData({enums:property.weatherOrder}).order
-  const timesOrder    = getTimesData  ({enums:property.timesOrder  }).order
+  const periodOrder  = property.current.period .order
+  const weatherOrder = property.current.weather.order
+  const timesOrder   = property.current.times  .order
 
-  const locationOrder    = property.locationOrder
-  const mainColorOrder   = property.mainColorOrder
-  const subColorOrder    = property.subColorOrder
-  const accentColorOrder = property.accentColorOrder
-  const jobOrder    = property.jobOrder
-  const outfitOrder = property.outfitOrder
-  const itemsOrder  = property.itemsOrder
+  const mainColorOrder   = property.current.mainColor
+  const subColorOrder    = property.current.subColor
+  const accentColorOrder = property.current.accentColor
+  const locationOrder = property.current.location
+  const jobOrder      = property.current.job
+  const outfitOrder   = property.current.outfit
+  const itemsOrder    = property.current.items
 
-  const [chkSimple    , setChkSimple    ] = useState(property.simple     ?? false)
-  const [condition    , setCondition    ] = useState(property.condition  ?? ""  )
-  const [locationInput, setLocationInput] = useState(property.location   ?? ""  )
-  const [outfitInput  , setOutfitInput  ] = useState(property.outfit     ?? ""  )
-  const [equipInput   , setEquipInput   ] = useState(property.equip      ?? ""  )
-  const [additional   , setAdditional   ] = useState(property.additional ?? ""  )
+  const [chkSimple    , setChkSimple    ] = useState(property.current.simple    )
+  const [condition    , setCondition    ] = useState(property.current.condition )
+  const [locationInput, setLocationInput] = useState(property.current.locationPrompt)
+  const [outfitInput  , setOutfitInput  ] = useState(property.current.outfitPrompt  )
+  const [equipInput   , setEquipInput   ] = useState(property.current.equip     )
+  const [additional   , setAdditional   ] = useState(property.current.additional)
 
-  const [display, setDisplay] = useState(property.prompts ?? "")
+  const [display, setDisplay] = useState(property.current.prompts)
 
   const handleChangeSimpleCheck     = () => setChkSimple(!chkSimple)
   const handleChangeConditionSelect = (select:string) => setCondition((select!==condition)?select:"")
@@ -39,9 +55,9 @@ const SceneSettings   = () => {
   const handleEquipInputChange      = (e:BaseSyntheticEvent) => setEquipInput   (e.target.value)
   const handleAdditionalChange      = (e:BaseSyntheticEvent) => setAdditional   (e.target.value)
 
-  const periodPrompt  = getPeriodData ({enums:property.periodOrder }).prompt
-  const weatherPrompt = getWeatherData({enums:property.weatherOrder}).prompt
-  const timesPrompt   = getTimesData  ({enums:property.timesOrder  }).prompt
+  const periodPrompt  = property.current.period .prompt
+  const weatherPrompt = property.current.weather.prompt
+  const timesPrompt   = property.current.times  .prompt[randBetween(0,1)]
 
   useEffect(()=>{
     const period   = (chkSimple) ? ""                        : periodPrompt
@@ -58,20 +74,7 @@ const SceneSettings   = () => {
       location  ,
       additional,
     ]
-    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
-    setDisplay(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, sceneProps: {
-        ...prev.sceneProps,
-          simple        : chkSimple    ,
-          conditionInput: condition    ,
-          locationInput : locationInput,
-          outfitInput   : outfitInput  ,
-          equipInput    : equipInput   ,
-          additional    : additional   ,
-          prompts       : summaryPrompt,
-      },
-    }))
+    onUpdateProps.current(prompts)
   },[
     chkSimple    ,
     periodPrompt ,
@@ -82,7 +85,6 @@ const SceneSettings   = () => {
     outfitInput  ,
     equipInput   ,
     additional   ,
-    setSummaryPrompt,
   ])
 
   return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>

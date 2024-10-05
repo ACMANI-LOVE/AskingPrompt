@@ -4,54 +4,46 @@ import { EditItem, MultiAdditional, MultiDisplay, OrderWithCheckBox } from "@/co
 import { ActionSettingsProps } from "@/const/cons_promptProps"
 import { eightString } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 
 const ActionSettings   = () => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property = summaryPrompt.actionProps as ActionSettingsProps
-  const emptyPrompt = Array.from({length:5},()=>"")
-
-  const [tier            , setTier            ] = useState(property.actionTier      ?? 0   )
-  const [actionsInputList, setActionsInputList] = useState(property.actionsList     ?? emptyPrompt  )
-  const [additionalList  , setAdditionalList  ] = useState(property.additionalList  ?? emptyPrompt  )
-
-  const [displayList     , setDisplayList     ] = useState(property.promptList      ?? emptyPrompt  )
-
-  const handleChangeTierSelect = (value:number) => setTier((value!==tier)?value:0)
-  const handleAdditionalChange = (val:string,id:number) => setAdditionalList(prev=>prev.map((prevItem,idx)=>(idx===id)?val:prevItem))
-
-  useEffect(()=>{
-    const actionsPromptList = actionsInputList.map(()=>(property.nsfw) ? eightString() : eightString())
-    setActionsInputList(actionsPromptList)
+  const property      = useRef<ActionSettingsProps>(summaryPrompt.actionProps)
+  const onUpdateProps = useRef((summaryPrompt:string[])=>{
     setSummaryPrompt(prev=>({
-      ...prev, actionProps: {
-        ...prev.actionProps,
-        actionTier  : tier,
-        actionsList : actionsPromptList,
-      },
-    }))
-  },[
-    tier,
-    actionsInputList,
-    property.nsfw,
-    setSummaryPrompt,
-  ])
-  useEffect(()=>{
-    const summaryPrompt = displayList.map((_,idx)=>actionsInputList[idx]+additionalList[idx])
-    setDisplayList(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, actionProps: {
-        ...prev.actionProps,
+      ...prev, emotionProps: {
+        ...prev.emotionProps,
+        actionTier    : tier,
+        actionsList   : actionsInputList,
         additionalList: additionalList ,
         promptList    : summaryPrompt  ,
       },
     }))
-  },[
-    actionsInputList,
-    additionalList  ,
-    displayList,
-    setSummaryPrompt,
+  })
+  const [tier            , setTier            ] = useState(property.current.actionTier    )
+  const [actionsInputList, setActionsInputList] = useState(property.current.actionsList   )
+  const [additionalList  , setAdditionalList  ] = useState(property.current.additionalList)
+
+  const [displayList     , setDisplayList     ] = useState(property.current.promptList    )
+
+  const handleChangeTierSelect = (value:number) => setTier((value!==tier)?value:0)
+  const handleAdditionalChange = (val:string,id:number) => setAdditionalList(prev=>prev.map((prevItem,idx)=>(idx===id)?val:prevItem))
+
+  const nsfwFlag = property.current.nsfw
+
+  // TODO: Refresh EmotionList
+  useEffect(()=>setActionsInputList(prev=>prev.map(()=>(nsfwFlag) ? eightString() : eightString()))
+  ,[
+    tier,
+    nsfwFlag,
   ])
+  useEffect(()=>setDisplayList(prev=>prev.map((_,idx)=>actionsInputList[idx]+additionalList[idx]))
+  ,[
+    actionsInputList,
+    additionalList ,
+  ])
+  useEffect(()=>onUpdateProps.current(displayList),[displayList])
+
 return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'EmotionSetting Prompt'}/>
     <Divider/>
