@@ -118,7 +118,7 @@ export const listingFromJson = (file?: File):Promise<string[]>=> {
           resolve(stringify.slice(0,ORDERS))
         }
       } catch (err) {
-        return reject(undefined)
+        return reject(err)
       }
     }
 
