@@ -45,7 +45,7 @@ const AskingPanel = () => {
   })),[selectReqTab,setSelection])
 
   const onClickShuffle = async () => {
-    const response = await fetch('/api', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({shuffle:{id:requestSelect.current}} as RequestBodies)

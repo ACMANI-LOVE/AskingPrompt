@@ -43,7 +43,7 @@ export const SummaryPromptContext = createContext<{
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 export const ContextProvider = (props:{children:ReactNode}) => {
   const initial = async () => {
-    const response = await fetch('/api', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
      method: 'POST',
      headers: {'Content-Type': 'application/json'},
      body: JSON.stringify({init:{orders:ORDERS}} as RequestBodies)

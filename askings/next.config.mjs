@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: '/AskingPrompt',
-  assetPrefix: '/AskingPrompt/',
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   distDir: "out",
   output: "export",
   trailingSlash: true,
