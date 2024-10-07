@@ -12,9 +12,7 @@ import { ItemText, LabelText } from '@/component/atoms/text';
 import { zeroPads } from "@/util";
 import { DataListContext, SelectContext } from '../context';
 import { OrderChecker } from '../molecules/promptItem';
-import { RequestBodies, ResponseBodies } from '@/app/api/route';
-
-
+import getRequestPrompt from '@/app/api/func/getRequestPrompt';
 
 const AskingPanel = () => {
   const {selection, setSelection} = useContext(SelectContext)
@@ -24,34 +22,35 @@ const AskingPanel = () => {
   const requestList = useRef(dataList.requestList ?? [])
   const orderList   = useRef(dataList.orderList   ?? [])
 
-  useEffect(()=>{
-    requestList.current = dataList.requestList ?? [];
-    orderList  .current = dataList.orderList   ?? [];
-  },[dataList])
-
   const requestLabel = requestList.current.map((_,idx)=>`REQ:#${zeroPads(idx+1)}`)
   const ordersItem   = orderList.  current[orderSelect  .current]
   const requestItem  = requestList.current[requestSelect.current]
 
-
-  const [ReqTab,selectReqTab] = useTabGroup({
+  const [RequestTab,selectReqTab] = useTabGroup({
     initial: requestSelect.current,
     labelList: requestLabel
   })
-  useEffect(()=>setSelection(prev=>({
-    ...prev,
-    requestSelect:selectReqTab,
-    orderSelect  :selectReqTab,
-  })),[selectReqTab,setSelection])
+  useEffect(()=>{
+    requestSelect.current = selectReqTab;
+    orderSelect  .current = selectReqTab;
+    setSelection(prev=>({
+      ...prev,
+      requestSelect:selectReqTab,
+      orderSelect  :selectReqTab,
+    }))
+  },[selectReqTab,setSelection])
 
-  const onClickShuffle = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({shuffle:{id:requestSelect.current}} as RequestBodies)
-    })
-    const result:ResponseBodies = await response.json()
-    const { responseShuffle = "fetch failed" } = result
+  const onClickShuffle = () => {
+    console.log("SHUFFLEd!!!")
+    // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
+    //   method: 'POST',
+    //   headers: {'Content-Type': 'application/json'},
+    //   body: JSON.stringify({shuffle:{id:requestSelect.current}} as RequestBodies)
+    // })
+    // const result:ResponseBodies = await response.json()
+    // const { responseShuffle = "fetch failed" } = result
+    const responseShuffle = getRequestPrompt(requestSelect.current) ?? "fetch failed"
+    requestList.current = requestList.current.map((item,idx)=>(idx===requestSelect.current) ? responseShuffle : item)
 
     setDataList(prev=>({
       ...prev,
@@ -59,10 +58,13 @@ const AskingPanel = () => {
     }))
   }
   const onClickCopy    = () => navigator.clipboard.writeText(dataList.requestList[requestSelect.current]).finally(()=>openCopy())
-  const onClickPaste   = () => navigator.clipboard.readText().then((text)=>setDataList(prev=>({
-    ...prev,
-    orderList: prev.orderList.map((item,idx)=>(idx===orderSelect.current ? text : item))
-  }))).finally(()=>openPaste())
+  const onClickPaste   = () => navigator.clipboard.readText().then((text)=>{
+    orderList.current = orderList.current.map((item,idx)=>(idx===orderSelect.current) ? text : item)
+    setDataList(prev=>({
+      ...prev,
+      orderList: prev.orderList.map((item,idx)=>(idx===orderSelect.current ? text : item))
+    }))
+  }).finally(()=>openPaste())
   const onClickClean   = () => setDataList(prev=>({
     ...prev,
     orderList: prev.orderList.map((item,idx)=>(idx === orderSelect.current ? "{}" : item))
@@ -94,7 +96,7 @@ const AskingPanel = () => {
     </Box>)
   }
   return (<Box padding={"1em"} display={"flex"} flexDirection={"column"} gap={"0.5em"}>
-    <ReqTab/>
+    <RequestTab/>
     <OrderCheckField/>
     <Box padding={"0.5em"} display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
       <PaperFrame label={"1. Generate the Request "} item={requestItem}>

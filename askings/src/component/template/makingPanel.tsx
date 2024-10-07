@@ -1,5 +1,4 @@
 import { downloadByJson, zeroPads, listingFromJson } from '@/util';
-import GetAppIcon from '@mui/icons-material/GetApp';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import UploadIcon from '@mui/icons-material/Upload';
 import { Box, Paper, Divider, IconButton } from '@mui/material';
@@ -38,7 +37,6 @@ const MakingPanel = () => {
     itemList: dataList.promptLabel
   })
 
-  useEffect(()=>{alert("STOP")},[selection.orderSelect])
   useEffect(()=>updateOrder   .current(selectOrderRadio   ),[selectOrderRadio   ])
   useEffect(()=>updateSettings.current(selectSettingsRadio),[selectSettingsRadio])
 
@@ -47,7 +45,6 @@ const MakingPanel = () => {
     const [SnackFailed, openSnackFailed] = useSnackBar({message:'Upload FAILED!'});
 
     const onClickSave     = () =>downloadByJson(dataList.orderList)
-    const onClickLoad     = () =>{}
     const { UploadForm, onClickUpload } = useHiddenUploadForm({
       onUpload: async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -76,7 +73,6 @@ const MakingPanel = () => {
           <UploadIcon/>
           <UploadForm/>
         </IconButton>
-        <IconButton onClick={onClickLoad  }><LabelText bold text={"Load Order: " }/><GetAppIcon/></IconButton>
         <Divider/>
         <IconButton onClick={onClickSave  }><LabelText bold text={"Save Order: " }/><SaveAltIcon/></IconButton>
       </Box></Paper>

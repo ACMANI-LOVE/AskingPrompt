@@ -3,7 +3,7 @@ import { Models, Genital } from "@/const/cons_reqEnum";
 import { ModelsTypes, BasicSettings, SpeciesType, GenitalSettings, GenitalSizeTypes, SituationSettings, PeriodTypes, WeathersTypes, TimesTypes, HairDataSettings, HairSizeTypes, FaceDataSettings, AgesTypes, EyesShapeTypes, MindTypes, BodyDataSettings, SkinTypes, FigureTypes, FigureSizeTypes } from "@/const/cons_requestTypes";
 import { request_header } from "@/const/const_text";
 import { Animaloid, Humanoids } from "@/init/init";
-import { lotteryList, randBetween, randBool } from "@/util"
+import { lotteryList, randBetween, randBool, zeroPads } from "@/util"
 
 const getRequestPrompt = (idx:number) => {
   const promptHeader    = request_header
@@ -16,6 +16,7 @@ const getRequestPrompt = (idx:number) => {
   const situations      = SituationSelection();
 
   const promptBody =
+  `[${zeroPads(idx+1)}]\n`+
   `{                                                                                                                                                                \n`+
   `  "OTHER_INFO" : {                                                                                                                                               \n`+
   `    "baseSettings"  : {                                                                                                                                          \n`+
@@ -122,8 +123,8 @@ const SituationSelection = (): SituationSettings => {
 };
 // =========+=========+=========+=========+=========+=========+=========+=========+=========+=========+
 const HairDataSelection = (): HairDataSettings => {
-  const hairSize  = getHairSizeData ({ enums:randBetween(0, 2) as HairSizeTypes}).order as string;
-  const bangsSize = getBangsSizeData({ enums:randBetween(0, 2) as HairSizeTypes}).order as string;
+  const hairSize  = getHairSizeData ({ enums:randBetween(1, 3) as HairSizeTypes}).order as string;
+  const bangsSize = getBangsSizeData({ enums:randBetween(1, 3) as HairSizeTypes}).order as string;
   return { hairSize, bangsSize } as HairDataSettings;
 };
 // =========+=========+=========+=========+=========+=========+=========+=========+=========+=========+
@@ -144,10 +145,10 @@ const BodyDataSelection = (chara: ModelsTypes): BodyDataSettings => {
   const skin   = getSkinData    ({ enums:specieType as SkinTypes})
   const skinData   = Number(skin.prompt) ?? 0;
   const skinType   = skin.order  as string;
-  const figureType = getFigureData  ({ enums:randBetween(0, 1) as FigureTypes    }).order[skinData] as string;
-  const bustSize   = getBoobSizeData({ enums:randBetween(0, 2) as FigureSizeTypes}).order[skinData] as string;
-  const waistSize  = getBodySizeData({ enums:randBetween(0, 2) as FigureSizeTypes}).order[skinData] as string;
-  const hipsSize   = getButtSizeData({ enums:randBetween(0, 2) as FigureSizeTypes}).order[skinData] as string;
+  const figureType = getFigureData  ({ enums:randBetween(1, 2) as FigureTypes    }).order[skinData] as string;
+  const bustSize   = getBoobSizeData({ enums:randBetween(1, 3) as FigureSizeTypes}).order[skinData] as string;
+  const waistSize  = getBodySizeData({ enums:randBetween(1, 3) as FigureSizeTypes}).order[skinData] as string;
+  const hipsSize   = getButtSizeData({ enums:randBetween(1, 3) as FigureSizeTypes}).order[skinData] as string;
   return {
     skinType,
     figureType,
