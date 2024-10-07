@@ -22,7 +22,7 @@ export async function POST(request:NextRequest) {
     initItems: {
       request   : [],
       order     : [],
-      properties: [],
+      properties: []
     },
     responseShuffle: ""
   }
