@@ -7,17 +7,19 @@ import { Box, Divider, IconButton } from "@mui/material";
 import { useContext, useState, useEffect, useRef } from "react";
 import { getRandomPosingData } from "@/const/cons_promptOrder";
 
-const PosingSettings   = () => {
+const PosingSettings   = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<PosingSettingsProps>(summaryPrompt.posingProps)
+  const property      = useRef<PosingSettingsProps>(summaryPrompt[props.orderSelect].posingProps)
   const onUpdateProps = useRef((summaryPrompt:string[])=>{
-    setSummaryPrompt(prev=>({
-      ...prev, posingProps: {
-        ...prev.posingProps,
-        posingList    : posingList    ,
-        additionalList: additionalList,
-        promptList    : summaryPrompt ,
-      },
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? { ...prev, posingProps: {
+            ...prev.posingProps,
+            posingList    : posingList    ,
+            additionalList: additionalList,
+            promptList    : summaryPrompt ,
+          },
+      } : prev
     }))
   })
   const [posingList    , setPosingList    ] = useState(property.current.posingList    )

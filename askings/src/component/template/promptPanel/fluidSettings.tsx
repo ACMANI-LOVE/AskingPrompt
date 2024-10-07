@@ -6,18 +6,20 @@ import { eightString } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { useContext, useState, useEffect, useRef } from "react"
 
-const FluidSettings   = () => {
+const FluidSettings   = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<FluidSettingsProps>(summaryPrompt.fluidProps)
+  const property      = useRef<FluidSettingsProps>(summaryPrompt[props.orderSelect].fluidProps)
   const onUpdateProps = useRef((summaryPrompt:string[])=>{
-    setSummaryPrompt(prev=>({
-      ...prev, fluidProps: {
-        ...prev.fluidProps,
-        fluidTier     : tier,
-        fluidsList    : fluidsInputList,
-        additionalList: additionalList ,
-        promptList    : summaryPrompt  ,
-      },
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? { ...prev, fluidProps: {
+            ...prev.fluidProps,
+            fluidTier     : tier,
+            fluidsList    : fluidsInputList,
+            additionalList: additionalList ,
+            promptList    : summaryPrompt  ,
+          },
+      } : prev
     }))
   })
 

@@ -6,20 +6,22 @@ import { eightString } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { useContext, useState, useEffect, useRef } from "react"
 
-const EmotionSettings   = () => {
+const EmotionSettings   = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<EmotionSettingsProps>(summaryPrompt.emotionProps)
+  const property      = useRef<EmotionSettingsProps>(summaryPrompt[props.orderSelect].emotionProps)
   const onUpdateProps = useRef((summaryPrompt:string[])=>{
-    setSummaryPrompt(prev=>({
-      ...prev, emotionProps: {
-        ...prev.emotionProps,
-        emoteTier     : tier,
-        emotesList    : emotesInputList,
-        additionalList: additionalList ,
-        promptList    : summaryPrompt  ,
-      },
-    }))
-  })
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? { ...prev, emotionProps: {
+            ...prev.emotionProps,
+            emoteTier     : tier,
+            emotesList    : emotesInputList,
+            additionalList: additionalList ,
+            promptList    : summaryPrompt  ,
+          },
+        } : prev
+      }))
+    })
 
   const [tier           , setTier           ] = useState(property.current.emoteTier     )
   const [emotesInputList, setEmotesInputList] = useState(property.current.emotesList    )

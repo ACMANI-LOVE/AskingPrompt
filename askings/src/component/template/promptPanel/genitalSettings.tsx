@@ -7,26 +7,29 @@ import { randBool } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
 
-const GenitalSettings = () => {
+const GenitalSettings = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<GenitalSettingsProps>(summaryPrompt.genitalProps)
+  const property      = useRef<GenitalSettingsProps>(summaryPrompt[props.orderSelect].genitalProps)
   const onUpdateProps = useRef((prompts:string[])=>{
     const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
     setDisplay(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, genitalProps: {
-        ...prev.genitalProps,
-        random      :chkRandom      ,
-        publicHair  :chkPublicHair  ,
-        invertNipple:chkInvertNipple,
-        sheathPenis :chkSheathPenis ,
-        genitalColor   : genitalColorInput   ,
-        pussyDetails   : pussyDetailsInput   ,
-        anusDetails    : anusDetailsInput    ,
-        genitalsDetails: genitalsDetailsInput,
-        additional  : additional     ,
-        prompts     : summaryPrompt  ,
-      },
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? {
+        ...prev, genitalProps: {
+          ...prev.genitalProps,
+          random      :chkRandom      ,
+          publicHair  :chkPublicHair  ,
+          invertNipple:chkInvertNipple,
+          sheathPenis :chkSheathPenis ,
+          genitalColor   : genitalColorInput   ,
+          pussyDetails   : pussyDetailsInput   ,
+          anusDetails    : anusDetailsInput    ,
+          genitalsDetails: genitalsDetailsInput,
+          additional  : additional     ,
+          prompts     : summaryPrompt  ,
+        },
+      } : prev
     }))
   })
 

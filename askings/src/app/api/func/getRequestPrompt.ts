@@ -1,11 +1,12 @@
 import { getModelsData, getGenitalData, getGenitalSizeData, getPeriodData, getWeatherData, getTimesData, getHairSizeData, getBangsSizeData, getAgesData, getEyesShapeData, getMindData, getSkinData, getFigureData, getBoobSizeData, getBodySizeData, getButtSizeData } from "@/const/cons_promptOrder";
 import { Models, Genital } from "@/const/cons_reqEnum";
 import { ModelsTypes, BasicSettings, SpeciesType, GenitalSettings, GenitalSizeTypes, SituationSettings, PeriodTypes, WeathersTypes, TimesTypes, HairDataSettings, HairSizeTypes, FaceDataSettings, AgesTypes, EyesShapeTypes, MindTypes, BodyDataSettings, SkinTypes, FigureTypes, FigureSizeTypes } from "@/const/cons_requestTypes";
-import TextData from "@/const/const_text";
+import { request_header } from "@/const/const_text";
 import { Animaloid, Humanoids } from "@/init/init";
 import { lotteryList, randBetween, randBool } from "@/util"
 
-const useRequestPrompt = (idx:number) => {
+const getRequestPrompt = (idx:number) => {
+  const promptHeader    = request_header
   const Models          = ModelsSelection(idx);
   const basicSettings   = BasicSelection    (Models);
   const genitalSettings = GenitalSelection  (Models);
@@ -13,7 +14,6 @@ const useRequestPrompt = (idx:number) => {
   const hairSettings    = HairDataSelection ();
   const faceSettings    = FaceDataSelection ();
   const situations      = SituationSelection();
-  const promptHeader    = TextData.request_header
 
   const promptBody =
   `{                                                                                                                                                                \n`+
@@ -76,7 +76,7 @@ const useRequestPrompt = (idx:number) => {
   return promptHeader + promptBody;
 }
 
-export default useRequestPrompt
+export default getRequestPrompt
 
 // =========+=========+=========+=========+=========+=========+=========+=========+=========+=========+
 const ModelsSelection = (idx: number) => {

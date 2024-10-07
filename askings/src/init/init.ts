@@ -2,6 +2,7 @@
 //
 // =========+=========+=========+=========+=========+=========+=========+=========+=========+=========+
 export const ORDERS = 7;
+export const ITEMS  = 5;
 // =========+=========+=========+=========+=========+=========+=========+=========+=========+=========+
 const standingPose = ["standing"      ,"bent over","kneeling"  ,]
 const sittingPose  = ["sitting"       ,"squatting","crouching" ,]

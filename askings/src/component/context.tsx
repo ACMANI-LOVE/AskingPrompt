@@ -1,8 +1,9 @@
 "use client"
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "react";
-import usePromptProperties from "@/hooks/usePromptProperties";
-import getRequestPrompt from "@/hooks/useRequestPrompt";
+import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import { DataListType, SelectionType, SummaryPromptType } from "@/const/cons_promptProps";
+import { settingsLabel } from "@/const/const_text";
+import { RequestBodies, ResponseBodies } from "@/app/api/route";
+import { ORDERS } from "@/init/init";
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 // Contexts
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
@@ -26,36 +27,49 @@ export const DataListContext = createContext<{
   dataList: {
     requestList : [],
     orderList   : [],
-    promptLabel  : [],
+    promptLabel : [],
   },
   setDataList: ()=>{}
 })
 export const SummaryPromptContext = createContext<{
-  summaryPrompt    : SummaryPromptType,
-  setSummaryPrompt : Dispatch<SetStateAction<SummaryPromptType>>,
+  summaryPrompt    : SummaryPromptType[],
+  setSummaryPrompt : Dispatch<SetStateAction<SummaryPromptType[]>>,
 }>({
-  summaryPrompt: {} as SummaryPromptType,
+  summaryPrompt: [],
   setSummaryPrompt: ()=>{}
 })
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 // Provider
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 export const ContextProvider = (props:{children:ReactNode}) => {
+  const initial = async () => {
+    const response = await fetch('/api', {
+     method: 'POST',
+     headers: {'Content-Type': 'application/json'},
+     body: JSON.stringify({init:{orders:ORDERS}} as RequestBodies)
+    })
+    const result = (await response.json()) as ResponseBodies
+    const { initItems } =  result
+    setSelection(prev=>({...prev,
+      menuSelect    : 0,
+      requestSelect : 0,
+      orderSelect   : 0,
+      settingSelect : 0,
+    }))
+    setDataList(prev=>({...prev,
+      requestList: initItems.request,
+      orderList  : initItems.order,
+      promptLabel: settingsLabel,
+    }))
+    setSummaryPrompt(initItems.properties)
+  }
+  useEffect(()=>{initial()},[])
   // ----- Selection State -----
-  const [selection, setSelection] = useState<SelectionType>({
-    menuSelect    : 0,
-    requestSelect : 0,
-    orderSelect   : 0,
-    settingSelect : 0,
-  })
+  const [selection, setSelection] = useState<SelectionType>({} as SelectionType)
   // ----- DataList State -----
-  const [dataList, setDataList] = useState<DataListType>({
-    requestList : Array.from({length:askingCount},(_,idx)=>getRequestPrompt(idx)),
-    orderList   : Array.from({length:askingCount},()=>"{ empty }"),
-    promptLabel : settingsLabel,
-  })
+  const [dataList, setDataList] = useState<DataListType>({} as DataListType)
   // ----- props State -----
-  const [summaryPrompt, setSummaryPrompt] = useState<SummaryPromptType>(usePromptProperties({order:undefined}))
+  const [summaryPrompt, setSummaryPrompt] = useState<SummaryPromptType[]>([] as SummaryPromptType[])
   // ----- providers -----
   return (<SelectContext.Provider  value={{selection, setSelection}}>
     <DataListContext.Provider      value={{dataList, setDataList}}>
@@ -65,18 +79,6 @@ export const ContextProvider = (props:{children:ReactNode}) => {
     </DataListContext.Provider>
   </SelectContext.Provider>)
 }
-const askingCount = 7
-const settingsLabel = [
-  "Base Settings"   ,
-  "Hair Settings"   ,
-  "Face Settings"   ,
-  "Body Settings"   ,
-  "Scene Settings"  ,
-  "Genital Settings",
-  "Emotion Settings",
-  "Fluid Settings"  ,
-  "Action Settings" ,
-  "Posing Settings" ,
-  "Prompt Summaries",
-]
+
+
 

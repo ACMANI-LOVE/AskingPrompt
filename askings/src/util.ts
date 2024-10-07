@@ -1,4 +1,6 @@
 // +=========+=========+=========+=========+=========
+import { ORDERS } from "./init/init";
+// +=========+=========+=========+=========+=========
 // string Manage
 // +=========+=========+=========+=========+=========
 export function zeroPads(data:number, size?:number) {
@@ -102,3 +104,28 @@ export const downloadByJson = (value: string[]) => {
   // revoking...
   URL.revokeObjectURL(url);
 };
+
+export const listingFromJson = (file?: File):Promise<string[]>=> {
+  return new Promise((resolve, reject)=>{
+    if (!file) { return reject(undefined) }
+    const reader = new FileReader()
+
+    reader.onload = (e) => {
+      try {
+        const parsedData = JSON.parse(e.target?.result as string)
+        if (Array.isArray(parsedData)) {
+          const stringify = parsedData.map((item)=>JSON.stringify(item))
+          resolve(stringify.slice(0,ORDERS))
+        }
+      } catch (err) {
+        return reject(undefined)
+      }
+    }
+
+    reader.onerror = () => {
+      reject(undefined)
+    }
+
+    reader.readAsText(file)
+  })
+}

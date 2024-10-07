@@ -5,21 +5,24 @@ import { HairSettingsProps } from "@/const/cons_promptProps"
 import { Box, Divider } from "@mui/material"
 import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
 
-const HairSettings    = () => {
+const HairSettings    = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<HairSettingsProps>(summaryPrompt.hairProps)
+  const property      = useRef<HairSettingsProps>(summaryPrompt[props.orderSelect].hairProps)
   const onUpdateProps = useRef((prompts:string[])=>{
     const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
     setDisplay(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, hairProps: {
-        ...prev.hairProps,
-        hairColorPrompt  : hairColorInput ,
-        hairStylePrompt  : hairStyleInput ,
-        bangsStylePrompt : bangsStyleInput,
-        additional      : additional     ,
-        prompts         : summaryPrompt  ,
-      },
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? {
+        ...prev, hairProps: {
+          ...prev.hairProps,
+          hairColorPrompt  : hairColorInput ,
+          hairStylePrompt  : hairStyleInput ,
+          bangsStylePrompt : bangsStyleInput,
+          additional      : additional     ,
+          prompts         : summaryPrompt  ,
+        },
+      } : prev
     }))
   })
   const hairColorOrder  = property.current.hairColor

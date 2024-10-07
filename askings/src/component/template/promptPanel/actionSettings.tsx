@@ -1,23 +1,25 @@
 import { LabelText } from "@/component/atoms/text"
 import { SummaryPromptContext } from "@/component/context"
 import { EditItem, MultiAdditional, MultiDisplay, OrderWithCheckBox } from "@/component/molecules/promptItem"
-import { ActionSettingsProps } from "@/const/cons_promptProps"
+import { ActionSettingsProps, SummaryPromptType } from "@/const/cons_promptProps"
 import { eightString } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { useContext, useEffect, useRef, useState } from "react"
 
-const ActionSettings   = () => {
+const ActionSettings   = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<ActionSettingsProps>(summaryPrompt.actionProps)
+  const property      = useRef<ActionSettingsProps>(summaryPrompt[props.orderSelect].actionProps)
   const onUpdateProps = useRef((summaryPrompt:string[])=>{
-    setSummaryPrompt(prev=>({
-      ...prev, emotionProps: {
-        ...prev.emotionProps,
-        actionTier    : tier,
-        actionsList   : actionsInputList,
-        additionalList: additionalList ,
-        promptList    : summaryPrompt  ,
-      },
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? { ...prev, actionProps: {
+            ...prev.actionProps,
+            actionTier    : tier,
+            actionsList   : actionsInputList,
+            additionalList: additionalList ,
+            promptList    : summaryPrompt  ,
+          },
+      } : prev
     }))
   })
   const [tier            , setTier            ] = useState(property.current.actionTier    )

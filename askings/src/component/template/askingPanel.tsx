@@ -1,4 +1,4 @@
-import { useEffect, ReactNode, useContext } from 'react';
+import { useEffect, ReactNode, useContext, useRef } from 'react';
 import { Box, Paper, IconButton, Divider } from '@mui/material';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -11,15 +11,31 @@ import { OrdersField } from '@/component/atoms/textField';
 import { ItemText, LabelText } from '@/component/atoms/text';
 import { zeroPads } from "@/util";
 import { DataListContext, SelectContext } from '../context';
-import getRequestPrompt from '@/hooks/useRequestPrompt';
 import { OrderChecker } from '../molecules/promptItem';
+import { RequestBodies, ResponseBodies } from '@/app/api/route';
+
+
 
 const AskingPanel = () => {
   const {selection, setSelection} = useContext(SelectContext)
+  const requestSelect = useRef(selection.requestSelect ?? 0)
+  const orderSelect   = useRef(selection.orderSelect   ?? 0)
   const {dataList,  setDataList } = useContext(DataListContext)
-  const requestLabel = dataList.requestList.map((_,idx)=>`REQ:#${zeroPads(idx+1)}`)
+  const requestList = useRef(dataList.requestList ?? [])
+  const orderList   = useRef(dataList.orderList   ?? [])
+
+  useEffect(()=>{
+    requestList.current = dataList.requestList ?? [];
+    orderList  .current = dataList.orderList   ?? [];
+  },[dataList])
+
+  const requestLabel = requestList.current.map((_,idx)=>`REQ:#${zeroPads(idx+1)}`)
+  const ordersItem   = orderList.  current[orderSelect  .current]
+  const requestItem  = requestList.current[requestSelect.current]
+
+
   const [ReqTab,selectReqTab] = useTabGroup({
-    initial: selection.requestSelect,
+    initial: requestSelect.current,
     labelList: requestLabel
   })
   useEffect(()=>setSelection(prev=>({
@@ -28,29 +44,36 @@ const AskingPanel = () => {
     orderSelect  :selectReqTab,
   })),[selectReqTab,setSelection])
 
-  const onClickShuffle = () => setDataList(prev=>({
-    ...prev,
-    requestList: prev.requestList.map((item,idx)=>(idx===selection.requestSelect ? getRequestPrompt(idx) : item))
-  }))
-  const onClickCopy    = () => navigator.clipboard.writeText(dataList.requestList[selection.requestSelect]).finally(()=>openCopy())
+  const onClickShuffle = async () => {
+    const response = await fetch('/api', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({shuffle:{id:requestSelect.current}} as RequestBodies)
+    })
+    const result:ResponseBodies = await response.json()
+    const { responseShuffle = "fetch failed" } = result
+
+    setDataList(prev=>({
+      ...prev,
+      requestList: prev.requestList.map((item,idx)=>(idx===requestSelect.current ? responseShuffle : item))
+    }))
+  }
+  const onClickCopy    = () => navigator.clipboard.writeText(dataList.requestList[requestSelect.current]).finally(()=>openCopy())
   const onClickPaste   = () => navigator.clipboard.readText().then((text)=>setDataList(prev=>({
     ...prev,
-    orderList: prev.orderList.map((item,idx)=>(idx===selection.orderSelect ? text : item))
+    orderList: prev.orderList.map((item,idx)=>(idx===orderSelect.current ? text : item))
   }))).finally(()=>openPaste())
   const onClickClean   = () => setDataList(prev=>({
     ...prev,
-    orderList: prev.orderList.map((item,idx)=>(idx === selection.orderSelect ? "{}" : item))
+    orderList: prev.orderList.map((item,idx)=>(idx === orderSelect.current ? "{}" : item))
   }))
 
   const [SnackCopy   , openCopy   ] = useSnackBar({message:"Field Copied!!!"  })
   const [SnackPaste  , openPaste  ] = useSnackBar({message:"Field Pasted!!!"  })
 
-  const ordersItem  = dataList.orderList[selection.orderSelect]
-  const requestItem = dataList.requestList[selection.requestSelect]
-
   const OrderCheckField = () => {
     return (<Box flex={1} display={"flex"} flexDirection={"row"} justifyContent={"start"}>
-      {dataList.orderList.map((order,idx)=><Box key={`order${idx}`} display={"flex"} flexDirection={"row"} justifyContent={"center"} alignItems={"center"}>
+      {orderList.current.map((order,idx)=><Box key={`order${idx}`} display={"flex"} flexDirection={"row"} justifyContent={"center"} alignItems={"center"}>
         <ItemText bold text={`Order#${zeroPads(idx+1)}:`}/>
         <OrderChecker order={order}/>
       </Box>)}

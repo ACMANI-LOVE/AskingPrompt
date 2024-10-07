@@ -1,12 +1,11 @@
-import { downloadByJson, zeroPads } from '@/util';
+import { downloadByJson, zeroPads, listingFromJson } from '@/util';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import UploadIcon from '@mui/icons-material/Upload';
 import { Box, Paper, Divider, IconButton } from '@mui/material';
-import { useEffect, useContext, useRef } from 'react';
+import { useEffect, useContext, useRef, ChangeEvent } from 'react';
 import { ItemText, LabelText } from '../atoms/text';
 import useRadioGroup from '../organs/radioGroup';
-// import usePromptProperties from '@/hooks/usePromptProperties';
 import { SelectContext, DataListContext } from '../context';
 import BaseSettings from './promptPanel/baseSettings';
 import HairSettings from './promptPanel/hairSettings';
@@ -20,17 +19,13 @@ import ActionSettings from './promptPanel/actionSettings';
 import PosingSettings from './promptPanel/posingSettings';
 import { OrderChecker, RowDirection } from '../molecules/promptItem';
 import useHiddenUploadForm from '../organs/uploadFIle';
+import useSnackBar from '../organs/snackBar';
 
 const MakingPanel = () => {
   const {selection, setSelection} = useContext(SelectContext)
   const {dataList,  setDataList } = useContext(DataListContext)
-  const updateOrder = useRef((newOrder:number) => {
-    setSelection(prev=>({...prev, orderSelect:newOrder }))
-    setDataList(prev=>({...prev}))
-  })
-  const updateSettings = useRef((newSettings:number) => {
-    setSelection(prev=>({...prev, settingSelect:newSettings }))
-  })
+  const updateOrder    = useRef((newOrder   :number) => setSelection(prev=>({...prev, orderSelect  :newOrder   })))
+  const updateSettings = useRef((newSettings:number) => setSelection(prev=>({...prev, settingSelect:newSettings})))
 
   const ordersLabel = dataList.orderList.map((_,idx)=>`Order:${zeroPads(idx+1)}`)
   const [OrderRadio, selectOrderRadio] = useRadioGroup({
@@ -43,13 +38,28 @@ const MakingPanel = () => {
     itemList: dataList.promptLabel
   })
 
+  useEffect(()=>{alert("STOP")},[selection.orderSelect])
   useEffect(()=>updateOrder   .current(selectOrderRadio   ),[selectOrderRadio   ])
   useEffect(()=>updateSettings.current(selectSettingsRadio),[selectSettingsRadio])
 
   const OrdersField = () => {
+    const [SnackUpload, openSnackUpload] = useSnackBar({message:'JSON ROADED!'  });
+    const [SnackFailed, openSnackFailed] = useSnackBar({message:'Upload FAILED!'});
+
     const onClickSave     = () =>downloadByJson(dataList.orderList)
     const onClickLoad     = () =>{}
-    const {UploadForm, onClickUpload} = useHiddenUploadForm({onUpload:()=>{}})
+    const { UploadForm, onClickUpload } = useHiddenUploadForm({
+      onUpload: async (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        const uploadList = await listingFromJson(file);
+        if (uploadList) {
+          setDataList(prev=>({ ...prev, orderList:uploadList }))
+          openSnackUpload()
+        } else {
+          openSnackFailed();
+        }
+      }
+    })
 
     return (<Box>
       <Paper><Box padding={"0.5em 1em 0.5em 0.5em"} display={"flex"} flexDirection={"column"}>
@@ -62,29 +72,31 @@ const MakingPanel = () => {
           </Box>
         </RowDirection>
         <Divider/>
-        <IconButton onClick={onClickSave  }><LabelText bold text={"Save Order: " }/><SaveAltIcon/></IconButton>
-        <Divider/>
-        <IconButton onClick={onClickLoad  }><LabelText bold text={"Load Order: " }/>
-          <GetAppIcon/>
+        <IconButton onClick={onClickUpload}><LabelText bold text={"Upload File: "}/>
+          <UploadIcon/>
           <UploadForm/>
         </IconButton>
-        <IconButton onClick={onClickUpload}><LabelText bold text={"Upload File: "}/><UploadIcon/></IconButton>
+        <IconButton onClick={onClickLoad  }><LabelText bold text={"Load Order: " }/><GetAppIcon/></IconButton>
+        <Divider/>
+        <IconButton onClick={onClickSave  }><LabelText bold text={"Save Order: " }/><SaveAltIcon/></IconButton>
       </Box></Paper>
+      <SnackUpload/>
+      <SnackFailed/>
     </Box>)
   }
 
   // const properties = usePromptProperties({ order:dataList.orderList[selection.orderSelect] })
   const settingsList = [
-    <BaseSettings    key={"BaseSettingsField"   }/>,
-    <HairSettings    key={"HairSettingsField"   }/>,
-    <FaceSettings    key={"FaceSettingsField"   }/>,
-    <BodySettings    key={"BodySettingsField"   }/>,
-    <SceneSettings   key={"SceneSettingsField"  }/>,
-    <GenitalSettings key={"GenitalSettingsField"}/>,
-    <EmotionSettings key={"EmotionSettingsField"}/>,
-    <FluidSettings   key={"FluidSettingsField"  }/>,
-    <ActionSettings  key={"ActionSettingsField" }/>,
-    <PosingSettings  key={"PosingSettingsField" }/>,
+    <BaseSettings    orderSelect={selection.orderSelect} key={"BaseSettingsField"} />,
+    <HairSettings    orderSelect={selection.orderSelect} key={"HairSettingsField"} />,
+    <FaceSettings    orderSelect={selection.orderSelect} key={"FaceSettingsField"} />,
+    <BodySettings    orderSelect={selection.orderSelect} key={"BodySettingsField"} />,
+    <SceneSettings   orderSelect={selection.orderSelect} key={"SceneSettingsField"} />,
+    <GenitalSettings orderSelect={selection.orderSelect} key={"GenitalSettingsField"} />,
+    <EmotionSettings orderSelect={selection.orderSelect} key={"EmotionSettingsField"} />,
+    <FluidSettings   orderSelect={selection.orderSelect} key={"FluidSettingsField"} />,
+    <ActionSettings  orderSelect={selection.orderSelect} key={"ActionSettingsField"} />,
+    <PosingSettings  orderSelect={selection.orderSelect} key={"PosingSettingsField"} />,
   ]
   return(<Box padding={"1em"} display={"flex"} flexDirection={"row"} gap={"0.5em"} justifyContent={"start"}>
     <OrdersField/>

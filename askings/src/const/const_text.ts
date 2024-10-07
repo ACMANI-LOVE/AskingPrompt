@@ -1,13 +1,24 @@
-
-const TextData = {
-  titleHeader : '- Ask Gpt 4 Prompts. -',
-  request_header :
+export const settingsLabel = [
+  "Base Settings"   ,
+  "Hair Settings"   ,
+  "Face Settings"   ,
+  "Body Settings"   ,
+  "Scene Settings"  ,
+  "Genital Settings",
+  "Emotion Settings",
+  "Fluid Settings"  ,
+  "Action Settings" ,
+  "Posing Settings" ,
+  "Prompt Summaries",
+]
+export const titleHeader = '- Ask Gpt 4 Prompts. -'
+export const request_header =
   '新しい創作のキャラクター作成を手伝って欲しい。\n' +
   'キャラクターの設定を考えるうえで下記のプロフィールを作成したい。\n' +
   'プロフィールシートをJSONで渡すので貴方は記述箇所を埋めてほしい。\n' +
   'コメントを参考にプロパティの対応値をnumber型またはstring型で入力してほしい\n' +
-  '出力はJSONデータでお願いします。出力データにコメントは不要です。\n',
-  request_body :
+  '出力はJSONデータでお願いします。出力データにコメントは不要です。\n'
+export const request_body =
   `{                                                                                                                                                                \n`+
   `  "OTHER_INFO" : {                                                                                                                                               \n`+
   `    "baseSettings"  : {                                                                                                                                          \n`+
@@ -64,13 +75,10 @@ const TextData = {
   `    }                                                                                                                                                        \n`+
   `  },                                                                                                                                                         \n`+
   `  "story"           : ""  //未決定: 上記の内容をもとに、セクシーな短い紹介文を記載。ただし露骨な性表現はNG"                                                      \n`+
-  `}                                                                                                                                                            \n`,
-  prompt_header : "score_9, score_8_up, score_7_up, ultra detailed, anime source,",
-  prompt_footer :
+  `}                                                                                                                                                         \n`
+export const prompt_header = "score_9, score_8_up, score_7_up, ultra detailed, anime source,"
+export const prompt_footer =
     "<lora:Expressive_H:1>\n"+
-    "<lora:Smooth Style 2 SDXL_LoRA_Pony Diffusion V6 XL:1>\n",
-
-}
-export default TextData;
+    "<lora:Smooth Style 2 SDXL_LoRA_Pony Diffusion V6 XL:1>\n"
 // *=========*=========*=========*=========*=========*=========*=========*=========*=========*=========
 // *=========*=========*=========*=========*=========*=========*=========*=========*=========*=========

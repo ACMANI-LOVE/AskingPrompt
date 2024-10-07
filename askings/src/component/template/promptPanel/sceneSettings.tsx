@@ -7,23 +7,26 @@ import { randBetween } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { useContext, useState, BaseSyntheticEvent, useEffect, useRef } from "react"
 
-const SceneSettings   = () => {
+const SceneSettings   = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<SceneSettingsProps>(summaryPrompt.sceneProps)
+  const property      = useRef<SceneSettingsProps>(summaryPrompt[props.orderSelect].sceneProps)
   const onUpdateProps = useRef((prompts:string[])=>{
     const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
     setDisplay(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, sceneProps: {
-        ...prev.sceneProps,
-          simple        : chkSimple    ,
-          conditionInput: condition    ,
-          locationInput : locationInput,
-          outfitInput   : outfitInput  ,
-          equipInput    : equipInput   ,
-          additional    : additional   ,
-          prompts       : summaryPrompt,
-      },
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? {
+        ...prev, sceneProps: {
+          ...prev.sceneProps,
+            simple        : chkSimple    ,
+            conditionInput: condition    ,
+            locationInput : locationInput,
+            outfitInput   : outfitInput  ,
+            equipInput    : equipInput   ,
+            additional    : additional   ,
+            prompts       : summaryPrompt,
+        },
+      } : prev
     }))
   })
 

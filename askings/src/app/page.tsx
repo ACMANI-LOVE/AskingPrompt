@@ -1,6 +1,6 @@
 "use client"
 import { Box, Divider } from "@mui/material";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import useTabGroup from "@/component/organs/tabGroup";
 import { TitleText } from "@/component/atoms/text";
 import { ContextProvider, SelectContext } from "@/component/context";
@@ -9,6 +9,7 @@ import MakingPanel from "@/component/template/makingPanel";
 
 export default function Home() {
   const {selection, setSelection} = useContext(SelectContext)
+  const updateSelect = useRef((newSelect:number)=>setSelection(prev=>({...prev, menuSelect:newSelect})))
 
   const panelList = [
     { label:"AskingPrompts", panel:<AskingPanel/> },
@@ -18,7 +19,8 @@ export default function Home() {
     initial: selection.menuSelect,
     labelList: panelList.map((item)=>item.label)
   })
-  useEffect(()=>setSelection(prev=>({...prev, menuSelect:selectMenuTab})),[selectMenuTab, setSelection])
+
+  useEffect(()=>updateSelect.current(selectMenuTab),[selectMenuTab])
 
   return (<ContextProvider>
     <Box display={"flex"} flexDirection={"column"} gap={"0.5em"}>

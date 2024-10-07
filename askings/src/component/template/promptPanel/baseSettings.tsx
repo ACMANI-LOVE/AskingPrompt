@@ -6,23 +6,27 @@ import { BaseSettingsProps } from "@/const/cons_promptProps"
 import { Box, Divider } from "@mui/material"
 import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
 
-const BaseSettings    = () => {
+const BaseSettings    = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<BaseSettingsProps>(summaryPrompt.baseProps)
+  const property      = useRef<BaseSettingsProps>(summaryPrompt[props.orderSelect].baseProps)
   const onUpdateProps = useRef((prompts:string[])=>{
-  const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
+    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
     setDisplay(summaryPrompt)
-    setSummaryPrompt(prev=>({
-    ...prev, baseProps: {
-      ...prev.baseProps,
-      base      : baseInput    ,
-      nsfw      : chkNsfw      ,
-      solo      : chkSolo      ,
-      cute      : chkCute      ,
-      additional: additional   ,
-      prompts   : summaryPrompt,
-    },
-  }))})
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? {
+        ...prev, baseProps: {
+          ...prev.baseProps,
+          base      : baseInput    ,
+          nsfw      : chkNsfw      ,
+          solo      : chkSolo      ,
+          cute      : chkCute      ,
+          additional: additional   ,
+          prompts   : summaryPrompt,
+        },
+      } : prev
+    }))
+  })
 
   const storyOrder     = property.current.story
   const modelOrder     = property.current.model

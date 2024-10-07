@@ -6,23 +6,26 @@ import { randBool } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
 
-const FaceSettings    = () => {
+const FaceSettings    = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<FaceSettingsProps>(summaryPrompt.faceProps)
+  const property      = useRef<FaceSettingsProps>(summaryPrompt[props.orderSelect].faceProps)
   const onUpdateProps = useRef((prompts:string[])=>{
     const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
     setDisplay(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, faceProps: {
-        ...prev.faceProps,
-        eyesColorPrompt     : eyesColorInput,
-        random        : chkRandom      ,
-        closeEyes     : chkCloseEyes   ,
-        openMouth     : chkOpenMouth   ,
-        tongueOut     : chkTongueOut   ,
-        additional    : additional     ,
-        prompts       : summaryPrompt  ,
-      },
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? {
+        ...prev, faceProps: {
+          ...prev.faceProps,
+          eyesColorPrompt     : eyesColorInput,
+          random        : chkRandom      ,
+          closeEyes     : chkCloseEyes   ,
+          openMouth     : chkOpenMouth   ,
+          tongueOut     : chkTongueOut   ,
+          additional    : additional     ,
+          prompts       : summaryPrompt  ,
+        },
+      } : prev
     }))
   })
 

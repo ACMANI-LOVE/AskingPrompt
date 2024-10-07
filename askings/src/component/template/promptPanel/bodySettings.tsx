@@ -6,19 +6,22 @@ import { BodySettingsProps } from "@/const/cons_promptProps"
 import { Box, Divider } from "@mui/material"
 import { useContext, useState, BaseSyntheticEvent, useEffect, useRef } from "react"
 
-const BodySettings    = () => {
+const BodySettings    = (props:{orderSelect:number}) => {
   const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<BodySettingsProps>(summaryPrompt.bodyProps)
+  const property      = useRef<BodySettingsProps>(summaryPrompt[props.orderSelect].bodyProps)
   const onUpdateProps = useRef((prompts:string[])=>{
     const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
     setDisplay(summaryPrompt)
-    setSummaryPrompt(prev=>({
-      ...prev, bodyProps: {
-        ...prev.bodyProps,
-        skinInput : skinPrompt   ,
-        additional  : additional   ,
-        prompts   : summaryPrompt,
-      },
+    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
+      return (idx === props.orderSelect)
+      ? {
+        ...prev, baseProps: {
+          ...prev.baseProps,
+          skinInput : skinPrompt   ,
+          additional  : additional   ,
+          prompts   : summaryPrompt,
+        },
+      } : prev
     }))
   })
 
