@@ -1,53 +1,30 @@
 import { LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
-import { SummaryPromptContext } from "@/component/context"
+import { DataListContext } from "@/component/context"
 import { ViewItem, Order, EditItem, DisplayItem, OrderWithInput, OrderWithCheckBox, BlocItem, AdditionalItem } from "@/component/molecules/promptItem"
-import { GenitalSettingsProps } from "@/const/cons_promptProps"
 import { randBool } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
+import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const GenitalSettings = (props:{orderSelect:number}) => {
-  const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<GenitalSettingsProps>(summaryPrompt[props.orderSelect].genitalProps)
-  const onUpdateProps = useRef((prompts:string[])=>{
-    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
-    setDisplay(summaryPrompt)
-    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
-      return (idx === props.orderSelect)
-      ? {
-        ...prev, genitalProps: {
-          ...prev.genitalProps,
-          random      :chkRandom      ,
-          publicHair  :chkPublicHair  ,
-          invertNipple:chkInvertNipple,
-          sheathPenis :chkSheathPenis ,
-          genitalColor   : genitalColorInput   ,
-          pussyDetails   : pussyDetailsInput   ,
-          anusDetails    : anusDetailsInput    ,
-          genitalsDetails: genitalsDetailsInput,
-          additional  : additional     ,
-          prompts     : summaryPrompt  ,
-        },
-      } : prev
-    }))
-  })
+  const {dataList, setDataList} = useContext(DataListContext)
+  const property =  dataList.settingList[props.orderSelect].genitalProps
 
-  const genitalsColorOrder    = property.current.genitalsColor
-  const maleGenitalsOrder     = property.current.maleGenitals    .order
-  const maleGenitalsSizeOrder = property.current.maleGenitalsSize.order
+  const genitalsColorOrder    = property.genitalsColor
+  const maleGenitalsOrder     = property.maleGenitals    .order
+  const maleGenitalsSizeOrder = property.maleGenitalsSize.order
 
-  const [chkRandom      , setChkRandom      ] = useState(property.current.random      )
-  const [chkPublicHair  , setChkPublicHair  ] = useState(property.current.publicHair  )
-  const [chkInvertNipple, setChkInvertNipple] = useState(property.current.invertNipple)
-  const [chkSheathPenis , setChkSheathPenis ] = useState(property.current.sheathPenis )
-  const [genitalColorInput   , setGenitalColorInput   ] = useState(property.current.genitalColor   )
-  const [pussyDetailsInput   , setPussyDetailsInput   ] = useState(property.current.pussyDetails   )
-  const [anusDetailsInput    , setAnusDetailsInput    ] = useState(property.current.anusDetails    )
-  const [genitalsDetailsInput, setGenitalsDetailsInput] = useState(property.current.genitalsDetails)
-  const [additional          , setAdditional] = useState(property.current.additional)
+  const [chkRandom      , setChkRandom      ] = useState(property.random      )
+  const [chkPublicHair  , setChkPublicHair  ] = useState(property.publicHair  )
+  const [chkInvertNipple, setChkInvertNipple] = useState(property.invertNipple)
+  const [chkSheathPenis , setChkSheathPenis ] = useState(property.sheathPenis )
+  const [genitalColorInput   , setGenitalColorInput   ] = useState(property.genitalColor   )
+  const [pussyDetailsInput   , setPussyDetailsInput   ] = useState(property.pussyDetails   )
+  const [anusDetailsInput    , setAnusDetailsInput    ] = useState(property.anusDetails    )
+  const [genitalsDetailsInput, setGenitalsDetailsInput] = useState(property.genitalsDetails)
+  const [additional          , setAdditional] = useState(property.additional)
 
-  const [display,    setDisplay   ] = useState(property.current.prompts)
+  const [display,    setDisplay   ] = useState(property.prompts)
 
   const handleChangeRandomCheck          = () => setChkRandom      (!chkRandom      )
   const handleChangePublicHairCheck      = () => setChkPublicHair  (!chkPublicHair  )
@@ -59,9 +36,9 @@ const GenitalSettings = (props:{orderSelect:number}) => {
   const handleGenitalsDetailsInputChange = (e:BaseSyntheticEvent) => setGenitalsDetailsInput(e.target.value)
   const handleAdditionalChange = (e:BaseSyntheticEvent) => setAdditional(e.target.value)
 
-  const nsfwFag = property.current.nsfw
-  const maleGenitalsPrompt     = property.current.maleGenitals    .prompt === "yes"
-  const maleGenitalsSizePrompt = property.current.maleGenitalsSize.prompt
+  const nsfwFag = property.nsfw
+  const maleGenitalsPrompt     = property.maleGenitals    .prompt === "yes"
+  const maleGenitalsSizePrompt = property.maleGenitalsSize.prompt
 
   useEffect(()=>{
     const nipplePrompt  = (nsfwFag) ? `${genitalColorInput} nipples` : "no nipples"
@@ -81,7 +58,28 @@ const GenitalSettings = (props:{orderSelect:number}) => {
       (maleGenitalsPrompt) ? checkSheathPenis : "",
       additional,
     ]
-    onUpdateProps.current(prompts)
+    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
+    setDisplay(summaryPrompt)
+    setDataList(prev=>({ ...prev,
+      settingList: prev.settingList.map((prevListItem,idx)=>{
+        return (idx === props.orderSelect)
+        ? {
+            ...prevListItem, genitalProps: {
+              ...prevListItem.genitalProps,
+            random      :chkRandom      ,
+            publicHair  :chkPublicHair  ,
+            invertNipple:chkInvertNipple,
+            sheathPenis :chkSheathPenis ,
+            genitalColor   : genitalColorInput   ,
+            pussyDetails   : pussyDetailsInput   ,
+            anusDetails    : anusDetailsInput    ,
+            genitalsDetails: genitalsDetailsInput,
+            additional  : additional     ,
+            prompts     : summaryPrompt  ,
+          }
+        } : prevListItem
+      })
+    }))
   },[
     nsfwFag               ,
     chkInvertNipple       ,

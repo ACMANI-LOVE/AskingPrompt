@@ -1,45 +1,26 @@
-import { LabelText, ItemText } from "@/component/atoms/text"
+import { ItemText, LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
-import { SummaryPromptContext } from "@/component/context"
-import { ViewItem, EditItem, DisplayItem, Order, OrderWithCheckBox, BlocItem, AdditionalItem } from "@/component/molecules/promptItem"
-import { BaseSettingsProps } from "@/const/cons_promptProps"
+import { DataListContext } from "@/component/context"
+import { AdditionalItem, BlocItem, DisplayItem, EditItem, Order, OrderWithCheckBox, ViewItem } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
-import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
+import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const BaseSettings    = (props:{orderSelect:number}) => {
-  const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<BaseSettingsProps>(summaryPrompt[props.orderSelect].baseProps)
-  const onUpdateProps = useRef((prompts:string[])=>{
-    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
-    setDisplay(summaryPrompt)
-    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
-      return (idx === props.orderSelect)
-      ? {
-        ...prev, baseProps: {
-          ...prev.baseProps,
-          base      : baseInput    ,
-          nsfw      : chkNsfw      ,
-          solo      : chkSolo      ,
-          cute      : chkCute      ,
-          additional: additional   ,
-          prompts   : summaryPrompt,
-        },
-      } : prev
-    }))
-  })
+  const {dataList, setDataList} = useContext(DataListContext)
+  const property =  dataList.settingList[props.orderSelect].baseProps
 
-  const storyOrder     = property.current.story
-  const modelOrder     = property.current.model
-  const characterOrder = property.current.character
-  const speciesOrder   = property.current.species
+  const storyOrder     = property.story
+  const modelOrder     = property.model
+  const characterOrder = property.character
+  const speciesOrder   = property.species
 
-  const [baseInput , setBaseInput ] = useState(property.current.base      )
-  const [chkNsfw   , setChkNsfw   ] = useState(property.current.nsfw      )
-  const [chkSolo   , setChkSolo   ] = useState(property.current.solo      )
-  const [chkCute   , setChkCute   ] = useState(property.current.cute      )
-  const [additional, setAdditional] = useState(property.current.additional)
+  const [baseInput , setBaseInput ] = useState(property.base      )
+  const [chkNsfw   , setChkNsfw   ] = useState(property.nsfw      )
+  const [chkSolo   , setChkSolo   ] = useState(property.solo      )
+  const [chkCute   , setChkCute   ] = useState(property.cute      )
+  const [additional, setAdditional] = useState(property.additional)
 
-  const [display, setDisplay] = useState(property.current.prompts)
+  const [display, setDisplay] = useState(property.prompts)
 
   const handleChangeNsfwCheck  = ()=>setChkNsfw(!chkNsfw)
   const handleChangeSoloCheck  = ()=>setChkSolo(!chkSolo)
@@ -55,7 +36,25 @@ const BaseSettings    = (props:{orderSelect:number}) => {
       baseInput,
       additional,
     ]
-    onUpdateProps.current(prompts)
+    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
+    setDisplay(summaryPrompt)
+    setDataList(prev=>({ ...prev,
+      settingList: prev.settingList.map((prevListItem,idx)=>{
+        return (idx === props.orderSelect)
+        ? {
+          ...prevListItem, baseProps: {
+            ...prevListItem.baseProps,
+            base      : baseInput    ,
+            nsfw      : chkNsfw      ,
+            solo      : chkSolo      ,
+            cute      : chkCute      ,
+            additional: additional   ,
+            prompts   : summaryPrompt,
+          }
+        }
+        : prevListItem
+      })
+    }))
   },[
     baseInput ,
     chkNsfw   ,

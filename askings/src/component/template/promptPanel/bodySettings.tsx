@@ -1,46 +1,30 @@
 import { LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
-import { SummaryPromptContext } from "@/component/context"
-import { EditItem, OrderWithPrompt, DisplayItem, ViewItem, Order, RowDirection, BlocItem, AdditionalItem } from "@/component/molecules/promptItem"
-import { BodySettingsProps } from "@/const/cons_promptProps"
+import { DataListContext } from "@/component/context"
+import { AdditionalItem, BlocItem, DisplayItem, EditItem, Order, OrderWithPrompt, RowDirection, ViewItem } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
-import { useContext, useState, BaseSyntheticEvent, useEffect, useRef } from "react"
+import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const BodySettings    = (props:{orderSelect:number}) => {
-  const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<BodySettingsProps>(summaryPrompt[props.orderSelect].bodyProps)
-  const onUpdateProps = useRef((prompts:string[])=>{
-    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
-    setDisplay(summaryPrompt)
-    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
-      return (idx === props.orderSelect)
-      ? {
-        ...prev, baseProps: {
-          ...prev.baseProps,
-          skinInput : skinPrompt   ,
-          additional  : additional   ,
-          prompts   : summaryPrompt,
-        },
-      } : prev
-    }))
-  })
+  const {dataList, setDataList} = useContext(DataListContext)
+  const property =  dataList.settingList[props.orderSelect].bodyProps
 
-  const mainColorOrder = property.current.mainBodyColor
-  const subColorOrder  = property.current.subBodyColor
-  const skinTypeOrder  = property.current.skinType.order
-  const bodyTypeOrder  = property.current.bodyType.order
-  const bodyTypePrompt = property.current.bodyType.prompt
+  const mainColorOrder = property.mainBodyColor
+  const subColorOrder  = property.subBodyColor
+  const skinTypeOrder  = property.skinType.order
+  const bodyTypeOrder  = property.bodyType.order
+  const bodyTypePrompt = property.bodyType.prompt
 
-  const boobSizeOrder  = property.current.boobSize.order [Number(bodyTypePrompt)]
-  const bodySizeOrder  = property.current.bodySize.order [Number(bodyTypePrompt)]
-  const buttSizeOrder  = property.current.buttSize.order [Number(bodyTypePrompt)]
-  const boobSizePrompt = property.current.boobSize.prompt[Number(bodyTypePrompt)]
-  const bodySizePrompt = property.current.bodySize.prompt[Number(bodyTypePrompt)]
-  const buttSizePrompt = property.current.buttSize.prompt[Number(bodyTypePrompt)]
-  const [skinPrompt, setSkinPrompt] = useState(property.current.skinPrompt)
-  const [additional, setAdditional] = useState(property.current.additional)
+  const boobSizeOrder  = property.boobSize.order [Number(bodyTypePrompt)]
+  const bodySizeOrder  = property.bodySize.order [Number(bodyTypePrompt)]
+  const buttSizeOrder  = property.buttSize.order [Number(bodyTypePrompt)]
+  const boobSizePrompt = property.boobSize.prompt[Number(bodyTypePrompt)]
+  const bodySizePrompt = property.bodySize.prompt[Number(bodyTypePrompt)]
+  const buttSizePrompt = property.buttSize.prompt[Number(bodyTypePrompt)]
+  const [skinPrompt, setSkinPrompt] = useState(property.skinPrompt)
+  const [additional, setAdditional] = useState(property.additional)
 
-  const [display, setDisplay] = useState(property.current.prompts)
+  const [display, setDisplay] = useState(property.prompts)
 
   const handleSkinPromptChange = (e:BaseSyntheticEvent) => setSkinPrompt(e.target.value)
   const handleAdditionalChange = (e:BaseSyntheticEvent) => setAdditional(e.target.value)
@@ -55,7 +39,21 @@ const BodySettings    = (props:{orderSelect:number}) => {
       buttSizePrompt,
       additional,
     ]
-    onUpdateProps.current(prompts)
+    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
+    setDisplay(summaryPrompt)
+    setDataList(prev=>({ ...prev,
+      settingList: prev.settingList.map((prevListItem,idx)=>{
+        return (idx === props.orderSelect)
+        ? {
+            ...prevListItem, bodyProps: {
+              ...prevListItem.bodyProps,
+              skinInput : skinPrompt   ,
+              additional  : additional   ,
+              prompts   : summaryPrompt,
+            }
+        } : prevListItem
+      })
+    }))
   },[
     skinPrompt,
     additional,

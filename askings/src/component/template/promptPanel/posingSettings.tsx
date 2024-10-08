@@ -1,31 +1,20 @@
 import { LabelText } from "@/component/atoms/text";
-import { SummaryPromptContext } from "@/component/context";
+import { DataListContext } from "@/component/context";
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import { EditItem, MultiAdditional, MultiDisplay, PosingTable } from "@/component/molecules/promptItem";
-import { PosingDetailProps, PosingSettingsProps } from "@/const/cons_promptProps";
+import { PosingDetailProps } from "@/const/cons_promptProps";
 import { Box, Divider, IconButton } from "@mui/material";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect } from "react";
 import { getRandomPosingData } from "@/const/cons_promptOrder";
 
 const PosingSettings   = (props:{orderSelect:number}) => {
-  const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<PosingSettingsProps>(summaryPrompt[props.orderSelect].posingProps)
-  const onUpdateProps = useRef((summaryPrompt:string[])=>{
-    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
-      return (idx === props.orderSelect)
-      ? { ...prev, posingProps: {
-            ...prev.posingProps,
-            posingList    : posingList    ,
-            additionalList: additionalList,
-            promptList    : summaryPrompt ,
-          },
-      } : prev
-    }))
-  })
-  const [posingList    , setPosingList    ] = useState(property.current.posingList    )
-  const [additionalList, setAdditionalList] = useState(property.current.additionalList)
+  const {dataList, setDataList} = useContext(DataListContext)
+  const property =  dataList.settingList[props.orderSelect].posingProps
 
-  const [displayList     , setDisplayList ] = useState(property.current.promptList    )
+  const [posingList    , setPosingList    ] = useState(property.posingList    )
+  const [additionalList, setAdditionalList] = useState(property.additionalList)
+
+  const [displayList     , setDisplayList ] = useState(property.promptList    )
 
   const handleAdditionalChange = (val:string,id:number) => setAdditionalList(prev=>prev.map((prevItem,idx)=>(idx===id)?val:prevItem))
 
@@ -38,7 +27,18 @@ const PosingSettings   = (props:{orderSelect:number}) => {
     posingList    ,
     additionalList,
   ])
-  useEffect(()=>onUpdateProps.current(displayList),[displayList])
+  useEffect(()=>setDataList(prev=>({ ...prev,
+    settingList: prev.settingList.map((prevListItem,idx)=>{
+      return (idx === props.orderSelect)
+    ? { ...prevListItem, posingProps: {
+          ...prevListItem.posingProps,
+          posingList    : posingList    ,
+          additionalList: additionalList,
+          promptList    : displayList   ,
+        }
+      } : prevListItem
+    }),
+  })),[displayList])
 
   const posingListOrder = posingList.map((pose:PosingDetailProps)=>Object.values(pose).map((item)=>item))
   return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>

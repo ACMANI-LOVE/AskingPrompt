@@ -9,9 +9,10 @@ export interface SelectionType {
   settingSelect : number,
 }
 export interface DataListType {
-  requestList : string[],
-  orderList   : string[],
-  promptLabel : string[],
+  promptList   : string[],
+  requestList  : string[],
+  orderList    : string[],
+  settingList  : SummaryPromptType[],
 }
 export interface SummaryPromptType {
   baseProps   : BaseSettingsProps   ,

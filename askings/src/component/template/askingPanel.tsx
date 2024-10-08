@@ -1,4 +1,4 @@
-import { useEffect, ReactNode, useContext, useRef } from 'react';
+import { useEffect, ReactNode, useContext } from 'react';
 import { Box, Paper, IconButton, Divider } from '@mui/material';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -16,23 +16,17 @@ import getRequestPrompt from '@/app/api/func/getRequestPrompt';
 
 const AskingPanel = () => {
   const {selection, setSelection} = useContext(SelectContext)
-  const requestSelect = useRef(selection.requestSelect ?? 0)
-  const orderSelect   = useRef(selection.orderSelect   ?? 0)
   const {dataList,  setDataList } = useContext(DataListContext)
-  const requestList = useRef(dataList.requestList ?? [])
-  const orderList   = useRef(dataList.orderList   ?? [])
 
-  const requestLabel = requestList.current.map((_,idx)=>`REQ:#${zeroPads(idx+1)}`)
-  const ordersItem   = orderList.  current[orderSelect  .current]
-  const requestItem  = requestList.current[requestSelect.current]
+  const requestLabel = dataList.requestList.map((_,idx)=>`REQ:#${zeroPads(idx+1)}`)
+  const ordersItem   = dataList.orderList  [selection.orderSelect  ]
+  const requestItem  = dataList.requestList[selection.requestSelect]
 
   const [RequestTab,selectReqTab] = useTabGroup({
-    initial: requestSelect.current,
+    initial: selection.requestSelect,
     labelList: requestLabel
   })
   useEffect(()=>{
-    requestSelect.current = selectReqTab;
-    orderSelect  .current = selectReqTab;
     setSelection(prev=>({
       ...prev,
       requestSelect:selectReqTab,
@@ -41,33 +35,31 @@ const AskingPanel = () => {
   },[selectReqTab,setSelection])
 
   const onClickShuffle = () => {
-    console.log("SHUFFLEd!!!")
     // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
     //   method: 'POST',
     //   headers: {'Content-Type': 'application/json'},
-    //   body: JSON.stringify({shuffle:{id:requestSelect.current}} as RequestBodies)
+    //   body: JSON.stringify({shuffle:{id:requestSelect.}} as RequestBodies)
     // })
     // const result:ResponseBodies = await response.json()
     // const { responseShuffle = "fetch failed" } = result
-    const responseShuffle = getRequestPrompt(requestSelect.current) ?? "fetch failed"
-    requestList.current = requestList.current.map((item,idx)=>(idx===requestSelect.current) ? responseShuffle : item)
+    const responseShuffle = getRequestPrompt(selection.requestSelect) ?? "fetch failed"
+    dataList.requestList = dataList.requestList.map((item,idx)=>(idx===selection.requestSelect) ? responseShuffle : item)
 
     setDataList(prev=>({
       ...prev,
-      requestList: prev.requestList.map((item,idx)=>(idx===requestSelect.current ? responseShuffle : item))
+      requestList: prev.requestList.map((item,idx)=>(idx===selection.requestSelect ? responseShuffle : item))
     }))
   }
-  const onClickCopy    = () => navigator.clipboard.writeText(dataList.requestList[requestSelect.current]).finally(()=>openCopy())
+  const onClickCopy    = () => navigator.clipboard.writeText(dataList.requestList[selection.requestSelect]).finally(()=>openCopy())
   const onClickPaste   = () => navigator.clipboard.readText().then((text)=>{
-    orderList.current = orderList.current.map((item,idx)=>(idx===orderSelect.current) ? text : item)
     setDataList(prev=>({
       ...prev,
-      orderList: prev.orderList.map((item,idx)=>(idx===orderSelect.current ? text : item))
+      orderList: prev.orderList.map((item,idx)=>(idx===selection.orderSelect ? text : item))
     }))
   }).finally(()=>openPaste())
   const onClickClean   = () => setDataList(prev=>({
     ...prev,
-    orderList: prev.orderList.map((item,idx)=>(idx === orderSelect.current ? "{}" : item))
+    orderList: prev.orderList.map((item,idx)=>(idx===selection.orderSelect ? "{}" : item))
   }))
 
   const [SnackCopy   , openCopy   ] = useSnackBar({message:"Field Copied!!!"  })
@@ -75,7 +67,7 @@ const AskingPanel = () => {
 
   const OrderCheckField = () => {
     return (<Box flex={1} display={"flex"} flexDirection={"row"} justifyContent={"start"}>
-      {orderList.current.map((order,idx)=><Box key={`order${idx}`} display={"flex"} flexDirection={"row"} justifyContent={"center"} alignItems={"center"}>
+      {dataList.orderList.map((order,idx)=><Box key={`order${idx}`} display={"flex"} flexDirection={"row"} justifyContent={"center"} alignItems={"center"}>
         <ItemText bold text={`Order#${zeroPads(idx+1)}:`}/>
         <OrderChecker order={order}/>
       </Box>)}

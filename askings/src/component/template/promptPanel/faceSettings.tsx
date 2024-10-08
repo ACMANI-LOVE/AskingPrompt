@@ -1,47 +1,27 @@
 import { LabelText } from "@/component/atoms/text"
-import { SummaryPromptContext } from "@/component/context"
+import { DataListContext } from "@/component/context"
 import { ViewItem, EditItem, DisplayItem, OrderWithCheckBox, OrderWithInput, OrderWithPrompt, RowDirection, AdditionalItem } from "@/component/molecules/promptItem"
-import { FaceSettingsProps } from "@/const/cons_promptProps"
 import { randBool } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
+import { useState, BaseSyntheticEvent, useEffect, useContext } from "react"
 
 const FaceSettings    = (props:{orderSelect:number}) => {
-  const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<FaceSettingsProps>(summaryPrompt[props.orderSelect].faceProps)
-  const onUpdateProps = useRef((prompts:string[])=>{
-    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
-    setDisplay(summaryPrompt)
-    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
-      return (idx === props.orderSelect)
-      ? {
-        ...prev, faceProps: {
-          ...prev.faceProps,
-          eyesColorPrompt     : eyesColorInput,
-          random        : chkRandom      ,
-          closeEyes     : chkCloseEyes   ,
-          openMouth     : chkOpenMouth   ,
-          tongueOut     : chkTongueOut   ,
-          additional    : additional     ,
-          prompts       : summaryPrompt  ,
-        },
-      } : prev
-    }))
-  })
+  const {dataList, setDataList} = useContext(DataListContext)
+  const property =  dataList.settingList[props.orderSelect].faceProps
 
-  const eyesColorOrder   = property.current.eyesColor
-  const faceLooksOrder   = property.current.faceLooks       .order
-  const personalityOrder = property.current.personality.order
-  const eyesShapeOrder   = property.current.eyesShape  .order
+  const eyesColorOrder   = property.eyesColor
+  const faceLooksOrder   = property.faceLooks       .order
+  const personalityOrder = property.personality.order
+  const eyesShapeOrder   = property.eyesShape  .order
 
-  const [chkRandom     , setChkRandom     ] = useState(property.current.random    )
-  const [chkCloseEyes  , setChkCloseEyes  ] = useState(property.current.closeEyes )
-  const [chkOpenMouth  , setChkOpenMouth  ] = useState(property.current.openMouth )
-  const [chkTongueOut  , setChkTongueOut  ] = useState(property.current.tongueOut )
-  const [eyesColorInput, setEyesColorInput] = useState(property.current.eyesColorPrompt )
-  const [additional    , setAdditional    ] = useState(property.current.additional)
+  const [chkRandom     , setChkRandom     ] = useState(property.random    )
+  const [chkCloseEyes  , setChkCloseEyes  ] = useState(property.closeEyes )
+  const [chkOpenMouth  , setChkOpenMouth  ] = useState(property.openMouth )
+  const [chkTongueOut  , setChkTongueOut  ] = useState(property.tongueOut )
+  const [eyesColorInput, setEyesColorInput] = useState(property.eyesColorPrompt )
+  const [additional    , setAdditional    ] = useState(property.additional)
 
-  const [display, setDisplay] = useState(property.current.prompts)
+  const [display, setDisplay] = useState(property.prompts)
 
   const handleChangeRandomCheck    = () => setChkRandom   (!chkRandom   )
   const handleChangeCloseEyesCheck = () => setChkCloseEyes(!chkCloseEyes)
@@ -50,9 +30,9 @@ const FaceSettings    = (props:{orderSelect:number}) => {
   const handleEyesColorInputChange = (e:BaseSyntheticEvent) => setEyesColorInput(e.target.value)
   const handleAdditionalChange     = (e:BaseSyntheticEvent) => setAdditional    (e.target.value)
 
-  const faceLooksPrompt   = property.current.faceLooks       .prompt
-  const personalityPrompt = property.current.personality.prompt
-  const eyesShapePrompt   = property.current.eyesShape  .prompt
+  const faceLooksPrompt   = property.faceLooks  .prompt
+  const personalityPrompt = property.personality.prompt
+  const eyesShapePrompt   = property.eyesShape  .prompt
 
   useEffect(()=>{
     const checkCloseEyesPrompt = (chkRandom) ? (randBool() ? "closed eyes"  : "") : ((chkCloseEyes) ? "closed eyes"  : "")
@@ -68,7 +48,25 @@ const FaceSettings    = (props:{orderSelect:number}) => {
       checkTongueOutPrompt,
       additional          ,
     ]
-    onUpdateProps.current(prompts)
+    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
+    setDisplay(summaryPrompt)
+    setDataList(prev=>({ ...prev,
+      settingList: prev.settingList.map((prevListItem,idx)=>{
+        return (idx === props.orderSelect)
+        ? {
+          ...prevListItem, faceProps: {
+            ...prevListItem.faceProps,
+            eyesColorPrompt     : eyesColorInput,
+            random        : chkRandom      ,
+            closeEyes     : chkCloseEyes   ,
+            openMouth     : chkOpenMouth   ,
+            tongueOut     : chkTongueOut   ,
+            additional    : additional     ,
+            prompts       : summaryPrompt  ,
+          }
+        } : prevListItem
+      })
+    }))
   },[
     chkRandom     ,
     chkCloseEyes  ,

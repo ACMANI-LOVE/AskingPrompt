@@ -1,50 +1,33 @@
 import { LabelText } from "@/component/atoms/text"
-import { SummaryPromptContext } from "@/component/context"
+import { DataListContext } from "@/component/context"
 import { ViewItem, EditItem, DisplayItem, OrderWithInput, AdditionalItem, OrderWithPrompt } from "@/component/molecules/promptItem"
-import { HairSettingsProps } from "@/const/cons_promptProps"
 import { Box, Divider } from "@mui/material"
-import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
+import { useState, BaseSyntheticEvent, useEffect, useContext } from "react"
 
 const HairSettings    = (props:{orderSelect:number}) => {
-  const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<HairSettingsProps>(summaryPrompt[props.orderSelect].hairProps)
-  const onUpdateProps = useRef((prompts:string[])=>{
-    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
-    setDisplay(summaryPrompt)
-    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
-      return (idx === props.orderSelect)
-      ? {
-        ...prev, hairProps: {
-          ...prev.hairProps,
-          hairColorPrompt  : hairColorInput ,
-          hairStylePrompt  : hairStyleInput ,
-          bangsStylePrompt : bangsStyleInput,
-          additional      : additional     ,
-          prompts         : summaryPrompt  ,
-        },
-      } : prev
-    }))
-  })
-  const hairColorOrder  = property.current.hairColor
-  const hairStyleOrder  = property.current.hairStyle
-  const bangsStyleOrder = property.current.bangsStyle
-  const hairSizeOrder   = property.current.hairSize .order
-  const bangsSizeOrder  = property.current.bangsSize.order
+  const {dataList, setDataList} = useContext(DataListContext)
+  const property =  dataList.settingList[props.orderSelect].hairProps
 
-  const [hairColorInput , setHairColorInput ] = useState(property.current.hairColorPrompt )
-  const [hairStyleInput , setHairStyleInput ] = useState(property.current.hairStylePrompt )
-  const [bangsStyleInput, setBangsStyleInput] = useState(property.current.bangsStylePrompt)
-  const [additional     , setAdditional     ] = useState(property.current.additional)
+  const hairColorOrder  = property.hairColor
+  const hairStyleOrder  = property.hairStyle
+  const bangsStyleOrder = property.bangsStyle
+  const hairSizeOrder   = property.hairSize .order
+  const bangsSizeOrder  = property.bangsSize.order
 
-  const [display, setDisplay] = useState(property.current.prompts)
+  const [hairColorInput , setHairColorInput ] = useState(property.hairColorPrompt )
+  const [hairStyleInput , setHairStyleInput ] = useState(property.hairStylePrompt )
+  const [bangsStyleInput, setBangsStyleInput] = useState(property.bangsStylePrompt)
+  const [additional     , setAdditional     ] = useState(property.additional)
+
+  const [display, setDisplay] = useState(property.prompts)
 
   const handleHairColorInputChange  = (e:BaseSyntheticEvent) => setHairColorInput (e.target.value)
   const handleHairStyleInputChange  = (e:BaseSyntheticEvent) => setHairStyleInput (e.target.value)
   const handleBangsStyleInputChange = (e:BaseSyntheticEvent) => setBangsStyleInput(e.target.value)
   const handleAdditionalChange      = (e:BaseSyntheticEvent) => setAdditional     (e.target.value)
 
-  const hairSizePrompt  = property.current.hairSize .prompt
-  const bangsSizePrompt = property.current.bangsSize.prompt
+  const hairSizePrompt  = property.hairSize .prompt
+  const bangsSizePrompt = property.bangsSize.prompt
 
   useEffect(()=>{
     const prompts = [
@@ -55,7 +38,23 @@ const HairSettings    = (props:{orderSelect:number}) => {
       bangsStyleInput,
       additional     ,
     ]
-    onUpdateProps.current(prompts)
+    const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
+    setDisplay(summaryPrompt)
+    setDataList(prev=>({ ...prev,
+      settingList: prev.settingList.map((prevListItem,idx)=>{
+        return (idx === props.orderSelect)
+        ? {
+          ...prevListItem, hairProps: {
+            ...prevListItem.hairProps,
+            hairColorPrompt  : hairColorInput ,
+            hairStylePrompt  : hairStyleInput ,
+            bangsStylePrompt : bangsStyleInput,
+            additional      : additional     ,
+            prompts         : summaryPrompt  ,
+          }
+        } : prevListItem
+      })
+    }))
   },[
     hairColorInput ,
     hairStyleInput ,

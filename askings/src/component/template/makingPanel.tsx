@@ -2,7 +2,7 @@ import { downloadByJson, zeroPads, listingFromJson } from '@/util';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import UploadIcon from '@mui/icons-material/Upload';
 import { Box, Paper, Divider, IconButton } from '@mui/material';
-import { useEffect, useContext, useRef, ChangeEvent } from 'react';
+import { useEffect, useContext, ChangeEvent } from 'react';
 import { ItemText, LabelText } from '../atoms/text';
 import useRadioGroup from '../organs/radioGroup';
 import { SelectContext, DataListContext } from '../context';
@@ -19,12 +19,12 @@ import PosingSettings from './promptPanel/posingSettings';
 import { OrderChecker, RowDirection } from '../molecules/promptItem';
 import useHiddenUploadForm from '../organs/uploadFIle';
 import useSnackBar from '../organs/snackBar';
+import { settingsLabel } from '@/const/const_text';
+import getPromptProperties from '@/app/api/func/getPromptProperties';
 
 const MakingPanel = () => {
-  const {selection, setSelection} = useContext(SelectContext)
-  const {dataList,  setDataList } = useContext(DataListContext)
-  const updateOrder    = useRef((newOrder   :number) => setSelection(prev=>({...prev, orderSelect  :newOrder   })))
-  const updateSettings = useRef((newSettings:number) => setSelection(prev=>({...prev, settingSelect:newSettings})))
+  const {selection    , setSelection     } = useContext(SelectContext  )
+  const {dataList     , setDataList      } = useContext(DataListContext)
 
   const ordersLabel = dataList.orderList.map((_,idx)=>`Order:${zeroPads(idx+1)}`)
   const [OrderRadio, selectOrderRadio] = useRadioGroup({
@@ -34,11 +34,17 @@ const MakingPanel = () => {
 
   const [SettingsRadio, selectSettingsRadio] = useRadioGroup({
     initial:  selection.settingSelect,
-    itemList: dataList.promptLabel
+    itemList: settingsLabel,
   })
 
-  useEffect(()=>updateOrder   .current(selectOrderRadio   ),[selectOrderRadio   ])
-  useEffect(()=>updateSettings.current(selectSettingsRadio),[selectSettingsRadio])
+  useEffect(()=>setSelection(prev=>({ ...prev,
+    orderSelect  : selectOrderRadio,
+    settingSelect: selectSettingsRadio,
+  })),[
+    setSelection,
+    selectOrderRadio,
+    selectSettingsRadio,
+  ])
 
   const OrdersField = () => {
     const [SnackUpload, openSnackUpload] = useSnackBar({message:'JSON ROADED!'  });
@@ -50,7 +56,9 @@ const MakingPanel = () => {
         const file = event.target.files?.[0];
         const uploadList = await listingFromJson(file);
         if (uploadList) {
-          setDataList(prev=>({ ...prev, orderList:uploadList }))
+          setDataList(prev=>({ ...prev, orderList:uploadList,
+            settingList: prev.settingList.map((_,idx)=>getPromptProperties({order:uploadList[idx]}))
+           }))
           openSnackUpload()
         } else {
           openSnackFailed();
@@ -81,7 +89,6 @@ const MakingPanel = () => {
     </Box>)
   }
 
-  // const properties = usePromptProperties({ order:dataList.orderList[selection.orderSelect] })
   const settingsList = [
     <BaseSettings    orderSelect={selection.orderSelect} key={"BaseSettingsField"} />,
     <HairSettings    orderSelect={selection.orderSelect} key={"HairSettingsField"} />,
@@ -93,6 +100,7 @@ const MakingPanel = () => {
     <FluidSettings   orderSelect={selection.orderSelect} key={"FluidSettingsField"} />,
     <ActionSettings  orderSelect={selection.orderSelect} key={"ActionSettingsField"} />,
     <PosingSettings  orderSelect={selection.orderSelect} key={"PosingSettingsField"} />,
+    <>AAAA</>
   ]
   return(<Box padding={"1em"} display={"flex"} flexDirection={"row"} gap={"0.5em"} justifyContent={"start"}>
     <OrdersField/>

@@ -1,38 +1,24 @@
 import { LabelText } from "@/component/atoms/text"
-import { SummaryPromptContext } from "@/component/context"
+import { DataListContext } from "@/component/context"
 import { EditItem, OrderWithCheckBox, MultiAdditional, MultiDisplay } from "@/component/molecules/promptItem"
-import { FluidSettingsProps } from "@/const/cons_promptProps"
 import { eightString } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { useContext, useState, useEffect, useRef } from "react"
+import { useContext, useState, useEffect } from "react"
 
 const FluidSettings   = (props:{orderSelect:number}) => {
-  const {summaryPrompt, setSummaryPrompt} = useContext(SummaryPromptContext)
-  const property      = useRef<FluidSettingsProps>(summaryPrompt[props.orderSelect].fluidProps)
-  const onUpdateProps = useRef((summaryPrompt:string[])=>{
-    setSummaryPrompt(prevList=>prevList.map((prev,idx)=>{
-      return (idx === props.orderSelect)
-      ? { ...prev, fluidProps: {
-            ...prev.fluidProps,
-            fluidTier     : tier,
-            fluidsList    : fluidsInputList,
-            additionalList: additionalList ,
-            promptList    : summaryPrompt  ,
-          },
-      } : prev
-    }))
-  })
+  const {dataList, setDataList} = useContext(DataListContext)
+  const property =  dataList.settingList[props.orderSelect].fluidProps
 
-  const [tier           , setTier           ] = useState(property.current.fluidTier     )
-  const [fluidsInputList, setFluidsInputList] = useState(property.current.fluidsList    )
-  const [additionalList , setAdditionalList ] = useState(property.current.additionalList)
+  const [tier           , setTier           ] = useState(property.fluidTier     )
+  const [fluidsInputList, setFluidsInputList] = useState(property.fluidsList    )
+  const [additionalList , setAdditionalList ] = useState(property.additionalList)
 
-  const [displayList    , setDisplayList    ] = useState(property.current.promptList    )
+  const [displayList    , setDisplayList    ] = useState(property.promptList    )
 
   const handleChangeTierSelect = (value:number) => setTier((value!==tier)?value:0)
   const handleAdditionalChange = (val:string,id:number) => setAdditionalList(prev=>prev.map((prevItem,idx)=>(idx===id)?val:prevItem))
 
-  const nsfwFlag = property.current.nsfw
+  const nsfwFlag = property.nsfw
 
   // TODO: Refresh EmotionList
   useEffect(()=>setFluidsInputList(prev=>prev.map(()=>(nsfwFlag) ? eightString() : eightString()))
@@ -45,7 +31,19 @@ const FluidSettings   = (props:{orderSelect:number}) => {
     fluidsInputList,
     additionalList ,
   ])
-  useEffect(()=>onUpdateProps.current(displayList),[displayList])
+  useEffect(()=>setDataList(prev=>({ ...prev,
+    settingList: prev.settingList.map((prevListItem,idx)=>{
+      return (idx === props.orderSelect)
+      ? { ...prevListItem, fluidProps: {
+            ...prevListItem.fluidProps,
+          fluidTier     : tier,
+          fluidsList    : fluidsInputList,
+          additionalList: additionalList ,
+          promptList    : displayList    ,
+        }
+      } : prevListItem
+    }),
+  })),[displayList])
 
 return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'FluidsSetting Prompt'}/>

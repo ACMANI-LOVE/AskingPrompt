@@ -1,7 +1,6 @@
 "use client"
 import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "react";
 import { DataListType, SelectionType, SummaryPromptType } from "@/const/cons_promptProps";
-import { settingsLabel } from "@/const/const_text";
 import { ORDERS } from "@/init/init";
 import getInitialLists from "@/app/api/func/getInitLists";
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
@@ -25,18 +24,12 @@ export const DataListContext = createContext<{
   setDataList : Dispatch<SetStateAction<DataListType>>,
 }>({
   dataList: {
-    requestList : [],
-    orderList   : [],
-    promptLabel : [],
+    promptList : [],
+    requestList: [],
+    orderList  : [],
+    settingList: [],
   },
   setDataList: ()=>{}
-})
-export const SummaryPromptContext = createContext<{
-  summaryPrompt    : SummaryPromptType[],
-  setSummaryPrompt : Dispatch<SetStateAction<SummaryPromptType[]>>,
-}>({
-  summaryPrompt: [],
-  setSummaryPrompt: ()=>{}
 })
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 // Provider
@@ -70,18 +63,15 @@ export const ContextProvider = (props:{children:ReactNode}) => {
   } as SelectionType)
   // ----- DataList State -----
   const [dataList, setDataList] = useState<DataListType>({
+    promptList : [],
     requestList: initItems.request,
     orderList  : initItems.order,
-    promptLabel: settingsLabel,
+    settingList: initItems.properties,
   } as DataListType)
-  // ----- props State -----
-  const [summaryPrompt, setSummaryPrompt] = useState<SummaryPromptType[]>(initItems.properties as SummaryPromptType[])
   // ----- providers -----
   return (<SelectContext.Provider  value={{selection, setSelection}}>
     <DataListContext.Provider      value={{dataList, setDataList}}>
-    <SummaryPromptContext.Provider value={{summaryPrompt, setSummaryPrompt}}>
       {props.children}
-    </SummaryPromptContext.Provider>
     </DataListContext.Provider>
   </SelectContext.Provider>)
 }
