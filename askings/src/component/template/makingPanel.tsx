@@ -21,6 +21,7 @@ import useHiddenUploadForm from '../organs/uploadFIle';
 import useSnackBar from '../organs/snackBar';
 import { settingsLabel } from '@/const/const_text';
 import getPromptProperties from '@/app/api/func/getPromptProperties';
+import PromptSummaries from './promptPanel/promptSums';
 
 const MakingPanel = () => {
   const {selection    , setSelection     } = useContext(SelectContext  )
@@ -100,7 +101,7 @@ const MakingPanel = () => {
     <FluidSettings   orderSelect={selection.orderSelect} key={"FluidSettingsField"} />,
     <ActionSettings  orderSelect={selection.orderSelect} key={"ActionSettingsField"} />,
     <PosingSettings  orderSelect={selection.orderSelect} key={"PosingSettingsField"} />,
-    <>AAAA</>
+    <PromptSummaries orderSelect={selection.orderSelect} key={"PromptSummaries"} />,
   ]
   return(<Box padding={"1em"} display={"flex"} flexDirection={"row"} gap={"0.5em"} justifyContent={"start"}>
     <OrdersField/>

@@ -9,6 +9,7 @@ import { getRandomPosingData } from "@/app/api/func/getPropertyData";
 
 const PosingSettings   = (props:{orderSelect:number}) => {
   const orderSelect = useRef(props.orderSelect)
+  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
   const {dataList, setDataList} = useContext(DataListContext)
   const property =  dataList.settingList[orderSelect.current].posingProps
 

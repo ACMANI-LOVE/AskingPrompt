@@ -1,13 +1,14 @@
 import { LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
 import { DataListContext } from "@/component/context"
-import { ViewItem, Order, EditItem, DisplayItem, OrderWithInput, OrderWithCheckBox, BlocItem, AdditionalItem } from "@/component/molecules/promptItem"
+import { ViewItem, Order, EditItem, DisplayItem, OrderWithInput, OrderWithCheckBox, BlocItem, AdditionalItem, ColorOrder } from "@/component/molecules/promptItem"
 import { randBool } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
 
 const GenitalSettings = (props:{orderSelect:number}) => {
   const orderSelect = useRef(props.orderSelect)
+  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
   const {dataList, setDataList} = useContext(DataListContext)
   const property =  dataList.settingList[orderSelect.current].genitalProps
 
@@ -100,7 +101,10 @@ const GenitalSettings = (props:{orderSelect:number}) => {
   return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'GenitalSetting Prompt'}/>
     <Divider/>
-    <EditItem label={'Genital color:'  }><OrderWithInput value={genitalColorInput   } onChange={handleGenitalColorInputChange} order={genitalsColorOrder}/></EditItem>
+    <EditItem label={'Genital color:'  }>
+      <ColorOrder colorText={genitalsColorOrder}/>
+      <OrderWithInput value={genitalColorInput   } onChange={handleGenitalColorInputChange}/>
+    </EditItem>
     <EditItem label={'Pussy Details:'  }><PromptField    value={pussyDetailsInput   } onChange={handlePussyDetailsInputChange}/></EditItem>
     <EditItem label={'Anus Details:'   }><PromptField    value={anusDetailsInput    } onChange={handleAnusDetailsInputChange }/></EditItem>
     <Divider/>

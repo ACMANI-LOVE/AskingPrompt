@@ -8,6 +8,7 @@ import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "rea
 
 const SceneSettings   = (props:{orderSelect:number}) => {
   const orderSelect = useRef(props.orderSelect)
+  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
   const {dataList, setDataList} = useContext(DataListContext)
   const property =  dataList.settingList[orderSelect.current].sceneProps
 

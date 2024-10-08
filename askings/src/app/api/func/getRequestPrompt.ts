@@ -45,7 +45,7 @@ const getRequestPrompt = (idx:number) => {
   `      "hairStyleColor"   : "", //未決定:カラーコードを記載。指定に制限は設けない                                                                                                      \n`+
   `      "mainSkinColor"    : "", //未決定:カラーコードを記載。指定に制限は設けない                                                                                                      \n`+
   `      "subSkinColor"     : "", //未決定:カラーコードを記載。指定に制限は設けない                                                                                                      \n`+
-  `      "cosmeticSkinColor": ""  //未決定:カラーコードを記載。指定に制限は設けない                                                                                                      \n`+
+  `      "otherFreeColor": ""  //未決定:カラーコードを記載。指定に制限は設けない                                                                                                      \n`+
   `    }                                                                                                                                                          \n`+
   `  },                                                                                                                                                           \n`+
   `  "CHARA_INFO" : {                                                                                                                                             \n`+

@@ -7,6 +7,7 @@ import { useContext, useState, useEffect, useRef } from "react"
 
 const FluidSettings   = (props:{orderSelect:number}) => {
   const orderSelect = useRef(props.orderSelect)
+  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
   const {dataList, setDataList} = useContext(DataListContext)
   const property =  dataList.settingList[orderSelect.current].fluidProps
 

@@ -1,14 +1,14 @@
 import { TextField } from "@mui/material";
 import { BaseSyntheticEvent } from "react";
 
-export const OrdersField = (props:{text:string}) => {
+export const OrdersField = (props:{text:string, line?:number}) => {
   const onFocusInvalid = (e: React.FocusEvent<HTMLInputElement>) => {
     e.preventDefault();
     e.target.blur();
   };
   return (<TextField
     fullWidth
-    rows={35}
+    rows={props.line ?? 35}
     multiline
     focused={true}
     contentEditable={false}

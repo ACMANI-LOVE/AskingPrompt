@@ -1,4 +1,4 @@
-import { Box, Checkbox, Divider, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
+import { Badge, BadgePropsColorOverrides, Box, Card, Checkbox, Divider, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import { BaseSyntheticEvent, ReactNode } from "react"
 import { ItemText, TableText } from "../atoms/text"
 import DiscountIcon from '@mui/icons-material/Discount';
@@ -118,6 +118,20 @@ export const Order = (props:{order:string}) => {
   return (<Box flex={1} display={"flex"} justifyContent={"end"} alignItems={"center"} gap={"0.5em"}>
     <ItemText bold text={props.order} />
   </Box>)
+}
+
+export const ColorOrder = (props:{colorText:string}) => {
+  const hexPattern = /^#([0-9A-F]{3}){1,2}$/i;
+  const isCode = hexPattern.test(props.colorText);
+  return (<Box flex={1} display={"flex"} justifyContent={"end"} alignItems={"center"} gap={"0.5em"}>
+      <ItemText text={props.colorText}/>
+      <Card sx={{
+        bgcolor: (isCode) ? props.colorText : "#000",
+        width:"1.5em",height:"1.5em", borderRadius:"100%",
+        boxShadow:`2px 2px 5px 0px #FFF`
+      }}/>
+  </Box>
+  )
 }
 
 export const OrderWithInput = (props:{order?:string, value:string, onChange:(e:BaseSyntheticEvent)=>void}) => {

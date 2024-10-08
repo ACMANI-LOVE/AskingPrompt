@@ -85,7 +85,7 @@ const getPromptProperties = (props:{order?:string}) => {
   const genitalProps:GenitalSettingsProps = {
     maleGenitals    : getGenitalData    ({ enums: charaInfo?.genitalSettings?.maleGenital ?? 0 }),
     maleGenitalsSize: getGenitalSizeData({ enums: charaInfo?.genitalSettings?.genitalSize ?? 0 }),
-    genitalsColor   : otherInfo?.colorSettings?.cosmeticSkinColor ?? emptyStrings,
+    genitalsColor   : otherInfo?.colorSettings?.otherFreeColor ?? emptyStrings,
     nsfw           : initialNSFW,
     random         : false,
     publicHair     : false,

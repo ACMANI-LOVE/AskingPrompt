@@ -1,12 +1,13 @@
 import { LabelText } from "@/component/atoms/text"
 import { DataListContext } from "@/component/context"
-import { ViewItem, EditItem, DisplayItem, OrderWithCheckBox, OrderWithInput, OrderWithPrompt, RowDirection, AdditionalItem } from "@/component/molecules/promptItem"
+import { ViewItem, EditItem, DisplayItem, OrderWithCheckBox, OrderWithInput, OrderWithPrompt, RowDirection, AdditionalItem, ColorOrder } from "@/component/molecules/promptItem"
 import { randBool } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
 
 const FaceSettings    = (props:{orderSelect:number}) => {
   const orderSelect = useRef(props.orderSelect)
+  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
   const {dataList, setDataList} = useContext(DataListContext)
   const property =  dataList.settingList[orderSelect.current].faceProps
 
@@ -88,7 +89,10 @@ const FaceSettings    = (props:{orderSelect:number}) => {
     <ViewItem label={'Personality:'}><OrderWithPrompt order={personalityOrder} value={personalityPrompt}/></ViewItem>
     <Divider/>
     <ViewItem label={'Eyes shape:' }><OrderWithPrompt order={eyesShapeOrder  } value={eyesShapePrompt  }/></ViewItem>
-    <EditItem label={'Eyes color:' }><OrderWithInput  order={eyesColorOrder  } value={eyesColorInput   } onChange={handleEyesColorInputChange}/></EditItem>
+    <EditItem label={'Eyes color:' }>
+      <ColorOrder colorText={eyesColorOrder} />
+      <OrderWithInput value={eyesColorInput   } onChange={handleEyesColorInputChange}/>
+    </EditItem>
     <Divider/>
     <EditItem  label={'Optional:'}/>
     <RowDirection noIdent>

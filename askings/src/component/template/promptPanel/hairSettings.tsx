@@ -1,11 +1,12 @@
 import { LabelText } from "@/component/atoms/text"
 import { DataListContext } from "@/component/context"
-import { ViewItem, EditItem, DisplayItem, OrderWithInput, AdditionalItem, OrderWithPrompt } from "@/component/molecules/promptItem"
+import { ViewItem, EditItem, DisplayItem, OrderWithInput, AdditionalItem, OrderWithPrompt, ColorOrder } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
 import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
 
 const HairSettings    = (props:{orderSelect:number}) => {
   const orderSelect = useRef(props.orderSelect)
+  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
   const {dataList, setDataList} = useContext(DataListContext)
   const property =  dataList.settingList[orderSelect.current].hairProps
 
@@ -69,7 +70,10 @@ const HairSettings    = (props:{orderSelect:number}) => {
   return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'HairSetting Prompt'}/>
     <Divider/>
-    <EditItem label={'Hair color:' }><OrderWithInput order={hairColorOrder } value={hairColorInput } onChange={handleHairColorInputChange }/></EditItem>
+    <EditItem label={'Hair color:' }>
+      <ColorOrder colorText={hairColorOrder}/>
+      <OrderWithInput value={hairColorInput } onChange={handleHairColorInputChange }/>
+    </EditItem>
     <Divider/>
     <ViewItem label={'Hair size:'  }><OrderWithPrompt order={hairSizeOrder  } value={hairSizePrompt} /></ViewItem>
     <EditItem label={'Hair style:' }><OrderWithInput  order={hairStyleOrder } value={hairStyleInput} onChange={handleHairStyleInputChange }/></EditItem>

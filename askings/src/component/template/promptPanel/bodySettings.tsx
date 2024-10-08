@@ -1,12 +1,13 @@
 import { LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
 import { DataListContext } from "@/component/context"
-import { AdditionalItem, BlocItem, DisplayItem, EditItem, Order, OrderWithPrompt, RowDirection, ViewItem } from "@/component/molecules/promptItem"
+import { AdditionalItem, BlocItem, ColorOrder, DisplayItem, EditItem, Order, OrderWithPrompt, RowDirection, ViewItem } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
 import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
 
 const BodySettings    = (props:{orderSelect:number}) => {
   const orderSelect = useRef(props.orderSelect)
+  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
   const {dataList, setDataList} = useContext(DataListContext)
   const property =  dataList.settingList[orderSelect.current].bodyProps
 
@@ -70,8 +71,8 @@ return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <Divider/>
     <ViewItem label={'Skin Type: '}><Order order={skinTypeOrder} /></ViewItem>
     <RowDirection>
-      <ViewItem label={'BodyColor [Main]: '}><Order order={mainColorOrder} /></ViewItem>
-      <ViewItem label={'BodyColor [Sub]: ' }><Order order={subColorOrder } /></ViewItem>
+      <ViewItem label={'BodyColor [Main]: '}><ColorOrder colorText={mainColorOrder} /></ViewItem>
+      <ViewItem label={'BodyColor [Sub]: ' }><ColorOrder colorText={subColorOrder } /></ViewItem>
     </RowDirection>
     <EditItem label={'Skin Prompt: '}/>
     <BlocItem><PromptField value={skinPrompt} onChange={handleSkinPromptChange}/></BlocItem>
