@@ -1,13 +1,14 @@
+import { getRandomActionData } from "@/app/api/func/getPropertyData"
 import { LabelText } from "@/component/atoms/text"
 import { DataListContext } from "@/component/context"
 import { EditItem, MultiAdditional, MultiDisplay, OrderWithCheckBox } from "@/component/molecules/promptItem"
-import { eightString } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 
 const ActionSettings   = (props:{orderSelect:number}) => {
+  const orderSelect = useRef(props.orderSelect)
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[props.orderSelect].actionProps
+  const property =  dataList.settingList[orderSelect.current].actionProps
 
   const [tier            , setTier            ] = useState(property.actionTier    )
   const [actionsInputList, setActionsInputList] = useState(property.actionsList   )
@@ -21,29 +22,43 @@ const ActionSettings   = (props:{orderSelect:number}) => {
   const nsfwFlag = property.nsfw
 
   // TODO: Refresh EmotionList
-  useEffect(()=>setActionsInputList(prev=>prev.map(()=>(nsfwFlag) ? eightString() : eightString()))
-  ,[
-    tier,
-    nsfwFlag,
-  ])
-  useEffect(()=>setDisplayList(prev=>prev.map((_,idx)=>actionsInputList[idx]+additionalList[idx]))
-  ,[
-    actionsInputList,
-    additionalList ,
-  ])
+  useEffect(()=>{
+    setActionsInputList(prev=>prev.map(()=> `${getRandomActionData(tier)}`))
+    setDataList(prev=>({ ...prev,
+      settingList: prev.settingList.map((prevListItem,idx)=>{
+        return (idx === orderSelect.current)
+        ? { ...prevListItem, actionProps: {
+              ...prevListItem.actionProps,
+              actionTier    : tier,
+            }
+        } : prevListItem
+      }),
+    }))
+  },[ setDataList, tier, nsfwFlag, ])
+  useEffect(()=>{
+    setDisplayList(prev=>prev.map((_,idx)=>`${actionsInputList[idx]}, ${additionalList[idx]}`))
+    setDataList(prev=>({ ...prev,
+      settingList: prev.settingList.map((prevListItem,idx)=>{
+        return (idx === orderSelect.current)
+        ? { ...prevListItem, actionProps: {
+              ...prevListItem.actionProps,
+              actionsList   : actionsInputList,
+              additionalList: additionalList ,
+            }
+        } : prevListItem
+      }),
+    }))
+  },[ setDataList, actionsInputList, additionalList, ])
   useEffect(()=>setDataList(prev=>({ ...prev,
     settingList: prev.settingList.map((prevListItem,idx)=>{
-      return (idx === props.orderSelect)
+      return (idx === orderSelect.current)
       ? { ...prevListItem, actionProps: {
             ...prevListItem.actionProps,
-            actionTier    : tier,
-            actionsList   : actionsInputList,
-            additionalList: additionalList ,
             promptList    : displayList  ,
           }
       } : prevListItem
     }),
-  })),[displayList])
+  })),[ setDataList, displayList ])
 
 return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'EmotionSetting Prompt'}/>

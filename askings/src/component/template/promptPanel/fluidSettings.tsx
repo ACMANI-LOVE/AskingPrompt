@@ -1,13 +1,14 @@
+import { getRandomFluidsData } from "@/app/api/func/getPropertyData"
 import { LabelText } from "@/component/atoms/text"
 import { DataListContext } from "@/component/context"
 import { EditItem, OrderWithCheckBox, MultiAdditional, MultiDisplay } from "@/component/molecules/promptItem"
-import { eightString } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { useContext, useState, useEffect } from "react"
+import { useContext, useState, useEffect, useRef } from "react"
 
 const FluidSettings   = (props:{orderSelect:number}) => {
+  const orderSelect = useRef(props.orderSelect)
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[props.orderSelect].fluidProps
+  const property =  dataList.settingList[orderSelect.current].fluidProps
 
   const [tier           , setTier           ] = useState(property.fluidTier     )
   const [fluidsInputList, setFluidsInputList] = useState(property.fluidsList    )
@@ -21,29 +22,43 @@ const FluidSettings   = (props:{orderSelect:number}) => {
   const nsfwFlag = property.nsfw
 
   // TODO: Refresh EmotionList
-  useEffect(()=>setFluidsInputList(prev=>prev.map(()=>(nsfwFlag) ? eightString() : eightString()))
-  ,[
-    tier,
-    nsfwFlag,
-  ])
-  useEffect(()=>setDisplayList(prev=>prev.map((_,idx)=>fluidsInputList[idx]+additionalList[idx]))
-  ,[
-    fluidsInputList,
-    additionalList ,
-  ])
+  useEffect(()=>{
+    setFluidsInputList(prev=>prev.map(()=> `${(tier===3)?"excessive cum drop, ":""}${getRandomFluidsData(tier)}`))
+    setDataList(prev=>({ ...prev,
+      settingList: prev.settingList.map((prevListItem,idx)=>{
+        return (idx === orderSelect.current)
+        ? { ...prevListItem, fluidProps: {
+              ...prevListItem.fluidProps,
+              fluidTier : tier,
+            }
+        } : prevListItem
+      })
+    }))
+  },[ setDataList, tier, nsfwFlag, ])
+  useEffect(()=>{
+    setDisplayList(prev=>prev.map((_,idx)=>`${fluidsInputList[idx]}, ${additionalList[idx]}`))
+    setDataList(prev=>({ ...prev,
+      settingList: prev.settingList.map((prevListItem,idx)=>{
+        return (idx === orderSelect.current)
+        ? { ...prevListItem, fluidProps: {
+              ...prevListItem.fluidProps,
+              fluidsList    : fluidsInputList,
+              additionalList: additionalList ,
+            }
+        } : prevListItem
+      })
+    }))
+  },[ setDataList, fluidsInputList, additionalList, ])
   useEffect(()=>setDataList(prev=>({ ...prev,
     settingList: prev.settingList.map((prevListItem,idx)=>{
-      return (idx === props.orderSelect)
+      return (idx === orderSelect.current)
       ? { ...prevListItem, fluidProps: {
             ...prevListItem.fluidProps,
-          fluidTier     : tier,
-          fluidsList    : fluidsInputList,
-          additionalList: additionalList ,
-          promptList    : displayList    ,
-        }
+            promptList: displayList,
+          }
       } : prevListItem
     }),
-  })),[displayList])
+  })),[ setDataList, displayList, ])
 
 return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'FluidsSetting Prompt'}/>
@@ -56,7 +71,7 @@ return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
     </Box>
     <Divider/>
-    <MultiAdditional additions={additionalList} onChange={handleAdditionalChange}/>
+    <MultiAdditional label={"Fluids Prompts"} additions={additionalList} onChange={handleAdditionalChange}/>
     <MultiDisplay prompts={displayList}/>
   </Box>)}
 export default FluidSettings

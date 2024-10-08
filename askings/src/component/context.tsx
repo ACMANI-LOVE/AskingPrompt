@@ -1,6 +1,6 @@
 "use client"
 import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "react";
-import { DataListType, SelectionType, SummaryPromptType } from "@/const/cons_promptProps";
+import { DataListType, SelectionType } from "@/const/cons_promptProps";
 import { ORDERS } from "@/init/init";
 import getInitialLists from "@/app/api/func/getInitLists";
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========

@@ -1,9 +1,9 @@
-import { getModelsData, getGenitalData, getGenitalSizeData, getPeriodData, getWeatherData, getTimesData, getHairSizeData, getBangsSizeData, getAgesData, getEyesShapeData, getMindData, getSkinData, getFigureData, getBoobSizeData, getBodySizeData, getButtSizeData } from "@/const/cons_promptOrder";
 import { Models, Genital } from "@/const/cons_reqEnum";
 import { ModelsTypes, BasicSettings, SpeciesType, GenitalSettings, GenitalSizeTypes, SituationSettings, PeriodTypes, WeathersTypes, TimesTypes, HairDataSettings, HairSizeTypes, FaceDataSettings, AgesTypes, EyesShapeTypes, MindTypes, BodyDataSettings, SkinTypes, FigureTypes, FigureSizeTypes } from "@/const/cons_requestTypes";
 import { request_header } from "@/const/const_text";
 import { Animaloid, Humanoids } from "@/init/init";
-import { lotteryList, randBetween, randBool, zeroPads } from "@/util"
+import { lotteryList, randBetween, randBool } from "@/util";
+import { getModelsData, getGenitalData, getGenitalSizeData, getPeriodData, getWeatherData, getTimesData, getHairSizeData, getBangsSizeData, getAgesData, getEyesShapeData, getMindData, getSkinData, getFigureData, getBoobSizeData, getBodySizeData, getButtSizeData } from "./getPropertyData";
 
 const getRequestPrompt = (idx:number) => {
   const promptHeader    = request_header
@@ -16,9 +16,9 @@ const getRequestPrompt = (idx:number) => {
   const situations      = SituationSelection();
 
   const promptBody =
-  `[${zeroPads(idx+1)}]\n`+
   `{                                                                                                                                                                \n`+
   `  "OTHER_INFO" : {                                                                                                                                               \n`+
+  `    "story"         : ""  //未決定: 上記の内容をもとに、セクシーな短い紹介文を記載。ただし露骨な性表現はNG"                                                      \n`+
   `    "baseSettings"  : {                                                                                                                                          \n`+
   `      "model"       : ${basicSettings.models }, //対応する番号に変換:1人型（女性）,2人型（両性）,3獣人（メス）,4獣人（両性）,                                                          \n`+
   `      "character"   : ${basicSettings.species}, //決定済                                                                                                                               \n`+
@@ -71,8 +71,7 @@ const getRequestPrompt = (idx:number) => {
   `      "maleGenital" : ${genitalSettings.maleGenital},  //対応する番号に変換:1あり,2なし,                                                                                                 \n`+
   `      "genitalSize" : ${genitalSettings.genitalSize}   //対応する番号に変換:1普通,2短小,3太い,4長い,5巨大,                                                                             \n`+
   `    }                                                                                                                                                        \n`+
-  `  },                                                                                                                                                         \n`+
-  `  "story"           : ""  //未決定: 上記の内容をもとに、セクシーな短い紹介文を記載。ただし露骨な性表現はNG"                                                      \n`+
+  `  }                                                                                                                                                          \n`+
   `}                                                                                                                                                            \n`
   return promptHeader + promptBody;
 }
@@ -93,9 +92,9 @@ const ModelsSelection = (idx: number) => {
 const BasicSelection = (chara: ModelsTypes): BasicSettings => {
   let speciesData = {} as SpeciesType;
   if (chara === Models.Female || chara === Models.Futanari) {
-    speciesData = lotteryList(Humanoids);
+    speciesData = lotteryList(Humanoids)[0];
   } else {
-    speciesData = lotteryList(Animaloid);
+    speciesData = lotteryList(Animaloid)[0];
   }
   const species = speciesData.species
   const models  = getModelsData({enums:chara}).order as string;
@@ -138,17 +137,16 @@ const FaceDataSelection = (): FaceDataSettings => {
 const BodyDataSelection = (chara: ModelsTypes): BodyDataSettings => {
   let specieType = 0;
   if (chara === Models.Female || chara === Models.Futanari) {
-    specieType = lotteryList(Humanoids).type;
+    specieType = lotteryList(Humanoids)[0].type;
   } else {
-    specieType = lotteryList(Animaloid).type;
+    specieType = lotteryList(Animaloid)[0].type;
   }
-  const skin   = getSkinData    ({ enums:specieType as SkinTypes})
-  const skinData   = Number(skin.prompt) ?? 0;
-  const skinType   = skin.order  as string;
-  const figureType = getFigureData  ({ enums:randBetween(1, 2) as FigureTypes    }).order[skinData] as string;
-  const bustSize   = getBoobSizeData({ enums:randBetween(1, 3) as FigureSizeTypes}).order[skinData] as string;
-  const waistSize  = getBodySizeData({ enums:randBetween(1, 3) as FigureSizeTypes}).order[skinData] as string;
-  const hipsSize   = getButtSizeData({ enums:randBetween(1, 3) as FigureSizeTypes}).order[skinData] as string;
+  const skinType   = getSkinData    ({ enums:specieType        as SkinTypes      }).order as string
+  const figure     = getFigureData  ({ enums:randBetween(1, 2) as FigureTypes    })
+  const figureType = figure.order as string;
+  const bustSize   = getBoobSizeData({ enums:randBetween(1, 3) as FigureSizeTypes}).order[Number(figure.prompt)] as string;
+  const waistSize  = getBodySizeData({ enums:randBetween(1, 3) as FigureSizeTypes}).order[Number(figure.prompt)] as string;
+  const hipsSize   = getButtSizeData({ enums:randBetween(1, 3) as FigureSizeTypes}).order[Number(figure.prompt)] as string;
   return {
     skinType,
     figureType,

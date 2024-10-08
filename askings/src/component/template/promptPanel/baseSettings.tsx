@@ -3,11 +3,12 @@ import { PromptField } from "@/component/atoms/textField"
 import { DataListContext } from "@/component/context"
 import { AdditionalItem, BlocItem, DisplayItem, EditItem, Order, OrderWithCheckBox, ViewItem } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
-import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
+import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
 
 const BaseSettings    = (props:{orderSelect:number}) => {
+  const orderSelect = useRef(props.orderSelect)
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[props.orderSelect].baseProps
+  const property =  dataList.settingList[orderSelect.current].baseProps
 
   const storyOrder     = property.story
   const modelOrder     = property.model
@@ -40,27 +41,31 @@ const BaseSettings    = (props:{orderSelect:number}) => {
     setDisplay(summaryPrompt)
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === props.orderSelect)
-        ? {
-          ...prevListItem, baseProps: {
-            ...prevListItem.baseProps,
-            base      : baseInput    ,
-            nsfw      : chkNsfw      ,
-            solo      : chkSolo      ,
-            cute      : chkCute      ,
-            additional: additional   ,
-            prompts   : summaryPrompt,
+        return (idx === orderSelect.current)
+        ? { ...prevListItem,
+            baseProps: { ...prevListItem.baseProps,
+              base      : baseInput    ,
+              nsfw      : chkNsfw      ,
+              solo      : chkSolo      ,
+              cute      : chkCute      ,
+              additional: additional   ,
+              prompts   : summaryPrompt,
+            },
+            genitalProps: { ...prevListItem.genitalProps, nsfw: chkNsfw, },
+            fluidProps  : { ...prevListItem.fluidProps  , nsfw: chkNsfw, },
+            emotionProps: { ...prevListItem.emotionProps, nsfw: chkNsfw, },
+            actionProps : { ...prevListItem.actionProps , nsfw: chkNsfw, },
           }
-        }
-        : prevListItem
+          : prevListItem
       })
     }))
   },[
-    baseInput ,
-    chkNsfw   ,
-    chkSolo   ,
-    chkCute   ,
-    additional,
+    setDataList,
+    baseInput  ,
+    chkNsfw    ,
+    chkSolo    ,
+    chkCute    ,
+    additional ,
   ])
 
   return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>

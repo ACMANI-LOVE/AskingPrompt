@@ -3,11 +3,12 @@ import { PromptField } from "@/component/atoms/textField"
 import { DataListContext } from "@/component/context"
 import { AdditionalItem, BlocItem, DisplayItem, EditItem, Order, OrderWithPrompt, RowDirection, ViewItem } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
-import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
+import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
 
 const BodySettings    = (props:{orderSelect:number}) => {
+  const orderSelect = useRef(props.orderSelect)
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[props.orderSelect].bodyProps
+  const property =  dataList.settingList[orderSelect.current].bodyProps
 
   const mainColorOrder = property.mainBodyColor
   const subColorOrder  = property.subBodyColor
@@ -43,7 +44,7 @@ const BodySettings    = (props:{orderSelect:number}) => {
     setDisplay(summaryPrompt)
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === props.orderSelect)
+        return (idx === orderSelect.current)
         ? {
             ...prevListItem, bodyProps: {
               ...prevListItem.bodyProps,
@@ -55,8 +56,9 @@ const BodySettings    = (props:{orderSelect:number}) => {
       })
     }))
   },[
-    skinPrompt,
-    additional,
+    setDataList   ,
+    skinPrompt    ,
+    additional    ,
     bodyTypePrompt,
     bodySizePrompt,
     boobSizePrompt,

@@ -95,9 +95,9 @@ export const AdditionalItem = (props:{additional:string, onChange:(e:BaseSynthet
   )
 }
 
-export const MultiAdditional = (props:{additions:string[], onChange:(val:string,id:number)=>void}) => {
+export const MultiAdditional = (props:{additions:string[], onChange:(val:string,id:number)=>void, label?:string}) => {
   return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
-    <EditItem  label={'Additional:'}/>
+    <EditItem  label={`${props.label ?? "Additional"}:`}/>
     {props.additions.map((additional,idx)=><BlocItem key={`additions${idx}`}>
       <OrderWithInput order={`Additional:${zeroPads(idx+1)}`} value={additional} onChange={(e)=>props.onChange(e.target.value,idx)}/>
     </BlocItem>)}

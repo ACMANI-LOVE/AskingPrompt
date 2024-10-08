@@ -2,11 +2,12 @@ import { LabelText } from "@/component/atoms/text"
 import { DataListContext } from "@/component/context"
 import { ViewItem, EditItem, DisplayItem, OrderWithInput, AdditionalItem, OrderWithPrompt } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
-import { useState, BaseSyntheticEvent, useEffect, useContext } from "react"
+import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
 
 const HairSettings    = (props:{orderSelect:number}) => {
+  const orderSelect = useRef(props.orderSelect)
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[props.orderSelect].hairProps
+  const property =  dataList.settingList[orderSelect.current].hairProps
 
   const hairColorOrder  = property.hairColor
   const hairStyleOrder  = property.hairStyle
@@ -42,7 +43,7 @@ const HairSettings    = (props:{orderSelect:number}) => {
     setDisplay(summaryPrompt)
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === props.orderSelect)
+        return (idx === orderSelect.current)
         ? {
           ...prevListItem, hairProps: {
             ...prevListItem.hairProps,
@@ -56,6 +57,7 @@ const HairSettings    = (props:{orderSelect:number}) => {
       })
     }))
   },[
+    setDataList    ,
     hairColorInput ,
     hairStyleInput ,
     bangsStyleInput,

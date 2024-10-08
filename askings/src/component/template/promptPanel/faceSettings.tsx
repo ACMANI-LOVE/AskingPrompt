@@ -3,11 +3,12 @@ import { DataListContext } from "@/component/context"
 import { ViewItem, EditItem, DisplayItem, OrderWithCheckBox, OrderWithInput, OrderWithPrompt, RowDirection, AdditionalItem } from "@/component/molecules/promptItem"
 import { randBool } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { useState, BaseSyntheticEvent, useEffect, useContext } from "react"
+import { useState, BaseSyntheticEvent, useEffect, useContext, useRef } from "react"
 
 const FaceSettings    = (props:{orderSelect:number}) => {
+  const orderSelect = useRef(props.orderSelect)
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[props.orderSelect].faceProps
+  const property =  dataList.settingList[orderSelect.current].faceProps
 
   const eyesColorOrder   = property.eyesColor
   const faceLooksOrder   = property.faceLooks       .order
@@ -52,7 +53,7 @@ const FaceSettings    = (props:{orderSelect:number}) => {
     setDisplay(summaryPrompt)
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === props.orderSelect)
+        return (idx === orderSelect.current)
         ? {
           ...prevListItem, faceProps: {
             ...prevListItem.faceProps,
@@ -68,6 +69,7 @@ const FaceSettings    = (props:{orderSelect:number}) => {
       })
     }))
   },[
+    setDataList   ,
     chkRandom     ,
     chkCloseEyes  ,
     chkOpenMouth  ,

@@ -4,11 +4,12 @@ import { DataListContext } from "@/component/context"
 import { ViewItem, Order, EditItem, DisplayItem, OrderWithInput, OrderWithCheckBox, BlocItem, AdditionalItem } from "@/component/molecules/promptItem"
 import { randBool } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
+import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
 
 const GenitalSettings = (props:{orderSelect:number}) => {
+  const orderSelect = useRef(props.orderSelect)
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[props.orderSelect].genitalProps
+  const property =  dataList.settingList[orderSelect.current].genitalProps
 
   const genitalsColorOrder    = property.genitalsColor
   const maleGenitalsOrder     = property.maleGenitals    .order
@@ -62,7 +63,7 @@ const GenitalSettings = (props:{orderSelect:number}) => {
     setDisplay(summaryPrompt)
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === props.orderSelect)
+        return (idx === orderSelect.current)
         ? {
             ...prevListItem, genitalProps: {
               ...prevListItem.genitalProps,
@@ -81,6 +82,7 @@ const GenitalSettings = (props:{orderSelect:number}) => {
       })
     }))
   },[
+    setDataList           ,
     nsfwFag               ,
     chkInvertNipple       ,
     chkPublicHair         ,
@@ -88,6 +90,7 @@ const GenitalSettings = (props:{orderSelect:number}) => {
     chkSheathPenis        ,
     anusDetailsInput      ,
     pussyDetailsInput     ,
+    genitalsDetailsInput  ,
     genitalColorInput     ,
     maleGenitalsPrompt    ,
     maleGenitalsSizePrompt,

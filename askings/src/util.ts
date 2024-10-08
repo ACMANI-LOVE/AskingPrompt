@@ -22,9 +22,10 @@ export function randBetween (min: number, max: number) {
   const minimum = min ?? 0;
   return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 }
-export function lotteryList<T> (listObj: T[]): T {
-  const lotteryIDX = Math.floor(Math.random() * listObj.length);
-  return listObj[lotteryIDX];
+export function lotteryList<T> (listObj: T[], size=1): T[] {
+  const shuffled  = (listObj && listObj.length > 0) ? listObj.sort(()=> 0.5 - Math.random()) : []
+  const lotteries = shuffled.slice(0, size)
+  return lotteries;
 }
 // +=========+=========+=========+=========+=========
 // Date Manage
