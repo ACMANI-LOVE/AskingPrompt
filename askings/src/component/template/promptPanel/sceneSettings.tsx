@@ -1,7 +1,7 @@
 import { LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
 import { DataListContext } from "@/component/context"
-import { AdditionalItem, BlocItem, ColorOrder, DisplayItem, EditItem, Order, OrderWithCheckBox, OrderWithPrompt, RowDirection, ViewItem } from "@/component/molecules/promptItem"
+import { AdditionalItem, BlocItem, ColorOrder, DisplayItem, EditItem, Order, OrderWithCheckBox, RowDirection, ViewItem } from "@/component/molecules/promptItem"
 import { randBetween } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
