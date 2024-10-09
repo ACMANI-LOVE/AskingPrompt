@@ -8,8 +8,8 @@ import { prompt_footer, prompt_header } from "@/const/const_text";
 import { ITEMS } from "@/init/init";
 import { zeroPads } from "@/util";
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { Box, Divider, IconButton, Paper } from "@mui/material";
-import { ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { Box, Divider, IconButton } from "@mui/material";
+import { useContext, useEffect, useRef, useState } from "react";
 
 const PromptSummaries = (props:{orderSelect:number}) => {
   const orderSelect = useRef(props.orderSelect)
@@ -51,7 +51,7 @@ const PromptSummaries = (props:{orderSelect:number}) => {
     <RowDirection>
       <PromptRadio/>
       <Box display={"flex"} flexDirection={"column"} justifyContent={"start"}>
-        {prompts.map((prompt)=><IconButton size="large" onClick={()=>onClickCopy(prompt)}><AssignmentIcon color="primary"/></IconButton>)}
+        {prompts.map((prompt,idx)=><IconButton key={`promptCopy${idx}`} size="large" onClick={()=>onClickCopy(prompt)}><AssignmentIcon color="primary"/></IconButton>)}
       </Box>
     </RowDirection>
     <Divider/>

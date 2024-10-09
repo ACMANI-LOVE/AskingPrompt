@@ -1,11 +1,11 @@
-import { Badge, BadgePropsColorOverrides, Box, Card, Checkbox, Divider, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
-import { BaseSyntheticEvent, ReactNode } from "react"
-import { ItemText, TableText } from "../atoms/text"
+import { Box, Card, Checkbox, Divider, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { BaseSyntheticEvent, ReactNode } from "react";
+import { ItemText, TableText } from "../atoms/text";
 import DiscountIcon from '@mui/icons-material/Discount';
-import EditIcon     from '@mui/icons-material/Edit';
-import CommentIcon  from '@mui/icons-material/Comment';
-import CheckCircleIcon  from '@mui/icons-material/CheckCircle';
-import WarningIcon      from '@mui/icons-material/Warning';
+import EditIcon from '@mui/icons-material/Edit';
+import CommentIcon from '@mui/icons-material/Comment';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import WarningIcon from '@mui/icons-material/Warning';
 import { PromptField } from "../atoms/textField";
 import { chkJsonStrings, zeroPads } from "@/util";
 
