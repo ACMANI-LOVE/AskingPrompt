@@ -13,6 +13,7 @@ import { zeroPads } from "@/util";
 import { DataListContext, SelectContext } from '../context';
 import { OrderChecker } from '../molecules/promptItem';
 import getRequestPrompt from '@/app/api/func/getRequestPrompt';
+import getPromptProperties from '@/app/api/func/getPromptProperties';
 
 const AskingPanel = () => {
   const {selection, setSelection} = useContext(SelectContext)
@@ -54,7 +55,8 @@ const AskingPanel = () => {
   const onClickPaste   = () => navigator.clipboard.readText().then((text)=>{
     setDataList(prev=>({
       ...prev,
-      orderList: prev.orderList.map((item,idx)=>(idx===selection.orderSelect ? text : item))
+      orderList:   prev.orderList.map((item,idx)=>(idx===selection.orderSelect ? text : item)),
+      settingList: prev.settingList.map((item,idx)=>(idx===selection.orderSelect ? getPromptProperties({order:text}) : item))
     }))
   }).finally(()=>openPaste())
   const onClickClean   = () => setDataList(prev=>({

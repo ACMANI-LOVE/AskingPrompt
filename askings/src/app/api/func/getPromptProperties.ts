@@ -12,7 +12,7 @@ const getPromptProperties = (props:{order?:string}) => {
 
   const baseProps   :BaseSettingsProps    = {
     story    : otherInfo?.story ?? emptyStrings,
-    model    : getModelsData({ enums: data?.baseSettings?.model ?? 0 }).order,
+    model    : getModelsData({ enums: otherInfo?.baseSettings?.model ?? 0 }).order,
     character: otherInfo?.baseSettings?.character ?? emptyStrings,
     species  : otherInfo?.baseSettings?.species   ?? emptyStrings,
     base       : "",
