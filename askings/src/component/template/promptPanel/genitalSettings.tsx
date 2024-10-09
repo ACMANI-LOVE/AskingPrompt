@@ -4,13 +4,13 @@ import { DataListContext } from "@/component/context"
 import { ViewItem, Order, EditItem, DisplayItem, OrderWithInput, OrderWithCheckBox, BlocItem, AdditionalItem, ColorOrder } from "@/component/molecules/promptItem"
 import { randBool } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
+import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const GenitalSettings = (props:{orderSelect:number}) => {
-  const orderSelect = useRef(props.orderSelect)
-  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
+  const { orderSelect } = props
+
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[orderSelect.current].genitalProps
+  const property =  dataList.settingList[orderSelect].genitalProps
 
   const genitalsColorOrder    = property.genitalsColor
   const maleGenitalsOrder     = property.maleGenitals    .order
@@ -64,7 +64,7 @@ const GenitalSettings = (props:{orderSelect:number}) => {
     setDisplay(summaryPrompt)
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === orderSelect.current)
+        return (idx === orderSelect)
         ? {
             ...prevListItem, genitalProps: {
               ...prevListItem.genitalProps,
@@ -84,6 +84,7 @@ const GenitalSettings = (props:{orderSelect:number}) => {
     }))
   },[
     setDataList           ,
+    orderSelect           ,
     nsfwFag               ,
     chkInvertNipple       ,
     chkPublicHair         ,

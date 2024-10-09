@@ -3,13 +3,13 @@ import { PromptField } from "@/component/atoms/textField"
 import { DataListContext } from "@/component/context"
 import { AdditionalItem, BlocItem, DisplayItem, EditItem, Order, OrderWithCheckBox, ViewItem } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
-import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
+import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const BaseSettings    = (props:{orderSelect:number}) => {
-  const orderSelect = useRef(props.orderSelect)
-  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
+  const { orderSelect } = props
+
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[orderSelect.current].baseProps
+  const property =  dataList.settingList[orderSelect].baseProps
 
   const storyOrder     = property.story
   const modelOrder     = property.model
@@ -42,7 +42,7 @@ const BaseSettings    = (props:{orderSelect:number}) => {
     setDisplay(summaryPrompt)
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === orderSelect.current)
+        return (idx === orderSelect)
         ? { ...prevListItem,
             baseProps: { ...prevListItem.baseProps,
               base      : baseInput    ,
@@ -62,6 +62,7 @@ const BaseSettings    = (props:{orderSelect:number}) => {
     }))
   },[
     setDataList,
+    orderSelect,
     baseInput  ,
     chkNsfw    ,
     chkSolo    ,

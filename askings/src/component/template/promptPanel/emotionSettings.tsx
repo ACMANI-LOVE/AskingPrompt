@@ -3,13 +3,13 @@ import { LabelText } from "@/component/atoms/text"
 import { DataListContext } from "@/component/context"
 import { EditItem, OrderWithCheckBox, MultiAdditional, MultiDisplay } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
-import { useContext, useState, useEffect, useRef } from "react"
+import { useContext, useState, useEffect } from "react"
 
 const EmotionSettings   = (props:{orderSelect:number}) => {
-  const orderSelect = useRef(props.orderSelect)
-  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
+  const { orderSelect } = props
+
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[orderSelect.current].emotionProps
+  const property =  dataList.settingList[orderSelect].emotionProps
 
   const [tier           , setTier           ] = useState(property.emoteTier     )
   const [emotesInputList, setEmotesInputList] = useState(property.emotesList    )
@@ -22,12 +22,11 @@ const EmotionSettings   = (props:{orderSelect:number}) => {
 
   const nsfwFlag = property.nsfw
 
-  // TODO: Refresh EmotionList
   useEffect(()=>{
     setEmotesInputList(prev=>prev.map(()=> `${getRandomEmotionData(tier)}`))
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === orderSelect.current)
+        return (idx === orderSelect)
         ? { ...prevListItem, emotionProps: {
               ...prevListItem.emotionProps,
               emoteTier     : tier,
@@ -35,12 +34,12 @@ const EmotionSettings   = (props:{orderSelect:number}) => {
         } : prevListItem
       }),
     }))
-  },[ setDataList, tier, nsfwFlag, ])
+  },[ setDataList, tier, nsfwFlag, orderSelect, ])
   useEffect(()=>{
     setDisplayList(prev=>prev.map((_,idx)=>`${emotesInputList[idx]}, ${additionalList[idx]}`))
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === orderSelect.current)
+        return (idx === orderSelect)
         ? { ...prevListItem, emotionProps: {
               ...prevListItem.emotionProps,
               emotesList    : emotesInputList,
@@ -49,17 +48,17 @@ const EmotionSettings   = (props:{orderSelect:number}) => {
         } : prevListItem
       }),
     }))
-  },[ setDataList, emotesInputList, additionalList , ])
+  },[ setDataList, emotesInputList, additionalList, orderSelect, ])
   useEffect(()=>setDataList(prev=>({ ...prev,
     settingList: prev.settingList.map((prevListItem,idx)=>{
-      return (idx === orderSelect.current)
+      return (idx === orderSelect)
       ? { ...prevListItem, emotionProps: {
             ...prevListItem.emotionProps,
           promptList    : displayList    ,
         }
       } : prevListItem
     }),
-  })),[ setDataList, displayList, ])
+  })),[ setDataList, displayList, orderSelect, ])
 
 return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'EmotionSetting Prompt'}/>

@@ -9,13 +9,13 @@ import { ITEMS } from "@/init/init";
 import { zeroPads } from "@/util";
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Box, Divider, IconButton } from "@mui/material";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const PromptSummaries = (props:{orderSelect:number}) => {
-  const orderSelect = useRef(props.orderSelect)
-  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
+  const { orderSelect } = props
+
   const { dataList } = useContext(DataListContext)
-  const property =  dataList.settingList[orderSelect.current]
+  const property =  dataList.settingList[orderSelect]
   const itemLists = Array.from({length:ITEMS},(_,idx)=>`GeneratedPrompt${zeroPads(idx+1)}:`)
   const [promptSelect, setPromptSelect] = useState(0)
 

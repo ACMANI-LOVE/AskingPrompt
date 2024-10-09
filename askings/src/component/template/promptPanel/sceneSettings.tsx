@@ -4,13 +4,13 @@ import { DataListContext } from "@/component/context"
 import { AdditionalItem, BlocItem, DisplayItem, EditItem, Order, OrderWithCheckBox, OrderWithPrompt, RowDirection, ViewItem } from "@/component/molecules/promptItem"
 import { randBetween } from "@/util"
 import { Box, Divider } from "@mui/material"
-import { BaseSyntheticEvent, useContext, useEffect, useRef, useState } from "react"
+import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const SceneSettings   = (props:{orderSelect:number}) => {
-  const orderSelect = useRef(props.orderSelect)
-  useEffect(()=>{orderSelect.current = props.orderSelect},[props.orderSelect])
+  const { orderSelect } = props
+
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[orderSelect.current].sceneProps
+  const property =  dataList.settingList[orderSelect].sceneProps
 
   const periodOrder  = property.period .order
   const weatherOrder = property.weather.order
@@ -63,7 +63,7 @@ const SceneSettings   = (props:{orderSelect:number}) => {
     setDisplay(summaryPrompt)
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
-        return (idx === orderSelect.current)
+        return (idx === orderSelect)
         ? {
         ...prevListItem, sceneProps: {
           ...prevListItem.sceneProps,
@@ -80,6 +80,7 @@ const SceneSettings   = (props:{orderSelect:number}) => {
     }))
   },[
     setDataList  ,
+    orderSelect  ,
     chkSimple    ,
     periodPrompt ,
     timesPrompt  ,
