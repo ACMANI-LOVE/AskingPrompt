@@ -1,7 +1,7 @@
 import { LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
 import { DataListContext } from "@/component/context"
-import { AdditionalItem, BlocItem, DisplayItem, EditItem, Order, OrderWithCheckBox, OrderWithPrompt, RowDirection, ViewItem } from "@/component/molecules/promptItem"
+import { AdditionalItem, BlocItem, ColorOrder, DisplayItem, EditItem, Order, OrderWithCheckBox, OrderWithPrompt, RowDirection, ViewItem } from "@/component/molecules/promptItem"
 import { randBetween } from "@/util"
 import { Box, Divider } from "@mui/material"
 import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
@@ -107,9 +107,9 @@ const SceneSettings   = (props:{orderSelect:number}) => {
     <Divider/>
     <ViewItem label={'Color Config: '}/>
     <RowDirection noIdent>
-      <OrderWithPrompt order={'Main: '  } value={mainColorOrder  }/>
-      <OrderWithPrompt order={'Sub: '   } value={subColorOrder   }/>
-      <OrderWithPrompt order={'Accent: '} value={accentColorOrder}/>
+      <BlocItem><Order order={'Main: '  } /><ColorOrder colorText=  {mainColorOrder  }/></BlocItem>
+      <BlocItem><Order order={'Sub: '   } /><ColorOrder colorText=  {subColorOrder   }/></BlocItem>
+      <BlocItem><Order order={'Accent: '} /><ColorOrder colorText=  {accentColorOrder}/></BlocItem>
     </RowDirection>
     <EditItem  label={'Optional:'}>
       <OrderWithCheckBox order={'Nude: '          } checked={(condition==="nude"          )} onChange={()=>handleChangeConditionSelect("nude"          )} />

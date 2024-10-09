@@ -24,8 +24,9 @@ export type SpeciesType = {
   species : string;
 };
 export type BasicSettings = {
-  models : string;
-  species   : string;
+  models  : string;
+  species : string;
+  skin    : number
 };
 export type GenitalSettings = {
   maleGenital : string;

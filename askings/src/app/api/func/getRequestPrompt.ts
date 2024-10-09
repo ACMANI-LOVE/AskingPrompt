@@ -10,7 +10,7 @@ const getRequestPrompt = (idx:number) => {
   const Models          = ModelsSelection(idx);
   const basicSettings   = BasicSelection    (Models);
   const genitalSettings = GenitalSelection  (Models);
-  const bodySettings    = BodyDataSelection (Models);
+  const bodySettings    = BodyDataSelection (basicSettings.skin);
   const hairSettings    = HairDataSelection ();
   const faceSettings    = FaceDataSelection ();
   const situations      = SituationSelection();
@@ -56,8 +56,8 @@ const getRequestPrompt = (idx:number) => {
   `      "bangsStyle"  : ""  //未決定: bangsSize の内容をもとに、 前髪スタイルを記載\n`+
   `    },\n`+
   `    "faceSettings"  : {\n`+
-  `      "ages"        : ${faceSettings.face},  //対応する番号に変換:1若々しい,2年頃の,3成熟した,\n`+
-  `      "mind"        : ${faceSettings.mind},  //対応する番号に変換:1秩序／善良,2秩序／中立,3秩序／邪悪,4中庸／善良,5中庸／中立,6中庸／邪悪,7混沌／善良,8混沌／中立,9混沌／邪悪,\n`+
+  `      "faceLooks"   : ${faceSettings.face},  //対応する番号に変換:1若々しい,2年頃の,3成熟した,\n`+
+  `      "personality" : ${faceSettings.mind},  //対応する番号に変換:1秩序／善良,2秩序／中立,3秩序／邪悪,4中庸／善良,5中庸／中立,6中庸／邪悪,7混沌／善良,8混沌／中立,9混沌／邪悪,\n`+
   `      "eyesShape"   : ${faceSettings.eyes}   //対応する番号に変換:1細目,2ジト目,3タレ目,4ツリ目,\n`+
   `    },\n`+
   `    "bodySettings"  : {\n`+
@@ -97,8 +97,9 @@ const BasicSelection = (chara: ModelsTypes): BasicSettings => {
     speciesData = lotteryList(Animaloid)[0];
   }
   const species = speciesData.species
+  const skin = speciesData.type
   const models  = getModelsData({enums:chara}).order as string;
-  return { models, species } as BasicSettings;
+  return { models, species, skin } as BasicSettings;
 };
 // =========+=========+=========+=========+=========+=========+=========+=========+=========+=========+
 const GenitalSelection = (chara: ModelsTypes): GenitalSettings => {
@@ -134,13 +135,7 @@ const FaceDataSelection = (): FaceDataSettings => {
   return { face, eyes, mind } as FaceDataSettings;
 };
 // =========+=========+=========+=========+=========+=========+=========+=========+=========+=========+
-const BodyDataSelection = (chara: ModelsTypes): BodyDataSettings => {
-  let specieType = 0;
-  if (chara === Models.Female || chara === Models.Futanari) {
-    specieType = lotteryList(Humanoids)[0].type;
-  } else {
-    specieType = lotteryList(Animaloid)[0].type;
-  }
+const BodyDataSelection = (specieType:number): BodyDataSettings => {
   const skinType   = getSkinData    ({ enums:specieType        as SkinTypes      }).order as string
   const figure     = getFigureData  ({ enums:randBetween(1, 2) as FigureTypes    })
   const figureType = figure.order as string;
