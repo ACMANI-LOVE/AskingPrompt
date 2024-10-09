@@ -35,10 +35,10 @@ const BodySettings    = (props:{orderSelect:number}) => {
     const prompts = [
       skinPrompt,
       "shiny skin, sweaty skin",
-      bodyTypePrompt,
       boobSizePrompt,
       bodySizePrompt,
       buttSizePrompt,
+      (bodyTypePrompt==="1") ? "thick thighs" : "",
       additional,
     ]
     const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
