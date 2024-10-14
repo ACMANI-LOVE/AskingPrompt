@@ -1,7 +1,7 @@
 import { ItemText, LabelText } from "@/component/atoms/text"
 import { PromptField } from "@/component/atoms/textField"
 import { DataListContext } from "@/component/context"
-import { AdditionalItem, BlocItem, DisplayItem, EditItem, Order, OrderWithCheckBox, ViewItem } from "@/component/molecules/promptItem"
+import { BlocItem, DisplayItem, EditItem, Order, ViewItem } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
 import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
@@ -9,34 +9,31 @@ const BaseSettings    = (props:{orderSelect:number}) => {
   const { orderSelect } = props
 
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[orderSelect].baseProps
+  const base  = dataList.settingList[orderSelect].baseProps
+  const scene = dataList.settingList[orderSelect].sceneProps
 
-  const storyOrder     = property.story
-  const modelOrder     = property.model
-  const characterOrder = property.character
-  const speciesOrder   = property.species
+  const storyOrder     = base.story
+  const modelOrder     = base.model
+  const characterOrder = base.character
+  const speciesOrder   = base.species
 
-  const [baseInput , setBaseInput ] = useState(property.base      )
-  const [chkNsfw   , setChkNsfw   ] = useState(property.nsfw      )
-  const [chkSolo   , setChkSolo   ] = useState(property.solo      )
-  const [chkCute   , setChkCute   ] = useState(property.cute      )
-  const [additional, setAdditional] = useState(property.additional)
+  const periodOrder   = scene.period .order
+  const weatherOrder  = scene.weather.order
+  const timesOrder    = scene.times  .order
+  const locationOrder = scene.location
 
-  const [display, setDisplay] = useState(property.prompts)
+  const [baseInput  , setBaseInput  ] = useState(base.base)
+  const [locateInput, setLocateInput] = useState(base.base)
 
-  const handleChangeNsfwCheck  = ()=>setChkNsfw(!chkNsfw)
-  const handleChangeSoloCheck  = ()=>setChkSolo(!chkSolo)
-  const handleChangeCuteCheck  = ()=>setChkCute(!chkCute)
-  const handleBasePromptChange = (e:BaseSyntheticEvent) => setBaseInput (e.target.value)
-  const handleAdditionalChange = (e:BaseSyntheticEvent) => setAdditional(e.target.value)
+  const [display, setDisplay] = useState(base.prompts)
+
+  const handleBaseInputChange   = (e:BaseSyntheticEvent) => setBaseInput   (e.target.value)
+  const handleLocateInputChange = (e:BaseSyntheticEvent) => setLocateInput (e.target.value)
 
   useEffect(()=>{
     const prompts = [
-      (chkNsfw) ? "NSFW" : "Safe content, sfw",
-      (chkSolo) ? "SOLO" : "",
-      (chkCute) ? "CUTE" : "",
       baseInput,
-      additional,
+      locateInput,
     ]
     const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
     setDisplay(summaryPrompt)
@@ -44,30 +41,18 @@ const BaseSettings    = (props:{orderSelect:number}) => {
       settingList: prev.settingList.map((prevListItem,idx)=>{
         return (idx === orderSelect)
         ? { ...prevListItem,
-            baseProps: { ...prevListItem.baseProps,
-              base      : baseInput    ,
-              nsfw      : chkNsfw      ,
-              solo      : chkSolo      ,
-              cute      : chkCute      ,
-              additional: additional   ,
-              prompts   : summaryPrompt,
-            },
-            genitalProps: { ...prevListItem.genitalProps, nsfw: chkNsfw, },
-            fluidProps  : { ...prevListItem.fluidProps  , nsfw: chkNsfw, },
-            emotionProps: { ...prevListItem.emotionProps, nsfw: chkNsfw, },
-            actionProps : { ...prevListItem.actionProps , nsfw: chkNsfw, },
-          }
-          : prevListItem
+          baseProps: { ...prevListItem.baseProps,
+            base      : baseInput    ,
+            prompts   : summaryPrompt,
+          },
+        }: prevListItem
       })
     }))
   },[
     setDataList,
     orderSelect,
     baseInput  ,
-    chkNsfw    ,
-    chkSolo    ,
-    chkCute    ,
-    additional ,
+    locateInput,
   ])
 
   return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
@@ -79,16 +64,15 @@ const BaseSettings    = (props:{orderSelect:number}) => {
     <ViewItem label={"Model Theme:"    }><Order order={modelOrder    }/></ViewItem>
     <ViewItem label={"Character Order:"}><Order order={characterOrder}/></ViewItem>
     <ViewItem label={"Species Detail:" }><Order order={speciesOrder  }/></ViewItem>
-    <EditItem label={'Base Prompt:'}/>
-    <BlocItem><PromptField value={baseInput} onChange={handleBasePromptChange}/></BlocItem>
+    <EditItem label={'Base Prompt:'    }/>
+    <BlocItem><PromptField value={baseInput} onChange={handleBaseInputChange}/></BlocItem>
     <Divider/>
-    <EditItem  label={'Optional:'}>
-      <OrderWithCheckBox order={"NSFW: "} checked={chkNsfw} onChange={handleChangeNsfwCheck}/>
-      <OrderWithCheckBox order={"SOLO: "} checked={chkSolo} onChange={handleChangeSoloCheck}/>
-      <OrderWithCheckBox order={"CUTE: "} checked={chkCute} onChange={handleChangeCuteCheck}/>
-    </EditItem>
+    <ViewItem label={'Period:'  }><Order order={periodOrder  }/></ViewItem>
+    <ViewItem label={'Weather:' }><Order order={weatherOrder }/></ViewItem>
+    <ViewItem label={'Times:'   }><Order order={timesOrder   }/></ViewItem>
+    <EditItem label={'Location:'}><Order order={locationOrder}/></EditItem>
+    <BlocItem><PromptField value={locateInput} onChange={handleLocateInputChange}/></BlocItem>
     <Divider/>
-    <AdditionalItem additional={additional} onChange={handleAdditionalChange}/>
     <DisplayItem text={display}/>
   </Box>)
 }

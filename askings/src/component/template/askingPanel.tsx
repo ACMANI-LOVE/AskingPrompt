@@ -1,14 +1,13 @@
-import { useEffect, ReactNode, useContext } from 'react';
-import { Box, Paper, IconButton, Divider } from '@mui/material';
+import { useEffect, useContext } from 'react';
+import { Paper, IconButton, Grid2 as Grid } from '@mui/material';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
-import ForwardIcon from '@mui/icons-material/Forward';
 import useTabGroup from '@/component/organs/tabGroup';
 import useSnackBar from "@/component/organs/snackBar";
 import { OrdersField } from '@/component/atoms/textField';
-import { ItemText, LabelText } from '@/component/atoms/text';
+import { LText, SText } from '@/component/atoms/text';
 import { zeroPads } from "@/util";
 import { DataListContext, SelectContext } from '../context';
 import { OrderChecker } from '../molecules/promptItem';
@@ -67,45 +66,35 @@ const AskingPanel = () => {
   const [SnackCopy   , openCopy   ] = useSnackBar({message:"Field Copied!!!"  })
   const [SnackPaste  , openPaste  ] = useSnackBar({message:"Field Pasted!!!"  })
 
-  const OrderCheckField = () => {
-    return (<Box flex={1} display={"flex"} flexDirection={"row"} justifyContent={"start"}>
-      {dataList.orderList.map((order,idx)=><Box key={`order${idx}`} display={"flex"} flexDirection={"row"} justifyContent={"center"} alignItems={"center"}>
-        <ItemText bold text={`Order#${zeroPads(idx+1)}:`}/>
+  return (<Grid container justifyContent={"center"}>
+    <Grid size={12} container justifyContent={"space-around"}>
+      {dataList.orderList.map((order,idx)=><Grid key={`order${idx}`}>
+        <SText bold text={`Order#${zeroPads(idx+1)}:`}/>
         <OrderChecker order={order}/>
-      </Box>)}
-    </Box>)
-  }
-  const PaperFrame = (props:{label:string, item:string, children:ReactNode}) => {
-    return (<Box flex={1}>
-      <Paper>
-        <Box padding={"0.5em"} gap={"0.5em"} display={"flex"} flexDirection={"column"}>
-          <LabelText bold text={props.label}/>
-          <Box display={"flex"} flexDirection={"row"} justifyContent={"space-around"}>
-            {props.children}
-          </Box>
-          <Divider/>
-          <OrdersField text={props.item}/>
-        </Box>
-      </Paper>
-    </Box>)
-  }
-  return (<Box padding={"1em"} display={"flex"} flexDirection={"column"} gap={"0.5em"}>
-    <RequestTab/>
-    <OrderCheckField/>
-    <Box padding={"0.5em"} display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
-      <PaperFrame label={"1. Generate the Request "} item={requestItem}>
-        <IconButton onClick={onClickShuffle}><AutorenewIcon/>  </IconButton>
-        <IconButton onClick={onClickCopy   }><ContentCopyIcon/></IconButton>
-      </PaperFrame>
-      <Box padding={"1em"}><ForwardIcon/></Box>
-      <PaperFrame label={"2. Save the Order"} item={ordersItem}>
-        <IconButton onClick={onClickPaste  }><ContentPasteGoIcon/>  </IconButton>
-        <IconButton onClick={onClickClean  }><CleaningServicesIcon/></IconButton>
-      </PaperFrame>
-    </Box>
+      </Grid>)}
+    </Grid>
+    <Grid size={12}><RequestTab/></Grid>
+    <Grid size={12} container>
+      <Grid size={6} padding={"0.5em"}><LText bold text={"1. Generate the Request "}/></Grid>
+      <Grid size={6} padding={"0.5em"}><LText bold text={"2. Save the Order"}/></Grid>
+      <Grid size={6} padding={"0.5em"}><Paper><Grid container padding={"0.5em"} gap={"0.5em"}>
+        <Grid size={12} container>
+          <Grid size={ 6}><IconButton onClick={onClickShuffle}><AutorenewIcon/>  </IconButton></Grid>
+          <Grid size={ 6}><IconButton onClick={onClickCopy   }><ContentCopyIcon/></IconButton></Grid>
+        </Grid>
+        <Grid size={12}><OrdersField text={requestItem}/></Grid>
+      </Grid></Paper></Grid>
+      <Grid size={6} padding={"0.5em"}><Paper><Grid container padding={"0.5em"} gap={"0.5em"}>
+        <Grid size={12} container>
+          <Grid size={ 6}><IconButton onClick={onClickPaste  }><ContentPasteGoIcon/>  </IconButton></Grid>
+          <Grid size={ 6}><IconButton onClick={onClickClean  }><CleaningServicesIcon/></IconButton></Grid>
+        </Grid>
+        <Grid size={12}><OrdersField text={ordersItem}/></Grid>
+        </Grid></Paper></Grid>
+    </Grid>
     <SnackCopy />
     <SnackPaste/>
-  </Box>);
+  </Grid>);
 }
 
 export default AskingPanel

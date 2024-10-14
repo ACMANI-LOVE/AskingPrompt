@@ -1,9 +1,11 @@
 import { zeroPads } from "@/util";
 import { Tabs, Tab, Paper } from "@mui/material";
 import { ReactNode, useState, BaseSyntheticEvent } from "react";
+import { MText } from "../atoms/text";
 interface TabGroupProps {
   initial:number
   labelList:string[]
+  labelLine?:number
 }
 type TabGroupReturnType = [
   TabGroup: ()=>ReactNode,
@@ -13,14 +15,32 @@ const useTabGroup = (props:TabGroupProps) => {
   const {
     initial,
     labelList,
+    labelLine = 1,
   } = props
   const [tabSelect, setTabSelect] = useState(initial)
   const handleChangeTab = (_:BaseSyntheticEvent,newVal:number) => setTabSelect(newVal)
+  const rowSize = Math.ceil(labelList.length / labelLine)
+
+  const tabList = labelList.reduce((result:string[][], item, index) => {
+    const resIdx = Math.floor(index / rowSize);
+    if (!result[resIdx]) {
+      result[resIdx] = [item]
+    } else {
+      result[resIdx].push(item)
+    }
+    return result
+  },[])
+
   const TabGroup = () => {
     return (<Paper>
-      <Tabs variant="fullWidth" centered value={tabSelect} onChange={handleChangeTab}>
-        {labelList.map((label,idx)=><Tab key={`tabId-${idx}`} label={`${zeroPads(idx+1)}:${label}`} id={idx.toString()} />)}
-      </Tabs>
+      {tabList.map((row,rowIdx)=>{
+        const startIdx = (tabList[rowIdx-1]) ? tabList[rowIdx-1].length : 0
+        return <Tabs key={`tabRowId-${rowIdx}`} variant="fullWidth" centered value={tabSelect} onChange={handleChangeTab}>
+        {row.map((label,idx)=> {
+          const index = idx+startIdx
+          return <Tab key={`tabId-${index}`} label={<MText text={`${zeroPads(index+1)}:${label}`}/>} id={index.toString()} value={index}/>
+        })}
+      </Tabs>})}
     </Paper>)
   }
   return [ TabGroup, tabSelect ] as TabGroupReturnType

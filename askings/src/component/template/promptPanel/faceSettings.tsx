@@ -1,7 +1,6 @@
 import { LabelText } from "@/component/atoms/text"
 import { DataListContext } from "@/component/context"
-import { ViewItem, EditItem, DisplayItem, OrderWithCheckBox, OrderWithInput, OrderWithPrompt, RowDirection, AdditionalItem, ColorOrder } from "@/component/molecules/promptItem"
-import { randBool } from "@/util"
+import { ViewItem, EditItem, DisplayItem, OrderWithInput, OrderWithPrompt, AdditionalItem } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
 import { useState, BaseSyntheticEvent, useEffect, useContext } from "react"
 
@@ -9,45 +8,39 @@ const FaceSettings    = (props:{orderSelect:number}) => {
   const { orderSelect } = props
 
   const {dataList, setDataList} = useContext(DataListContext)
-  const property =  dataList.settingList[orderSelect].faceProps
+  const face =  dataList.settingList[orderSelect].faceProps
+  const hair =  dataList.settingList[orderSelect].hairProps
 
-  const eyesColorOrder   = property.eyesColor
-  const faceLooksOrder   = property.faceLooks       .order
-  const personalityOrder = property.personality.order
-  const eyesShapeOrder   = property.eyesShape  .order
+  const hairStyleOrder  = hair.hairStyle
+  const bangsStyleOrder = hair.bangsStyle
+  const hairSizeOrder   = hair.hairSize .order
+  const bangsSizeOrder  = hair.bangsSize.order
+  const hairSizePrompt  = hair.hairSize .prompt
+  const bangsSizePrompt = hair.bangsSize.prompt
 
-  const [chkRandom     , setChkRandom     ] = useState(property.random    )
-  const [chkCloseEyes  , setChkCloseEyes  ] = useState(property.closeEyes )
-  const [chkOpenMouth  , setChkOpenMouth  ] = useState(property.openMouth )
-  const [chkTongueOut  , setChkTongueOut  ] = useState(property.tongueOut )
-  const [eyesColorInput, setEyesColorInput] = useState(property.eyesColorPrompt )
-  const [additional    , setAdditional    ] = useState(property.additional)
+  const faceLooksOrder   = face.faceLooks  .order
+  const personalityOrder = face.personality.order
+  const eyesShapeOrder   = face.eyesShape  .order
+  const faceLooksPrompt   = face.faceLooks  .prompt
+  const personalityPrompt = face.personality.prompt
+  const eyesShapePrompt   = face.eyesShape  .prompt
 
-  const [display, setDisplay] = useState(property.prompts)
+  const [hairStyleInput , setHairStyleInput ] = useState(hair.hairStylePrompt )
+  const [bangsStyleInput, setBangsStyleInput] = useState(hair.bangsStylePrompt)
+  const [additional    , setAdditional    ] = useState(face.additional)
 
-  const handleChangeRandomCheck    = () => setChkRandom   (!chkRandom   )
-  const handleChangeCloseEyesCheck = () => setChkCloseEyes(!chkCloseEyes)
-  const handleChangeOpenMouthCheck = () => setChkOpenMouth(!chkOpenMouth)
-  const handleChangeTongueOutCheck = () => setChkTongueOut(!chkTongueOut)
-  const handleEyesColorInputChange = (e:BaseSyntheticEvent) => setEyesColorInput(e.target.value)
+  const [display, setDisplay] = useState(face.prompts)
+
+  const handleHairStyleInputChange  = (e:BaseSyntheticEvent) => setHairStyleInput (e.target.value)
+  const handleBangsStyleInputChange = (e:BaseSyntheticEvent) => setBangsStyleInput(e.target.value)
+
   const handleAdditionalChange     = (e:BaseSyntheticEvent) => setAdditional    (e.target.value)
 
-  const faceLooksPrompt   = property.faceLooks  .prompt
-  const personalityPrompt = property.personality.prompt
-  const eyesShapePrompt   = property.eyesShape  .prompt
-
   useEffect(()=>{
-    const checkCloseEyesPrompt = (chkRandom) ? (randBool() ? "closed eyes"  : "") : ((chkCloseEyes) ? "closed eyes"  : "")
-    const checkOpenMouthPrompt = (chkRandom) ? (randBool() ? "opened mouth" : "") : ((chkOpenMouth) ? "opened mouth" : "")
-    const checkTongueOutPrompt = (chkRandom) ? (randBool() ? "tongue out"   : "") : ((chkTongueOut) ? "tongue out"   : "")
     const prompts = [
       faceLooksPrompt     ,
       personalityPrompt   ,
       eyesShapePrompt     ,
-      eyesColorInput      ,
-      checkCloseEyesPrompt,
-      checkOpenMouthPrompt,
-      checkTongueOutPrompt,
       additional          ,
     ]
     const summaryPrompt = `${prompts.filter(prompt=>prompt!=="").join(", ")},`;
@@ -58,11 +51,11 @@ const FaceSettings    = (props:{orderSelect:number}) => {
         ? {
           ...prevListItem, faceProps: {
             ...prevListItem.faceProps,
-            eyesColorPrompt     : eyesColorInput,
-            random        : chkRandom      ,
-            closeEyes     : chkCloseEyes   ,
-            openMouth     : chkOpenMouth   ,
-            tongueOut     : chkTongueOut   ,
+            // eyesColorPrompt     : eyesColorInput,
+            // random        : chkRandom      ,
+            // closeEyes     : chkCloseEyes   ,
+            // openMouth     : chkOpenMouth   ,
+            // tongueOut     : chkTongueOut   ,
             additional    : additional     ,
             prompts       : summaryPrompt  ,
           }
@@ -72,11 +65,6 @@ const FaceSettings    = (props:{orderSelect:number}) => {
   },[
     setDataList   ,
     orderSelect   ,
-    chkRandom     ,
-    chkCloseEyes  ,
-    chkOpenMouth  ,
-    chkTongueOut  ,
-    eyesColorInput,
     additional    ,
     faceLooksPrompt  ,
     personalityPrompt,
@@ -88,8 +76,8 @@ const FaceSettings    = (props:{orderSelect:number}) => {
     <Divider/>
     <ViewItem label={'Face looks:' }><OrderWithPrompt order={faceLooksOrder  } value={faceLooksPrompt  }/></ViewItem>
     <ViewItem label={'Personality:'}><OrderWithPrompt order={personalityOrder} value={personalityPrompt}/></ViewItem>
-    <Divider/>
     <ViewItem label={'Eyes shape:' }><OrderWithPrompt order={eyesShapeOrder  } value={eyesShapePrompt  }/></ViewItem>
+    {/* <Divider/>
     <EditItem label={'Eyes color:' }>
       <ColorOrder colorText={eyesColorOrder} />
       <OrderWithInput value={eyesColorInput   } onChange={handleEyesColorInputChange}/>
@@ -101,7 +89,13 @@ const FaceSettings    = (props:{orderSelect:number}) => {
       <OrderWithCheckBox order={"Closed Eyes: " } checked={chkCloseEyes} onChange={handleChangeCloseEyesCheck} disabled={chkRandom}/>
       <OrderWithCheckBox order={"Opened Mouth: "} checked={chkOpenMouth} onChange={handleChangeOpenMouthCheck} disabled={chkRandom}/>
       <OrderWithCheckBox order={"Tongue Out: "  } checked={chkTongueOut} onChange={handleChangeTongueOutCheck} disabled={chkRandom}/>
-    </RowDirection>
+    </RowDirection> */}
+    <Divider/>
+    <ViewItem label={'Hair size:'  }><OrderWithPrompt order={hairSizeOrder  } value={hairSizePrompt} /></ViewItem>
+    <EditItem label={'Hair style:' }><OrderWithInput  order={hairStyleOrder } value={hairStyleInput} onChange={handleHairStyleInputChange }/></EditItem>
+    <Divider/>
+    <ViewItem label={'Bangs size:' }><OrderWithPrompt order={bangsSizeOrder } value={bangsSizePrompt} /></ViewItem>
+    <EditItem label={'Bangs style:'}><OrderWithInput  order={bangsStyleOrder} value={bangsStyleInput} onChange={handleBangsStyleInputChange}/></EditItem>
     <Divider/>
     <AdditionalItem additional={additional} onChange={handleAdditionalChange}/>
     <DisplayItem text={display}/>

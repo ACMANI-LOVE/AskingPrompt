@@ -1,6 +1,6 @@
 import { RadioGroup, Box, FormControlLabel, Radio } from "@mui/material"
 import { ReactNode, useState } from "react"
-import { LabelText } from "../atoms/text"
+import { MText } from "../atoms/text"
 
 interface RadioGroupProps {
   initial:number
@@ -18,7 +18,6 @@ const useRadioGroup = (props:RadioGroupProps) => {
   const [radioSelect, setRadioSelect] = useState(initial)
   const handleChangeRadio = (newVal:number) => setRadioSelect(newVal)
 
-
   const RadioGroupField = () => {
     return (
     <RadioGroup defaultValue={initial}>
@@ -28,7 +27,7 @@ const useRadioGroup = (props:RadioGroupProps) => {
           onChange={()=>handleChangeRadio(idx)}
           value={idx}
           control={<Radio color="primary"/>}
-          label={<LabelText text={item}/>}/>
+          label={<MText text={item}/>}/>
       </Box>)}
     </RadioGroup>)
   }

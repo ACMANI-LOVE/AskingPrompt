@@ -1,10 +1,7 @@
 export const settingsLabel = [
   "Base Settings"   ,
-  "Hair Settings"   ,
   "Face Settings"   ,
   "Body Settings"   ,
-  "Scene Settings"  ,
-  "Genital Settings",
   "Emotion Settings",
   "Fluid Settings"  ,
   "Action Settings" ,

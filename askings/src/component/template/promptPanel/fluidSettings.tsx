@@ -22,7 +22,6 @@ const FluidSettings   = (props:{orderSelect:number}) => {
 
   const nsfwFlag = property.nsfw
 
-  // TODO: Refresh EmotionList
   useEffect(()=>{
     setFluidsInputList(prev=>prev.map(()=> `${(tier===3)?"excessive cum drop, ":""}${getRandomFluidsData(tier)}`))
     setDataList(prev=>({ ...prev,

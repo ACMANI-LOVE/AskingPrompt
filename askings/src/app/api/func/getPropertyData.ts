@@ -118,7 +118,7 @@ export const getBoobSizeData = (props:{ enums:FigureSizeTypes}):PromptListType =
     case FigureSize.Normal: return { prompt:[""            ,"saggy breast"              ,""], order:["普通","普通"] }
     case FigureSize.Large : return { prompt:["large breast","saggy breast, large breast",""], order:["巨乳","巨乳"] }
     case FigureSize.Huge  : return { prompt:["huge breast" ,"saggy breast, huge breast" ,""], order:["爆乳","爆乳"] }
-    default: return { prompt: ["none1","none2","invalid"], order:["無効"] }
+    default: return { prompt: ["none1","none2","invalid"], order:["なし","なし","無効"] }
   }
 }
 export const getBodySizeData = (props:{ enums:FigureSizeTypes}):PromptListType => {
@@ -126,7 +126,7 @@ export const getBodySizeData = (props:{ enums:FigureSizeTypes}):PromptListType =
     case FigureSize.Normal: return { prompt:["slim body"   ,"thick body" ,""], order:["細身","肉厚"]       }
     case FigureSize.Large : return { prompt:["healthy body","muscle body",""], order:["健康的","筋肉質"]   }
     case FigureSize.Huge  : return { prompt:["plump body"  ,"chubby body",""], order:["ぽっちゃり","肥満"] }
-    default: return { prompt: ["none1","none2","invalid"], order:["無効"] }
+    default: return { prompt: ["none1","none2","invalid"], order:["なし","なし","無効"] }
   }
 }
 export const getButtSizeData = (props:{ enums:FigureSizeTypes}):PromptListType => {
@@ -134,7 +134,7 @@ export const getButtSizeData = (props:{ enums:FigureSizeTypes}):PromptListType =
     case FigureSize.Normal: return { prompt:[""          ,"thick butt"            ,""], order:["普通","普通"] }
     case FigureSize.Large : return { prompt:["large butt","thick butt, large butt",""], order:["巨尻","巨尻"] }
     case FigureSize.Huge  : return { prompt:["huge butt" ,"thick butt, huge butt" ,""], order:["爆尻","爆尻"] }
-    default: return { prompt: ["none1","none2","invalid"], order:["無効"] }
+    default: return { prompt: ["none1","none2","invalid"], order:["なし","なし","無効"] }
   }
 }
 

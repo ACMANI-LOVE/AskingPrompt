@@ -22,7 +22,6 @@ const ActionSettings   = (props:{orderSelect:number}) => {
 
   const nsfwFlag = property.nsfw
 
-  // TODO: Refresh EmotionList
   useEffect(()=>{
     setActionsInputList(prev=>prev.map(()=> `${getRandomActionData(tier)}`))
     setDataList(prev=>({ ...prev,
