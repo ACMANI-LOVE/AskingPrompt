@@ -63,10 +63,11 @@ const FluidSettings   = (props:{orderSelect:number}) => {
 return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'FluidsSetting Prompt'}/>
     <Divider/>
-    <EditItem label={'Fluids Tier:' }>
-      <OrderWithCheckBox order={"Tier1: "} checked={tier===1} onChange={()=>handleChangeTierSelect(1)} />
-      <OrderWithCheckBox order={"Tier2: "} checked={tier===2} onChange={()=>handleChangeTierSelect(2)} />
-      <OrderWithCheckBox order={"Tier3: "} checked={tier===3} onChange={()=>handleChangeTierSelect(3)} />
+    <EditItem label={'Prompts Tier:' }>
+      <OrderWithCheckBox order={"SFW: "  } checked={tier===1} onChange={()=>handleChangeTierSelect(1)} />
+      <OrderWithCheckBox order={"NUDE: " } checked={tier===2} onChange={()=>handleChangeTierSelect(2)} />
+      <OrderWithCheckBox order={"SEXY: " } checked={tier===3} onChange={()=>handleChangeTierSelect(3)} />
+      <OrderWithCheckBox order={"NASTY: "} checked={tier===3} onChange={()=>handleChangeTierSelect(3)} />
     </EditItem>
     <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
     </Box>

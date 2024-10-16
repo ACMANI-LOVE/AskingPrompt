@@ -1,9 +1,9 @@
 import { getRandomEmotionData } from "@/app/api/func/getPropertyData"
 import { LabelText } from "@/component/atoms/text"
 import { DataListContext } from "@/component/context"
-import { EditItem, OrderWithCheckBox, MultiAdditional, MultiDisplay, OrderWithPrompt } from "@/component/molecules/promptItem"
+import { EditItem, OrderWithCheckBox, MultiAdditional, MultiDisplay, OrderWithPrompt, AdditionalItem } from "@/component/molecules/promptItem"
 import { Box, Divider } from "@mui/material"
-import { useContext, useState, useEffect } from "react"
+import { useContext, useState, useEffect, BaseSyntheticEvent } from "react"
 
 const EmotionSettings   = (props:{orderSelect:number}) => {
   const { orderSelect } = props
@@ -14,12 +14,12 @@ const EmotionSettings   = (props:{orderSelect:number}) => {
 
   const [tier           , setTier           ] = useState(property.emoteTier     )
   const [emotesInputList, setEmotesInputList] = useState(property.emotesList    )
-  const [additionalList , setAdditionalList ] = useState(property.additionalList)
+  const [additional    , setAdditional    ] = useState("")
 
   const [displayList    , setDisplayList    ] = useState(property.promptList)
 
   const handleChangeTierSelect = (value:number) => setTier((value!==tier)?value:0)
-  const handleAdditionalChange = (val:string,id:number) => setAdditionalList(prev=>prev.map((prevItem,idx)=>(idx===id)?val:prevItem))
+  const handleAdditionalChange     = (e:BaseSyntheticEvent) => setAdditional    (e.target.value)
 
   const nsfwFlag = property.nsfw
 
@@ -37,19 +37,19 @@ const EmotionSettings   = (props:{orderSelect:number}) => {
     }))
   },[ setDataList, tier, nsfwFlag, orderSelect, ])
   useEffect(()=>{
-    setDisplayList(prev=>prev.map((_,idx)=>`${emotesInputList[idx]}, ${additionalList[idx]}`))
+    setDisplayList(prev=>prev.map((_,idx)=>`${emotesInputList[idx]}, ${additional[idx]}`))
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
         return (idx === orderSelect)
         ? { ...prevListItem, emotionProps: {
               ...prevListItem.emotionProps,
               emotesList    : emotesInputList,
-              additionalList: additionalList ,
+              additionalList: additional ,
             }
         } : prevListItem
       }),
     }))
-  },[ setDataList, emotesInputList, additionalList, orderSelect, ])
+  },[ setDataList, emotesInputList, additional, orderSelect, ])
   useEffect(()=>setDataList(prev=>({ ...prev,
     settingList: prev.settingList.map((prevListItem,idx)=>{
       return (idx === orderSelect)
@@ -82,12 +82,12 @@ return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     </EditItem>
     <Divider/>
     <EditItem label={'Genital Tier:' }>
-      <OrderWithCheckBox order={"Random: "} checked={tier===1} onChange={()=>handleChangeTierSelect(1)} />
+      <OrderWithPrompt   order={'Male Genital[MG]: '} value={maleGenitalsOrder}/>
+      <OrderWithCheckBox order={"Random: "        } checked={tier===1} onChange={()=>handleChangeTierSelect(1)} />
       <OrderWithCheckBox order={"Sheathed penis: "} checked={tier===2} onChange={()=>handleChangeTierSelect(2)} />
-    <OrderWithPrompt order={'Male Genital[MG]: '} value={maleGenitalsOrder}/>
     </EditItem>
     <Divider/>
-    <MultiAdditional label={"Emote Prompts"} additions={additionalList} onChange={handleAdditionalChange}/>
+    <AdditionalItem additional={additional} onChange={handleAdditionalChange}/>
     <MultiDisplay prompts={displayList}/>
   </Box>)}
 export default EmotionSettings

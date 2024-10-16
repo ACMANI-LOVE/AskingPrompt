@@ -4,7 +4,7 @@ import { MText } from "../atoms/text"
 
 interface RadioGroupProps {
   initial:number
-  itemList:string[]
+  itemList:ReactNode[]
 }
 type RadioGroupReturnType = [
   RadioGroupField: ()=>ReactNode,
@@ -27,7 +27,7 @@ const useRadioGroup = (props:RadioGroupProps) => {
           onChange={()=>handleChangeRadio(idx)}
           value={idx}
           control={<Radio color="primary"/>}
-          label={<MText text={item}/>}/>
+          label={item}/>
       </Box>)}
     </RadioGroup>)
   }

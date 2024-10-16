@@ -1,7 +1,8 @@
-import { getRandomActionData } from "@/app/api/func/getPropertyData"
+import { getRandomActionData, getRandomPosingData } from "@/app/api/func/getPropertyData"
 import { LabelText } from "@/component/atoms/text"
 import { DataListContext } from "@/component/context"
-import { EditItem, MultiAdditional, MultiDisplay, OrderWithCheckBox } from "@/component/molecules/promptItem"
+import { DataTable, EditItem, MultiAdditional, MultiDisplay, OrderWithCheckBox, PosingTable, RowDirection, ViewItem } from "@/component/molecules/promptItem"
+import { PosingDetailProps } from "@/const/cons_promptProps"
 import { Box, Divider } from "@mui/material"
 import { useContext, useEffect, useState } from "react"
 
@@ -14,6 +15,7 @@ const ActionSettings   = (props:{orderSelect:number}) => {
   const [tier            , setTier            ] = useState(property.actionTier    )
   const [actionsInputList, setActionsInputList] = useState(property.actionsList   )
   const [additionalList  , setAdditionalList  ] = useState(property.additionalList)
+  const [posingList      , setPosingList      ] = useState(Array.from({length:5},()=>getRandomPosingData()))
 
   const [displayList     , setDisplayList     ] = useState(property.promptList    )
 
@@ -21,8 +23,11 @@ const ActionSettings   = (props:{orderSelect:number}) => {
   const handleAdditionalChange = (val:string,id:number) => setAdditionalList(prev=>prev.map((prevItem,idx)=>(idx===id)?val:prevItem))
 
   const nsfwFlag = property.nsfw
+  const posingListOrder = posingList.map((pose:PosingDetailProps)=>Object.values(pose).map((item)=>item))
+
 
   useEffect(()=>{
+    setPosingList(prev=>prev.map(()=>getRandomPosingData()))
     setActionsInputList(prev=>prev.map(()=> `${getRandomActionData(tier)}`))
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
@@ -63,11 +68,18 @@ const ActionSettings   = (props:{orderSelect:number}) => {
 return (<Box display={"flex"} flexDirection={"column"} gap={"0.25em"}>
     <LabelText bold text={'EmotionSetting Prompt'}/>
     <Divider/>
-    <EditItem label={'Action Tier:' }>
-      <OrderWithCheckBox order={"Tier1: "} checked={tier===1} onChange={()=>handleChangeTierSelect(1)} />
-      <OrderWithCheckBox order={"Tier2: "} checked={tier===2} onChange={()=>handleChangeTierSelect(2)} />
-      <OrderWithCheckBox order={"Tier3: "} checked={tier===3} onChange={()=>handleChangeTierSelect(3)} />
+    <EditItem label={'Prompts Tier:' }>
+      <OrderWithCheckBox order={"SFW: "  } checked={tier===1} onChange={()=>handleChangeTierSelect(1)} />
+      <OrderWithCheckBox order={"NUDE: " } checked={tier===2} onChange={()=>handleChangeTierSelect(2)} />
+      <OrderWithCheckBox order={"SEXY: " } checked={tier===3} onChange={()=>handleChangeTierSelect(3)} />
+      <OrderWithCheckBox order={"NASTY: "} checked={tier===3} onChange={()=>handleChangeTierSelect(3)} />
     </EditItem>
+    <Divider/>
+    <ViewItem label={'Posing Tier:' }><PosingTable tableList={posingListOrder}/></ViewItem>
+    <RowDirection>
+    <ViewItem label={'Action Tier:' }><DataTable tableList={[]} label={"Action:" }/></ViewItem>
+    <ViewItem label={'Emotion Tier:'}><DataTable tableList={[]} label={"Emotion:"}/></ViewItem>
+    </RowDirection>
     <Divider/>
     <MultiAdditional additions={additionalList} onChange={handleAdditionalChange}/>
     <MultiDisplay prompts={displayList}/>

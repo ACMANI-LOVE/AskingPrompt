@@ -27,6 +27,112 @@ export interface SummaryPromptType {
   actionProps : ActionSettingsProps ,
 }
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
+// Settings Properties _fix
+// +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
+export interface BasisSettingsProps  {
+  basis: {
+    story    :string
+    model    :string
+    character:string
+    species  :string
+  }
+  scene: {
+    period :string
+    weather:string
+    times  :string
+  },
+  input:{
+    basisInput :string
+    locateInput:string
+  }
+}
+export interface FacesSettingsProps  {
+  face: {
+    looking    :PromptDataType
+    personality:PromptDataType
+    eyesShape  :PromptDataType
+  }
+  hair: {
+    hairsStyle:PromptDataType
+    bangsStyle:PromptDataType
+  },
+  input:{
+    hairsStyleInput:string
+    bangsStyleInput:string
+    hairOptionInput:string
+  }
+}
+export interface BodiesSettingsProps {
+  body: {
+    figures :PromptDataType
+    boobSize:PromptListType
+    bodySize:PromptListType
+    ButtSize:PromptListType
+  }
+  genital: {
+    maleGenital:PromptDataType
+    malesSize  :PromptDataType
+  }
+  input:{
+    bodyOptionInput   :string
+    pussyDetailsInput :string
+    anusDetailsInput  :string
+    malesDetailsInput :string
+    genitalOptionInput:string
+  }
+}
+export interface OptionsSettingsProps{
+  basis:{
+    simple:boolean
+    solo  :boolean
+    cute  :boolean
+  }
+  face:{
+    random:boolean
+    winked:boolean
+    tongue:boolean
+  }
+  genital:{
+    random :boolean
+    pubHair:boolean
+    inverts:boolean
+  }
+  males:{
+    maleGenital:string
+    random:boolean
+    sheath:boolean
+  }
+  input:{
+    optionInput:string
+  }
+}
+export interface ColorsSettingsProps {
+  order:{
+    hair   :string
+    eyes   :string
+    skin   :string
+    outfit :string
+    eqMain :string
+    eqSub  :string
+    genital:string
+  }
+  input:{
+    hair   :string
+    eyes   :string
+    skin   :string
+    outfit :string
+    equips :string
+    genital:string
+  }
+}
+export interface PromptsSettingsProps{
+  promptTier:number
+  posingList:PosingDetailProps[]
+  emotesList:string[]
+  actionList:string[]
+  promptList:string[]
+}
+// +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 // Settings Properties
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 export interface BaseSettingsProps    {
@@ -124,7 +230,7 @@ export interface EmotionSettingsProps {
   nsfw          : boolean;
   emoteTier     : number;
   emotesList    : string[];
-  additionalList: string[];
+  additional: string[];
   promptList    : string[];
 }
 export interface ActionSettingsProps  {
@@ -133,6 +239,7 @@ export interface ActionSettingsProps  {
   actionsList   : string[];
   additionalList: string[];
   promptList    : string[];
+  posingList    : PosingDetailProps[];
 }
 export interface PosingSettingsProps  {
   posingList    : PosingDetailProps[];

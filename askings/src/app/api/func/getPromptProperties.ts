@@ -1,12 +1,13 @@
 import { ActionSettingsProps, BaseSettingsProps, BodySettingsProps, EmotionSettingsProps, FaceSettingsProps, FluidSettingsProps, GenitalSettingsProps, HairSettingsProps, PosingSettingsProps, SceneSettingsProps, SummaryPromptType } from "@/const/cons_promptProps"
 import { ITEMS } from "@/init/init"
 import { getModelsData, getHairSizeData, getBangsSizeData, getAgesData, getMindData, getEyesShapeData, getSkinData, getFigureData, getBoobSizeData, getBodySizeData, getButtSizeData, getPeriodData, getTimesData, getWeatherData, getGenitalData, getGenitalSizeData, getRandomPosingData } from "./getPropertyData"
+import { convertJsonStrings } from "@/util"
 
 const getPromptProperties = (props:{order?:string}) => {
   const emptyStrings = "- empty -"
   const initialNSFW = true
   const emptyList = Array.from({length:ITEMS},()=>"")
-  const data = JSON.parse(props.order ?? "{}")
+  const data = convertJsonStrings(props.order ?? "{}") as any
   const otherInfo = data?.OTHER_INFO ?? undefined
   const charaInfo = data?.CHARA_INFO ?? undefined
 
@@ -106,11 +107,11 @@ const getPromptProperties = (props:{order?:string}) => {
     promptList    : emptyList
   }
   const emotionProps:EmotionSettingsProps = {
-    nsfw          : initialNSFW,
-    emoteTier     : 0,
-    additionalList: emptyList,
-    emotesList    : emptyList,
-    promptList    : emptyList
+    nsfw: initialNSFW,
+    emoteTier: 0,
+    emotesList: emptyList,
+    promptList: emptyList,
+    additional: []
   }
   const posingProps :PosingSettingsProps  = {
     posingList    : emptyList.map(()=>getRandomPosingData()),
@@ -118,11 +119,12 @@ const getPromptProperties = (props:{order?:string}) => {
     promptList    : emptyList
   }
   const actionProps :ActionSettingsProps  = {
-    nsfw          : initialNSFW,
-    actionTier    : 0,
-    actionsList   : emptyList,
+    nsfw: initialNSFW,
+    actionTier: 0,
+    actionsList: emptyList,
     additionalList: emptyList,
-    promptList    : emptyList
+    promptList: emptyList,
+    posingList: []
   }
   return {
     baseProps   ,

@@ -4,8 +4,7 @@ import { ItemText, TableText } from "../atoms/text";
 import DiscountIcon from '@mui/icons-material/Discount';
 import EditIcon from '@mui/icons-material/Edit';
 import CommentIcon from '@mui/icons-material/Comment';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import WarningIcon from '@mui/icons-material/Warning';
+
 import { PromptField } from "../atoms/textField";
 import { chkJsonStrings, zeroPads } from "@/util";
 
@@ -28,11 +27,7 @@ const DisplayLabel = (props:{label:string}) => {
   </Box>)
 }
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
-export const OrderChecker = (props:{order:string}) => {
-  return (chkJsonStrings(props.order))
-    ? <CheckCircleIcon fontSize='small' color='success'/>
-    : <WarningIcon     fontSize='small' color='warning'/>
-}
+
 
 export const ViewItem = (props:{label:string, children?:ReactNode}) => {
   return (<Box display={"flex"} alignItems={"center"} gap={"0.5em"}>
@@ -171,8 +166,27 @@ export const PosingTable = (props:{tableList:string[][]}) => {
     </TableHead>
     <TableBody>
       {props.tableList.map((row,idx)=><TableRow key={`row${idx}`}>
-        <TableCell padding="none" color="success" size="small"><TableText text={`#:${zeroPads(idx+1)}`}/></TableCell>
+        <TableCell padding="none" size="small"><TableText text={`#:${zeroPads(idx+1)}`}/></TableCell>
         {row.map((cell,idx)=><TableCell padding="none" size="small" key={`cell${idx}`}><TableText text={cell}/></TableCell>)}
+     </TableRow>)}
+    </TableBody>
+  </Table>
+  )
+}
+
+export const DataTable = (props:{label:string,tableList:string[]}) => {
+  return (
+    <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell padding="none" size="small"><TableText bold text={"#:"       }/></TableCell>
+        <TableCell padding="none" size="small"><TableText bold text={"Posing"   }/></TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {props.tableList.map((tableData,idx)=><TableRow key={`row${idx}`}>
+        <TableCell padding="none" size="small"><TableText text={`#:${zeroPads(idx+1)}`}/></TableCell>
+        <TableCell padding="none" size="small"><TableText text={tableData}/>             </TableCell>
      </TableRow>)}
     </TableBody>
   </Table>
