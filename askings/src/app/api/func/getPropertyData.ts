@@ -154,9 +154,9 @@ export const getPeriodData = (props:{ enums:PeriodTypes}):PromptDataType => {
 // 時間帯
 export const getTimesData = (props:{ enums:TimesTypes}):PromptCmpxType => {
   switch(props.enums) {
-    case Times.MorningToSunset  : return  { prompt:["morning","sunset"], order:"午前から夕方まで" }
-    case Times.EveningToMidnight: return  { prompt:["sunset", "night" ], order:"夕刻から深夜まで" }
-    case Times.NightToDawnbreak : return  { prompt:["night",  "dawn"  ], order:"夜中から明方まで" }
+    case Times.MorningToSunset  : return  { prompt:["morning" ,"sunset"], order:"午前から夕方まで" }
+    case Times.EveningToMidnight: return  { prompt:["evening" ,"night" ], order:"夕刻から深夜まで" }
+    case Times.NightToDawnbreak : return  { prompt:["midnight","dawn"  ], order:"夜中から明方まで" }
     default: return { prompt: ["",""], order:"無効" }
   }
 }

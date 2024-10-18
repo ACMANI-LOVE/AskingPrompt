@@ -1,13 +1,5 @@
-export const settingsLabel = [
-  "Base Settings"   ,
-  "Face Settings"   ,
-  "Body Settings"   ,
-  "Emotion Settings",
-  "Fluid Settings"  ,
-  "Action Settings" ,
-  "Posing Settings" ,
-  "Prompt Summaries",
-]
+
+export const emptyText = '- empty -'
 export const titleHeader = '- Ask Gpt 4 Prompts. -'
 export const request_header =
   '新しい創作のキャラクター作成を手伝って欲しい。\n' +

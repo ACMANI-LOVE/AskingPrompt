@@ -1,13 +1,18 @@
 import { downloadByJson, zeroPads, listingFromJson } from '@/util';
 import { useEffect, useContext, ChangeEvent } from 'react';
-import { LText, MText, SText } from '../atoms/text';
 import useRadioGroup from '../organs/radioGroup';
 import { SelectContext, DataListContext } from '../context';
 import useHiddenUploadForm from '../organs/uploadFIle';
 import useSnackBar from '../organs/snackBar';
 import getPromptProperties from '@/app/api/func/getPromptProperties';
 import useTabGroup from '../organs/tabGroup';
-import { DividerLine, DownloadingIcon, Layout, OrderChecker, PaperLayout, UploadingIcon } from '../atoms/atoms';
+import { DividerLine, DownloadingIcon, Layout, LText, MText, OrderChecker, PaperLayout, SText, UploadingIcon } from '../atoms';
+import BasisSettings from './settingsPanel/basisSettings';
+import FacesSettings from './settingsPanel/facesSettings';
+import BodiesSettings from './settingsPanel/bodiesSettings';
+import DetailsSettings from './settingsPanel/dtailsSettings';
+import OptionsSettings from './settingsPanel/optionsSettings';
+import PromptsSettings from './settingsPanel/promptSettings';
 
 const MakingPanel = () => {
   const {selection    , setSelection     } = useContext(SelectContext  )
@@ -20,16 +25,15 @@ const MakingPanel = () => {
       <OrderChecker key={`orderChk${idx}`} order={order}/>
     </Layout>)
   })
-
   const settingsList = [
-    { label:"Basis"  , settings:<>aa</> },
-    { label:"Faces"  , settings:<>bb</> },
-    { label:"Bodies" , settings:<>cc</> },
-    { label:"Options", settings:<>dd</> },
-    { label:"Colors" , settings:<>ff</> },
-    { label:"Prompts", settings:<>ee</> },
+    { label:"Basis"  , settings:<BasisSettings   orderSelect={selection.orderSelect}/> },
+    { label:"Faces"  , settings:<FacesSettings   orderSelect={selection.orderSelect}/> },
+    { label:"Bodies" , settings:<BodiesSettings  orderSelect={selection.orderSelect}/> },
+    { label:"Colors" , settings:<DetailsSettings  orderSelect={selection.orderSelect}/> },
+    { label:"Options", settings:<OptionsSettings orderSelect={selection.orderSelect}/> },
+    { label:"Prompts", settings:<PromptsSettings orderSelect={selection.orderSelect}/> },
   ]
-  const SettingsContent = () => settingsList[selection.settingSelect].settings
+
   const [SettingsTab, selectSettingsTab] = useTabGroup({
     initial: selection.settingSelect,
     labelList: settingsList.map((item,idx)=><MText text={`${zeroPads(idx+1)}:${item.label}`}/>),
@@ -64,10 +68,16 @@ const MakingPanel = () => {
     }
   })
 
-return(<Layout center>
-    <Layout vertical size={ 1}>
-      <Layout center size={ 1}><LText bold text={"3. Select Order"}/></Layout>
-      <Layout center size={20}>
+  return(<Layout center vertical>
+    <Layout>
+      <Layout size={2}><LText bold text={"3. Select Order"}/></Layout>
+      <Layout size={8}>
+        <LText bold text={"Fin. Set the Prompts"}/>
+        <SText bold text={`--- Selected:[${zeroPads(selection.orderSelect+1)}]`}/>
+      </Layout>
+    </Layout>
+    <Layout>
+      <Layout size={2}>
         <PaperLayout vertical>
           <Layout center><OrderRadio/></Layout>
           <DividerLine/>
@@ -76,19 +86,15 @@ return(<Layout center>
             <UploadForm/>
           </UploadingIcon>
           <DividerLine/>
-          <DownloadingIcon onClick={onClickSave  }>
+            <DownloadingIcon onClick={onClickSave  }>
             <MText bold text={"Save Order: " }/>
           </DownloadingIcon>
         </PaperLayout>
       </Layout>
-    </Layout>
-    <Layout vertical size={ 9}>
-      <Layout center size={ 1}>
-        <LText bold text={"Fin. Set the Prompts"}/>
-        <SText bold text={`--- Selected:[${zeroPads(selection.orderSelect+1)}]`}/>
+      <Layout size={8} vertical>
+        <Layout center ><SettingsTab/></Layout>
+        <Layout center >{settingsList[selection.settingSelect].settings}</Layout>
       </Layout>
-      <Layout center size={ 2}><SettingsTab/>    </Layout>
-      <Layout center size={18}><SettingsContent/></Layout>
     </Layout>
     <SnackUpload/>
     <SnackFailed/>

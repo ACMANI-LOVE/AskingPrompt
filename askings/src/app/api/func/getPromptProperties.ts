@@ -1,7 +1,7 @@
-import { ActionSettingsProps, BaseSettingsProps, BodySettingsProps, EmotionSettingsProps, FaceSettingsProps, FluidSettingsProps, GenitalSettingsProps, HairSettingsProps, PosingSettingsProps, SceneSettingsProps, SummaryPromptType } from "@/const/cons_promptProps"
 import { ITEMS } from "@/init/init"
 import { getModelsData, getHairSizeData, getBangsSizeData, getAgesData, getMindData, getEyesShapeData, getSkinData, getFigureData, getBoobSizeData, getBodySizeData, getButtSizeData, getPeriodData, getTimesData, getWeatherData, getGenitalData, getGenitalSizeData, getRandomPosingData } from "./getPropertyData"
 import { convertJsonStrings } from "@/util"
+import { BasisSettingsProps, FacesSettingsProps, BodiesSettingsProps, DetailsSettingsProps, OptionsSettingsProps, PromptsSettingsProps, SummaryPromptType } from "@/const/cons_promptProps"
 
 const getPromptProperties = (props:{order?:string}) => {
   const emptyStrings = "- empty -"
@@ -11,132 +11,129 @@ const getPromptProperties = (props:{order?:string}) => {
   const otherInfo = data?.OTHER_INFO ?? undefined
   const charaInfo = data?.CHARA_INFO ?? undefined
 
-  const baseProps   :BaseSettingsProps    = {
-    story    : otherInfo?.story ?? emptyStrings,
-    model    : getModelsData({ enums: otherInfo?.baseSettings?.model ?? 0 }).order,
-    character: otherInfo?.baseSettings?.character ?? emptyStrings,
-    species  : otherInfo?.baseSettings?.species   ?? emptyStrings,
-    base       : "",
-    nsfw       : initialNSFW,
-    solo       : true,
-    cute       : true,
-    additional : "",
-    prompts    : ""
+  const basisProps: BasisSettingsProps = {
+    basis: {
+      story    : "",
+      jobs     : "",
+      model    : "",
+      character: "",
+      species  : "",
+    },
+    scene: {
+      period : { order:"", prompt:"", },
+      weather: { order:"", prompt:"", },
+      times  : { order:"", prompt:"", },
+      locate : "",
+    },
+    input: {
+      basisInput : "",
+      locateInput: ""
+    }
   }
-  const hairProps   :HairSettingsProps    = {
-    hairColor : otherInfo?.colorSettings?.hairStyleColor ?? emptyStrings,
-    hairSize  : getHairSizeData ({ enums: charaInfo?.hairSettings?.hairSize  ?? 0 }),
-    bangsSize : getBangsSizeData({ enums: charaInfo?.hairSettings?.bangsSize ?? 0 }),
-    hairStyle : charaInfo?.hairSettings?.hairStyle  ?? emptyStrings,
-    bangsStyle: charaInfo?.hairSettings?.bangsStyle ?? emptyStrings,
-    hairColorPrompt : "",
-    hairStylePrompt : "",
-    bangsStylePrompt: "",
-    additional      : "",
-    prompts         : ""
+  const facesProps: FacesSettingsProps =  {
+    face: {
+      looking    : { order:"", prompt:"", },
+      personality: { order:"", prompt:"", },
+      eyesShape  : { order:"", prompt:"", },
+    },
+    hair: {
+      hairsSize : { order:"", prompt:"", },
+      bangsSize : { order:"", prompt:"", },
+      hairsStyle: "",
+      bangsStyle: "",
+    },
+    input: {
+      faceOptionInput: "",
+      hairsStyleInput: "",
+      bangsStyleInput: "",
+      hairOptionInput: ""
+    }
   }
-  const faceProps   :FaceSettingsProps    = {
-    faceLooks   : getAgesData     ({ enums: charaInfo?.faceSettings?.faceLooks   ?? 0 }),
-    personality : getMindData     ({ enums: charaInfo?.faceSettings?.personality ?? 0 }),
-    eyesShape   : getEyesShapeData({ enums: charaInfo?.faceSettings?.eyesShape   ?? 0 }),
-    eyesColor   : otherInfo?.colorSettings?.eyesStyleColor ?? emptyStrings,
-    eyesColorPrompt : "",
-    random          : false,
-    closeEyes       : false,
-    openMouth       : false,
-    tongueOut       : false,
-    additional      : "",
-    prompts         : ""
+  const bodiesProps: BodiesSettingsProps =  {
+    body: {
+      figures : { prompt: "none", order: "なし" },
+      boobSize: { prompt: ["none1","none2","invalid"], order: ["なし","なし","無効"] },
+      bodySize: { prompt: ["none1","none2","invalid"], order: ["なし","なし","無効"] },
+      buttSize: { prompt: ["none1","none2","invalid"], order: ["なし","なし","無効"] }
+    },
+    genital: {
+      maleGenital: { prompt: "none", order: "なし" },
+      malesSize  : { prompt: "none", order: "なし" }
+    },
+    input: {
+      bodyOptionInput   : "",
+      pussyDetailsInput : "",
+      anusDetailsInput  : "",
+      malesDetailsInput : "",
+      genitalOptionInput: ""
+    }
   }
-  const bodyProps   :BodySettingsProps    = {
-    skinType     : getSkinData  ({ enums: charaInfo?.bodySettings?.skin   ?? 0 }),
-    bodyType     : getFigureData({ enums: charaInfo?.bodySettings?.figure ?? 0 }),
-    mainBodyColor: otherInfo?.colorSettings?.mainSkinColor ?? emptyStrings,
-    subBodyColor : otherInfo?.colorSettings?.subSkinColor  ?? emptyStrings,
-    boobSize     : getBoobSizeData({ enums: charaInfo?.bodySettings?.boob ?? 0 }),
-    bodySize     : getBodySizeData({ enums: charaInfo?.bodySettings?.body ?? 0 }),
-    buttSize     : getButtSizeData({ enums: charaInfo?.bodySettings?.butt ?? 0 }),
-    skinPrompt: "",
-    additional: "",
-    prompts   : ""
+  const detailsProps: DetailsSettingsProps =  {
+    order: {
+      skinType: "",
+      outfits : "",
+      equips  : ""
+    },
+    color: {
+      hair      : "#1debca",
+      eyes      : "#2cfad9",
+      skinMain  : "#3b10e8",
+      skinSub   : "#3b10e8",
+      outfitMain: "#4a29f7",
+      outfitSub : "#4a29f7",
+      equipsMain: "#503816",
+      equipsSub : "#694725",
+      genital   : "#785634"
+    },
+    input: {
+      hairColor   : "",
+      eyesColor   : "",
+      skinColor   : "",
+      genitalColor: "",
+      outfitInput : "",
+      equipsInput : "",
+    }
   }
-  const sceneProps  :SceneSettingsProps   = {
-    location   : otherInfo?.background?.location ?? emptyStrings,
-    outfit     : otherInfo?.background?.outfit   ?? emptyStrings,
-    job        : otherInfo?.background?.job      ?? emptyStrings,
-    items      : [
-      otherInfo?.background?.items1 ?? "",
-      otherInfo?.background?.items2 ?? "",
-      otherInfo?.background?.items3 ?? "",
-    ].filter((item)=>item!=="").join(', ') ?? emptyStrings,
-    mainColor  : otherInfo?.colorSettings?.mainThemeColor   ?? emptyStrings,
-    subColor   : otherInfo?.colorSettings?.subThemeColor    ?? emptyStrings,
-    accentColor: otherInfo?.colorSettings?.accentThemeColor ?? emptyStrings,
-    period     : getPeriodData ({ enums: otherInfo?.situation?.period  ?? 0 }),
-    times      : getTimesData  ({ enums: otherInfo?.situation?.times   ?? 0 }),
-    weather    : getWeatherData({ enums: otherInfo?.situation?.weather ?? 0 }),
-    simple        : false,
-    locationPrompt: "",
-    outfitPrompt  : "",
-    condition     : "",
-    equip         : "",
-    additional    : "",
-    prompts       : ""
+  const optionsProps: OptionsSettingsProps = {
+    basis: {
+      simple: true,
+      solo  : true,
+      cute  : true
+    },
+    face: {
+      random: false,
+      winked: false,
+      tongue: false
+    },
+    genital: {
+      random : false,
+      pubHair: false,
+      inverts: false
+    },
+    males: {
+      genital: { prompt: "none", order: "なし" },
+      random : false,
+      sheath : false
+    },
+    input: {
+      optionInput: ""
+    }
   }
-  const genitalProps:GenitalSettingsProps = {
-    maleGenitals    : getGenitalData    ({ enums: charaInfo?.genitalSettings?.maleGenital ?? 0 }),
-    maleGenitalsSize: getGenitalSizeData({ enums: charaInfo?.genitalSettings?.genitalSize ?? 0 }),
-    genitalsColor   : otherInfo?.colorSettings?.otherFreeColor ?? emptyStrings,
-    nsfw           : initialNSFW,
-    random         : false,
-    publicHair     : false,
-    invertNipple   : false,
-    sheathPenis    : false,
-    genitalColor   : "",
-    pussyDetails   : "",
-    anusDetails    : "",
-    genitalsDetails: "",
-    additional     : "",
-    prompts        : ""
+  const promptsProps: PromptsSettingsProps = {
+    promptTier: 0,
+    posingList: [],
+    emotesList: [],
+    actionList: [],
+    promptList: []
   }
-  const fluidProps  :FluidSettingsProps   = {
-    nsfw          : initialNSFW,
-    fluidTier     : 0,
-    fluidsList    : emptyList,
-    additionalList: emptyList,
-    promptList    : emptyList
-  }
-  const emotionProps:EmotionSettingsProps = {
-    nsfw: initialNSFW,
-    emoteTier: 0,
-    emotesList: emptyList,
-    promptList: emptyList,
-    additional: []
-  }
-  const posingProps :PosingSettingsProps  = {
-    posingList    : emptyList.map(()=>getRandomPosingData()),
-    additionalList: emptyList,
-    promptList    : emptyList
-  }
-  const actionProps :ActionSettingsProps  = {
-    nsfw: initialNSFW,
-    actionTier: 0,
-    actionsList: emptyList,
-    additionalList: emptyList,
-    promptList: emptyList,
-    posingList: []
-  }
+// +---------+---------+---------+---------+---------+---------+---------+---------+---------+---------
   return {
-    baseProps   ,
-    hairProps   ,
-    faceProps   ,
-    bodyProps   ,
-    sceneProps  ,
-    genitalProps,
-    fluidProps  ,
-    emotionProps,
-    posingProps ,
-    actionProps ,
+    basisProps,
+    facesProps,
+    bodiesProps,
+    optionsProps,
+    promptsProps,
+    detailsProps,
   } as SummaryPromptType
 }
 

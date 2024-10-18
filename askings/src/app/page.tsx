@@ -6,7 +6,7 @@ import { ContextProvider, SelectContext } from "@/component/context";
 import AskingPanel from "@/component/template/askingPanel";
 import MakingPanel from "@/component/template/makingPanel";
 import { titleHeader } from "@/const/const_text";
-import { Layout, TText } from "@/component/atoms/atoms";
+import { Layout, TText } from "@/component/atoms";
 
 export default function Home() {
   const {selection, setSelection} = useContext(SelectContext)
@@ -16,7 +16,6 @@ export default function Home() {
     { label:"Making Prompts", panel:<MakingPanel/> },
     { label:"PostingManager", panel:<AskingPanel/> },
   ]
-  const PanelContent = () => panelList[selectMenuTab].panel
   const menuLabel = panelList.map((item)=>item.label)
 
   const [MenuTab,selectMenuTab] = useTabGroup({ initial: selection.menuSelect, labelList: menuLabel })
@@ -30,10 +29,10 @@ export default function Home() {
     <CssBaseline/>
     <ContextProvider>
     <Layout vertical>
-      <Layout center><TText text={titleHeader}/></Layout>
+      <Layout center><TText bold text={titleHeader}/></Layout>
       <Layout center><Divider/></Layout>
       <Layout center><MenuTab/></Layout>
-      <Layout center><PanelContent/></Layout>
+      <Layout center>{panelList[selectMenuTab].panel}</Layout>
     </Layout>
     </ContextProvider>
   </ThemeProvider>);

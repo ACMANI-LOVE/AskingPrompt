@@ -35,24 +35,6 @@ export const DataListContext = createContext<{
 // Provider
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 export const ContextProvider = (props:{children:ReactNode}) => {
-  // const initial = async () => {
-  //   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api`, {
-  //    method: 'POST',
-  //    headers: {'Content-Type': 'application/json'},
-  //    body: JSON.stringify({init:{orders:ORDERS}} as RequestBodies)
-  //   })
-  //   const result = (await response.json()) as ResponseBodies
-  //   const { initItems } =  result
-  //   setSelection(prev=>({...prev,
-  //   }))
-  //   setDataList(prev=>({...prev,
-  //     requestList: initItems.request,
-  //     orderList  : initItems.order,
-  //     promptLabel: settingsLabel,
-  //   }))
-  //   setSummaryPrompt(initItems.properties)
-  // }
-  // useEffect(()=>{initial()},[])
   const initItems =  getInitialLists(ORDERS)
   // ----- Selection State -----
   const [selection, setSelection] = useState<SelectionType>({

@@ -1,12 +1,11 @@
 import { useEffect, useContext } from 'react';
 import useTabGroup from '@/component/organs/tabGroup';
 import useSnackBar from "@/component/organs/snackBar";
-import { LText } from '@/component/atoms/text';
 import { zeroPads } from "@/util";
 import { DataListContext, SelectContext } from '../context';
 import getRequestPrompt from '@/app/api/func/getRequestPrompt';
 import getPromptProperties from '@/app/api/func/getPromptProperties';
-import { ArrowIcon, CopyingIcon, Layout, MText, OrderChecker, OrdersField, PaperLayout, PastingIcon, ShuffleIcon, SweepingIcon } from '../atoms/atoms';
+import { ArrowIcon, CopyingIcon, Layout, LText, MText, OrderChecker, OrdersField, PaperLayout, PastingIcon, ShuffleIcon, SweepingIcon } from '../atoms';
 
 const AskingPanel = () => {
   const {selection, setSelection} = useContext(SelectContext)
@@ -70,7 +69,7 @@ const AskingPanel = () => {
           <Layout><OrdersField text={requestItem}/></Layout>
         </PaperLayout>
       </Layout>
-      <Layout size={1} vertical center><ArrowIcon/></Layout>
+      <Layout vertical center><ArrowIcon/></Layout>
       <Layout size={7} vertical>
         <Layout center><LText bold text={"2. Save the Order"       }/></Layout>
         <PaperLayout vertical>

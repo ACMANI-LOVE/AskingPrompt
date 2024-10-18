@@ -2,7 +2,7 @@ import { zeroPads } from "@/util";
 import { Tabs, Tab, Paper } from "@mui/material";
 import { ReactNode, useState, BaseSyntheticEvent } from "react";
 import { MText } from "../atoms/text";
-import { Layout, PaperLayout } from "../atoms/atoms";
+import { Layout, PaperLayout } from "../atoms";
 interface TabGroupProps {
   initial:number
   labelList:ReactNode[]
