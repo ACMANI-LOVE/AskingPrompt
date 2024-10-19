@@ -1,12 +1,13 @@
 import { DividerLine, IndentLayout, Layout, LText, MText, PaperLayout, PromptField } from "@/component/atoms"
 import { DataListContext } from "@/component/context"
 import { DisplayField, LabelText, OrderWithField, OrderWithPrompt } from "@/component/molecules"
-import { emptyText } from "@/const/const_text"
+import LABEL_TEXT from "@/const/LABEL_TEXT"
 import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const FacesSettings = (props:{orderSelect:number}) => {
   const { orderSelect } = props
   const {dataList, setDataList} = useContext(DataListContext)
+  const [display, setDisplay] = useState(LABEL_TEXT.empty)
   const property = dataList.settingList[orderSelect].facesProps
   const face  = property.face
   const hair  = property.hair
@@ -22,7 +23,6 @@ const FacesSettings = (props:{orderSelect:number}) => {
   const handleBangsStyleChange = (e:BaseSyntheticEvent) => setBangsStylePrompt(e.target.value)
   const handleHairOptionChange = (e:BaseSyntheticEvent) => setHairOptionPrompt(e.target.value)
 
-  const [display, setDisplay] = useState([emptyText])
 
   useEffect(()=>{
     setDisplay([ faceOptionPrompt, hairsStylePrompt, bangsStylePrompt, hairOptionPrompt, ])
@@ -53,9 +53,9 @@ const FacesSettings = (props:{orderSelect:number}) => {
       <DividerLine/>
       <Layout><MText bold text={"Face"} /></Layout>
       <IndentLayout vertical>
-        <OrderWithPrompt label={"Model Theme:"    } order={face.looking    .order} prompt={face.looking    .prompt}/>
-        <OrderWithPrompt label={"Character Order:"} order={face.personality.order} prompt={face.personality.prompt}/>
-        <OrderWithPrompt label={"Species Detail:" } order={face.eyesShape  .order} prompt={face.eyesShape  .prompt}/>
+        <OrderWithPrompt label={"Her Looks:"      } order={face.looks    .order} prompt={face.looks    .prompt}/>
+        <OrderWithPrompt label={"Her Personality:"} order={face.personality.order} prompt={face.personality.prompt}/>
+        <OrderWithPrompt label={"Eyes Shapes:"    } order={face.eyesShape  .order} prompt={face.eyesShape  .prompt}/>
         <DividerLine noLine/>
         <LabelText text={"Faces Options:"} editable/>
         <IndentLayout><PromptField value={faceOptionPrompt} onChange={handleFaceOptionChange}/></IndentLayout>

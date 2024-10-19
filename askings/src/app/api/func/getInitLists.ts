@@ -1,12 +1,12 @@
-import getPromptProperties from "./getPromptProperties"
-import getRequestPrompt from "./getRequestPrompt"
+import getPromptProperty from "./gePromptProperty"
+import getOrderRequest from "./getOrderRequest"
 
 const getInitialLists = (orders:number) => {
   const emptyLists = Array.from({length:orders},()=>"{ empty }")
   return {
-    request   : emptyLists.map((_,idx)=>getRequestPrompt(idx)),
+    request   : emptyLists.map((_,idx)=>getOrderRequest(idx)),
     order     : emptyLists,
-    properties: emptyLists.map(()=>getPromptProperties({order:undefined})) 
+    properties: emptyLists.map(()=>getPromptProperty())
   }
 }
 

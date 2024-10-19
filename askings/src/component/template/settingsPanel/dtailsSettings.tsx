@@ -1,7 +1,7 @@
 import { PaperLayout, LText, DividerLine, Layout, IndentLayout, PromptField, SText } from "@/component/atoms"
 import { DataListContext } from "@/component/context"
 import { DisplayField, LabelText, LabelWithColors, LabelWithOrder, OrderWithColor } from "@/component/molecules"
-import { emptyText } from "@/const/const_text"
+import LABEL_TEXT from "@/const/LABEL_TEXT"
 import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const DetailsSettings = (props:{orderSelect:number}) => {
@@ -26,7 +26,7 @@ const DetailsSettings = (props:{orderSelect:number}) => {
   const handleOutfitChange  = (e:BaseSyntheticEvent) => setOutfitPrompt (e.target.value)
   const handleEquipsChange  = (e:BaseSyntheticEvent) => setEquipsPrompt (e.target.value)
 
-  const [display, setDisplay] = useState([emptyText])
+  const [display, setDisplay] = useState(LABEL_TEXT.empty)
 
   useEffect(()=>{
     setDisplay([ hairPrompt, eyesPrompt, genitalPrompt, skinPrompt, outfitPrompt, equipsPrompt, ])

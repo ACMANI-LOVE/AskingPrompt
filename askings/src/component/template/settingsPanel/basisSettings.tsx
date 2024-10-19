@@ -1,7 +1,7 @@
 import { DividerLine, IndentLayout, Layout, LText, MText, PaperLayout, PromptField, SText } from "@/component/atoms"
 import { DataListContext } from "@/component/context"
 import { DisplayField, LabelText, LabelWithOrder, OrderWithPrompt } from "@/component/molecules"
-import { emptyText } from "@/const/const_text"
+import LABEL_TEXT from "@/const/LABEL_TEXT"
 import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const BasisSettings = (props:{orderSelect:number}) => {
@@ -18,7 +18,7 @@ const BasisSettings = (props:{orderSelect:number}) => {
   const handleBasisChange  = (e:BaseSyntheticEvent) => setBasisPrompt (e.target.value)
   const handleLocateChange = (e:BaseSyntheticEvent) => setLocatePrompt(e.target.value)
 
-  const [display, setDisplay] = useState([emptyText])
+  const [display, setDisplay] = useState(LABEL_TEXT.empty)
 
   useEffect(()=>{
     setDisplay([ basisPrompt , locatePrompt, ])
@@ -61,7 +61,7 @@ const BasisSettings = (props:{orderSelect:number}) => {
       <IndentLayout vertical>
         <OrderWithPrompt label={"Period:" } order={scene.period .order} prompt={scene.period .prompt}/>
         <OrderWithPrompt label={"Weather:"} order={scene.weather.order} prompt={scene.weather.prompt}/>
-        <OrderWithPrompt label={"Times:"  } order={scene.times  .order} prompt={scene.times  .prompt[0]}/>
+        <OrderWithPrompt label={"Times:"  } order={scene.times  .order} prompt={scene.times  .prompt}/>
         <DividerLine noLine/>
         <LabelWithOrder label={"Location:"} order={scene.locate} editable/>
         <IndentLayout><PromptField value={locatePrompt} onChange={handleLocateChange}/></IndentLayout>

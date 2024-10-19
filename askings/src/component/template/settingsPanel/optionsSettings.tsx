@@ -1,13 +1,13 @@
 import { DividerLine, EdgeLayout, IndentLayout, Layout, LText, MText, PaperLayout, PromptField, SText, ToggleSwitch } from "@/component/atoms"
 import { DataListContext } from "@/component/context"
 import { DisplayField, LabelText } from "@/component/molecules"
-import { emptyText } from "@/const/const_text"
+import LABEL_TEXT from "@/const/LABEL_TEXT"
 import { randBool } from "@/util"
 import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
 const OptionsSettings = (props:{orderSelect:number}) => {
   const { orderSelect } = props
-  const [display, setDisplay] = useState([emptyText])
+  const [display, setDisplay] = useState(LABEL_TEXT.empty)
   const {dataList, setDataList} = useContext(DataListContext)
   const property = dataList.settingList[orderSelect].optionsProps
   const basis   = property.basis

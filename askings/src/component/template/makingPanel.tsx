@@ -4,7 +4,6 @@ import useRadioGroup from '../organs/radioGroup';
 import { SelectContext, DataListContext } from '../context';
 import useHiddenUploadForm from '../organs/uploadFIle';
 import useSnackBar from '../organs/snackBar';
-import getPromptProperties from '@/app/api/func/getPromptProperties';
 import useTabGroup from '../organs/tabGroup';
 import { DividerLine, DownloadingIcon, Layout, LText, MText, OrderChecker, PaperLayout, SText, UploadingIcon } from '../atoms';
 import BasisSettings from './settingsPanel/basisSettings';
@@ -13,6 +12,7 @@ import BodiesSettings from './settingsPanel/bodiesSettings';
 import DetailsSettings from './settingsPanel/dtailsSettings';
 import OptionsSettings from './settingsPanel/optionsSettings';
 import PromptsSettings from './settingsPanel/promptSettings';
+import getPromptProperty from '@/app/api/func/gePromptProperty';
 
 const MakingPanel = () => {
   const {selection    , setSelection     } = useContext(SelectContext  )
@@ -59,7 +59,7 @@ const MakingPanel = () => {
       const uploadList = await listingFromJson(file);
       if (uploadList) {
         setDataList(prev=>({ ...prev, orderList:uploadList,
-          settingList: prev.settingList.map((_,idx)=>getPromptProperties({order:uploadList[idx]}))
+          settingList: prev.settingList.map((_,idx)=>getPromptProperty(uploadList[idx]))
          }))
         openSnackUpload()
       } else {

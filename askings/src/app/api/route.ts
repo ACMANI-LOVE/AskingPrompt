@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import getRequestPrompt from "./func/getRequestPrompt";
 import getInitialLists from "./func/getInitLists";
-import { SummaryPromptType } from "@/const/cons_promptProps";
+import { SummaryPromptType } from "@/const/cons_interfaces";
+import getOrderRequest from "./func/getOrderRequest";
 
 export interface RequestBodies{
   init?   : { orders:number},
@@ -27,6 +27,6 @@ export async function POST(request:NextRequest) {
     responseShuffle: ""
   }
   if(body.init   ) { result.initItems       = getInitialLists(body.init.orders)}
-  if(body.shuffle) { result.responseShuffle = getRequestPrompt(body.shuffle.id)}
+  if(body.shuffle) { result.responseShuffle = getOrderRequest(body.shuffle.id)}
   return NextResponse.json(result)
 }

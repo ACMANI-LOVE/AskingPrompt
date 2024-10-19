@@ -1,12 +1,12 @@
 import { PaperLayout, LText, DividerLine, MText, IndentLayout, PromptField, Layout, SText } from "@/component/atoms"
 import { DataListContext } from "@/component/context"
 import { LabelText, DisplayField } from "@/component/molecules"
-import { emptyText } from "@/const/const_text"
+import LABEL_TEXT from "@/const/LABEL_TEXT"
 import { useState, useContext } from "react"
 
 const PromptsSettings = (props:{orderSelect:number}) => {
   const { orderSelect } = props
-  const [display, setDisplay] = useState([emptyText])
+  const [display, setDisplay] = useState(LABEL_TEXT.empty)
   const {dataList, setDataList} = useContext(DataListContext)
   const basis   = dataList.settingList[orderSelect].basisProps
   const faces   = dataList.settingList[orderSelect].facesProps

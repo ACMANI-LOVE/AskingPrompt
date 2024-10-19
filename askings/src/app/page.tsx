@@ -5,8 +5,8 @@ import useTabGroup from "@/component/organs/tabGroup";
 import { ContextProvider, SelectContext } from "@/component/context";
 import AskingPanel from "@/component/template/askingPanel";
 import MakingPanel from "@/component/template/makingPanel";
-import { titleHeader } from "@/const/const_text";
 import { Layout, TText } from "@/component/atoms";
+import LABEL_TEXT from "@/const/LABEL_TEXT";
 
 export default function Home() {
   const {selection, setSelection} = useContext(SelectContext)
@@ -29,7 +29,7 @@ export default function Home() {
     <CssBaseline/>
     <ContextProvider>
     <Layout vertical>
-      <Layout center><TText bold text={titleHeader}/></Layout>
+      <Layout center><TText bold text={LABEL_TEXT.title.join()}/></Layout>
       <Layout center><Divider/></Layout>
       <Layout center><MenuTab/></Layout>
       <Layout center>{panelList[selectMenuTab].panel}</Layout>

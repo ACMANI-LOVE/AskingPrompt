@@ -1,7 +1,7 @@
 import { PaperLayout, IndentLayout, Layout, LText, DividerLine, MText, PromptField } from "@/component/atoms"
 import { DataListContext } from "@/component/context"
 import { DisplayField, LabelText, LabelWithField, OrderWithPrompt } from "@/component/molecules"
-import { emptyText } from "@/const/const_text"
+import LABEL_TEXT from "@/const/LABEL_TEXT"
 import { parseNum } from "@/util"
 import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
@@ -12,7 +12,6 @@ const BodiesSettings = (props:{orderSelect:number}) => {
   const body    = property.body
   const genital = property.genital
   const input   = property.input
-  const bodyType = parseNum(body.figures.prompt, 2)
 
   const [bodyOptionPrompt   ,setBodyOptionPrompt   ] = useState(input.bodyOptionInput   )
   const [pussyDetailsPrompt ,setPussyDetailsPrompt ] = useState(input.pussyDetailsInput )
@@ -26,7 +25,7 @@ const BodiesSettings = (props:{orderSelect:number}) => {
   const handleMalesDetailsChange  = (e:BaseSyntheticEvent) => setMalesDetailsPrompt (e.target.value)
   const handleGenitalOptionChange = (e:BaseSyntheticEvent) => setGenitalOptionPrompt(e.target.value)
 
-  const [display, setDisplay] = useState([emptyText])
+  const [display, setDisplay] = useState(LABEL_TEXT.empty)
 
   useEffect(()=>{
     setDisplay([ bodyOptionPrompt, pussyDetailsPrompt, anusDetailsPrompt, malesDetailsPrompt, genitalOptionPrompt, ])
@@ -59,10 +58,10 @@ const BodiesSettings = (props:{orderSelect:number}) => {
       <DividerLine/>
       <Layout><MText bold text={"Body"   } /></Layout>
       <IndentLayout vertical>
-        <OrderWithPrompt label={"Figure Types:"} order={body.figures .order          } prompt={"-"}/>
-        <OrderWithPrompt label={"Boob Size:"   } order={body.boobSize.order[bodyType]} prompt={body.boobSize.prompt[bodyType]}/>
-        <OrderWithPrompt label={"Body Size:"   } order={body.bodySize.order[bodyType]} prompt={body.bodySize.prompt[bodyType]}/>
-        <OrderWithPrompt label={"Butt Size:"   } order={body.buttSize.order[bodyType]} prompt={body.buttSize.prompt[bodyType]}/>
+        <OrderWithPrompt label={"Figure Types:"} order={body.figures} prompt={"-"}/>
+        <OrderWithPrompt label={"Boob Size:"   } order={body.boobSize.order} prompt={body.boobSize.prompt}/>
+        <OrderWithPrompt label={"Body Size:"   } order={body.bodySize.order} prompt={body.bodySize.prompt}/>
+        <OrderWithPrompt label={"Butt Size:"   } order={body.buttSize.order} prompt={body.buttSize.prompt}/>
         <DividerLine noLine/>
         <LabelText text={"Bodies Options:" } editable/>
         <IndentLayout><PromptField value={bodyOptionPrompt   } onChange={handleBodyOptionChange   }/></IndentLayout>

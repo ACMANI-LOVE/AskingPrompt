@@ -3,9 +3,9 @@ import useTabGroup from '@/component/organs/tabGroup';
 import useSnackBar from "@/component/organs/snackBar";
 import { zeroPads } from "@/util";
 import { DataListContext, SelectContext } from '../context';
-import getRequestPrompt from '@/app/api/func/getRequestPrompt';
-import getPromptProperties from '@/app/api/func/getPromptProperties';
 import { ArrowIcon, CopyingIcon, Layout, LText, MText, OrderChecker, OrdersField, PaperLayout, PastingIcon, ShuffleIcon, SweepingIcon } from '../atoms';
+import getOrderRequest from '@/app/api/func/getOrderRequest';
+import getPromptProperty from '@/app/api/func/gePromptProperty';
 
 const AskingPanel = () => {
   const {selection, setSelection} = useContext(SelectContext)
@@ -32,7 +32,7 @@ const AskingPanel = () => {
   },[selectReqTab,setSelection])
 
   const onClickShuffle = () => {
-    const responseShuffle = getRequestPrompt(selection.requestSelect) ?? "fetch failed"
+    const responseShuffle = getOrderRequest(selection.requestSelect) ?? "fetch failed"
     dataList.requestList = dataList.requestList.map((item,idx)=>(idx===selection.requestSelect) ? responseShuffle : item)
     setDataList(prev=>({
       ...prev,
@@ -43,7 +43,7 @@ const AskingPanel = () => {
   const onClickCopy = () => navigator.clipboard.writeText(dataList.requestList[selection.requestSelect]).finally(()=>openCopy())
 
   const onClickPaste = () => navigator.clipboard.readText().then((text)=>{
-    const properties = getPromptProperties({order:text})
+    const properties = getPromptProperty(text)
     setDataList(prev=>({
       ...prev,
       orderList:   prev.orderList.map((item,idx)=>(idx===selection.orderSelect ? text : item)),

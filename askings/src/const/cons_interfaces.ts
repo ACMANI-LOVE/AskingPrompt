@@ -1,4 +1,3 @@
-import { PromptDataType, PromptCmpxType, PromptListType } from "./cons_requestTypes";
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 // Contexts Properties
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
@@ -24,7 +23,85 @@ export interface SummaryPromptType {
 }
 
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
-// Settings Properties _fix
+// Orders Properties
+// +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
+export interface PromptDataType   { prompt:string,   order:string   }
+export interface BodyDataSettings {
+  skinType   : string;
+  figureType : string;
+  bustSize   : string;
+  waistSize  : string;
+  hipsSize   : string;
+  legsSize   : string;
+};
+export interface BasisOrders   {
+  basisSettings: {
+    story    : string,
+    jobs     : string,
+    model    : number,
+    character: string,
+    species  : string,
+    locate   : string,
+    outfit   : string,
+    equips   : string,
+  },
+  sceneSettings: {
+    period : number,
+    weather: number,
+    times  : number,
+  }
+}
+export interface FacesOrders   {
+  facesSettings: {
+    looks    : number,
+    personality: number,
+    eyesShape  : number,
+  },
+  hairsSettings: {
+    hairsSize  : number,
+    bangsSize  : number,
+    hairsStyle : string,
+    bangsStyle : string,
+  },
+}
+export interface BodiesOrders  {
+  bodiesSettings: {
+    skinType: number,
+    figures : number,
+    boobSize: number,
+    bodySize: number,
+    buttSize: number,
+  },
+  genitalSettings: {
+    maleGenital: number,
+    malesSize  : number,
+  },
+}
+export interface DetailsOrders {
+  ordersData: {
+    skinType: string,
+    outfits : string,
+    equips  : string,
+  }
+  colorsData: {
+    hairColor        : string,
+    eyesColor        : string,
+    skinMainColor    : string,
+    skinAccentColor  : string,
+    outfitMainColor  : string,
+    outfitAccentColor: string,
+    equipsMainColor  : string,
+    equipsAccentColor: string,
+    randomAccentColor: string,
+  }
+}
+export interface OptionsOrders {
+  optionSettings: {
+    maleGenital: number
+  }
+}
+// +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
+// Settings Properties
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 export interface BasisSettingsProps  {
   basis: {
@@ -47,7 +124,7 @@ export interface BasisSettingsProps  {
 }
 export interface FacesSettingsProps  {
   face: {
-    looking    :PromptDataType
+    looks    :PromptDataType
     personality:PromptDataType
     eyesShape  :PromptDataType
   }
@@ -66,10 +143,10 @@ export interface FacesSettingsProps  {
 }
 export interface BodiesSettingsProps {
   body: {
-    figures :PromptDataType
-    boobSize:PromptListType
-    bodySize:PromptListType
-    buttSize:PromptListType
+    figures :string
+    boobSize:PromptDataType
+    bodySize:PromptDataType
+    buttSize:PromptDataType
   }
   genital: {
     maleGenital:PromptDataType
