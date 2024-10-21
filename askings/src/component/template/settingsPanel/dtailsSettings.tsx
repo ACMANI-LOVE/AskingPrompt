@@ -1,6 +1,6 @@
-import { PaperLayout, LText, DividerLine, Layout, IndentLayout, PromptField, SText } from "@/component/atoms"
+import { PaperLayout, LText, DividerLine, Layout, IndentLayout, PromptField } from "@/component/atoms"
 import { DataListContext } from "@/component/context"
-import { DisplayField, LabelText, LabelWithColors, LabelWithOrder, OrderWithColor } from "@/component/molecules"
+import { DisplayField, LabelWithColors, LabelWithOrder, OrderWithColor } from "@/component/molecules"
 import LABEL_TEXT from "@/const/LABEL_TEXT"
 import { BaseSyntheticEvent, useContext, useEffect, useState } from "react"
 
@@ -29,7 +29,25 @@ const DetailsSettings = (props:{orderSelect:number}) => {
   const [display, setDisplay] = useState(LABEL_TEXT.empty)
 
   useEffect(()=>{
-    setDisplay([ hairPrompt, eyesPrompt, genitalPrompt, skinPrompt, outfitPrompt, equipsPrompt, ])
+    const faces  = [
+      (hairPrompt!=="")?`${hairPrompt} hair`:"",
+      (eyesPrompt!=="")?`${eyesPrompt} eyes`:"",
+    ].filter((item)=>item!=="").join(", ")
+    const bodies = [
+      skinPrompt,
+    ].filter((item)=>item!=="").join(", ")
+    const genital = [
+      (genitalPrompt!=="")?`${genitalPrompt} nipples`:"",
+      (genitalPrompt!=="")?`${genitalPrompt} pussy`  :"",
+      (genitalPrompt!=="")?`${genitalPrompt} anus`   :"",
+      (genitalPrompt!=="")?`${genitalPrompt} penis`  :"",
+      (genitalPrompt!=="")?`${genitalPrompt} glans`  :"",
+    ].filter((item)=>item!=="").join(", ")
+    const scene  = [
+      outfitPrompt,
+      equipsPrompt,
+    ].filter((item)=>item!=="").join(", ")
+    setDisplay([ faces, bodies, genital, scene, ])
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
         return (idx === orderSelect)
@@ -47,6 +65,8 @@ const DetailsSettings = (props:{orderSelect:number}) => {
       })
     }))
   },[
+    orderSelect  ,
+    setDataList  ,
     hairPrompt   ,
     eyesPrompt   ,
     genitalPrompt,

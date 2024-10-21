@@ -1,6 +1,7 @@
-import { PromptDataType } from "@/const/cons_interfaces"
-import { getModelEnum, getPeriodEnum, getTimesEnum, getPersonalityEnum, getEyesShapeEnum, getWeatherEnum, getLooksEnum, getHairSizeEnum, Models, Period, Weather, Times, Looks, Personality, EyesShape, HairSize, getFigureEnum, getFigureSizeEnum, Figure, FigureSize, getGenitalEnum, getGenitalSizeEnum, Genital, GenitalSize } from "@/const/enum_requests"
+import { PosingDetailProps, PromptDataType } from "@/const/cons_interfaces"
+import { getPeriodEnum, getTimesEnum, getPersonalityEnum, getEyesShapeEnum, getWeatherEnum, getLooksEnum, getHairSizeEnum, Period, Weather, Times, Looks, Personality, EyesShape, HairSize, getFigureEnum, getFigureSizeEnum, Figure, FigureSize, getGenitalEnum, getGenitalSizeEnum, Genital, GenitalSize, Tiers, getTiersEnum } from "@/const/enum_requests"
 import { getBangsSizeOrder, getBodySizeOrder, getBoobSizeOrder, getButtSizeOrder, getEyesShapeOrder, getFigureOrder, getHairsSizeOrder, getLooksOrder, getMaleGenitalOrder, getMalesSizeOrder, getModelOrder, getPeriodOrder, getPersonalityOrder, getTimesOrder, getWeatherOrder } from "./getOrders"
+import { randBetween, randBool } from "@/util"
 
 export const getModelData       = (data:number):string => getModelOrder(data)
 export const getPeriodData      = (data:number):PromptDataType   => {
@@ -106,9 +107,9 @@ export const getFigureData     = (data:number):PromptDataType   => {
   const enums = getFigureEnum(data)
   const order = getFigureOrder(data)
   switch(enums) {
-    case Figure.Undefined: return { prompt:"no data", order }
-    case Figure.Normal   : return { prompt:"0"      , order }
-    case Figure.Solid    : return { prompt:"1"      , order }
+    case Figure.Undefined: return { prompt:"no data"   , order }
+    case Figure.Normal   : return { prompt:""          , order }
+    case Figure.Solid    : return { prompt:"thick legs", order }
     default: return { prompt:"2", order }
   }
 }
@@ -159,12 +160,66 @@ export const getMalesSize       = (data:number):PromptDataType   => {
   const enums = getGenitalSizeEnum(data)
   const order = getMalesSizeOrder(data)
   switch(enums) {
-    case GenitalSize.Undefined: return { prompt:"no data", order }
-    case GenitalSize.Normal   : return { prompt:""       , order }
-    case GenitalSize.Thick    : return { prompt:"thick"  , order }
-    case GenitalSize.Long     : return { prompt:"long"   , order }
-    case GenitalSize.Huge     : return { prompt:"huge"   , order }
-    case GenitalSize.Hyper    : return { prompt:"hyper"  , order }
+    case GenitalSize.Undefined: return { prompt:"no data"      , order }
+    case GenitalSize.Normal   : return { prompt:"penis"        , order }
+    case GenitalSize.Thick    : return { prompt:"thick penis"  , order }
+    case GenitalSize.Long     : return { prompt:"long penis"   , order }
+    case GenitalSize.Huge     : return { prompt:"huge penis"   , order }
+    case GenitalSize.Hyper    : return { prompt:"hyper penis"  , order }
     default: return { prompt:"none", order }
   }
+}
+export const getPosingData = () => {
+  const posingList = [
+    "standing" , "sitting"  , "laying on back",
+    "bent over", "squatting", "crawling"      ,
+    "kneeling" , "crouching", "stretching"    ,
+  ]
+  const handsList = [
+    "hand up"     , "hand on breast", "hand on waist",
+    "hand on butt", "hand on knee"  ,
+  ]
+  const legsList      = [ "knee up"   , "spread legs"   , "lift up leg"  , ]
+  const directionList = [ "front shot", "side shot"     , "back shot"    , ]
+  const angleList     = [ "-"         , "from above"    , "from below"   , ]
+  const posing      = posingList   [randBetween(0,(posingList   .length - 1))]
+  const direction   = directionList[randBetween(0,(directionList.length - 1))]
+  const angle       = angleList    [randBetween(0,(angleList    .length - 1))]
+  const focus       = (randBool()) ? "cowboy shot" : "-"
+  const legsOption  = (randBool()) ? legsList [randBetween(0,(legsList .length - 1))] : "-"
+  const handsOption = (randBool()) ? handsList[randBetween(0,(handsList.length - 1))] : "-"
+  return {
+    posing     ,
+    direction  ,
+    angle      ,
+    focus      ,
+    legsOption ,
+    handsOption,
+  } as PosingDetailProps
+}
+export const getEmotesData = (tiers:number) => {
+  const emotes:string[] = []
+  const tiersLv = getTiersEnum(tiers)
+  const emoteLottery = (list:string[]) => list.sort(()=>0.5-Math.random()).slice(0,randBetween(1,2)).forEach(item=>emotes.push(item));
+  switch(tiersLv) {
+    case Tiers.Safe : emoteLottery(["no expression","light smile","horny"]);break;
+    case Tiers.Nude : emoteLottery(["light smile","smile","looking pleasure","horny","embarrassed"]);break;
+    case Tiers.Nasty: emoteLottery(["smile","horny","embarrassed","looking pleasure","surprised","annoyed","panting"]);break;
+    case Tiers.Hard : emoteLottery(["horny","embarrassed","looking pleasure","surprised","annoyed","panting","ahegao","panting"]);break;
+    default: emotes.push("no expression");break;
+  }
+  return emotes
+}
+export const getActionData = (tiers:number) => {
+  const actions:string[] = []
+  const tiersLv = getTiersEnum(tiers)
+  const actionLottery = (list:string[]) => list.sort(()=>0.5-Math.random()).slice(0,1).forEach(item=>actions.push(item));
+  switch(tiersLv) {
+    case Tiers.Safe : actionLottery(["posing","bouncing"]);break;
+    case Tiers.Nude : actionLottery(["posing","bouncing","dancing"]);break;
+    case Tiers.Nasty: actionLottery(["bouncing","dancing","masturbation", "spread pussy", "spread anus",]);break;
+    case Tiers.Hard : actionLottery(["fucking","blowjob","handjob","paizuri"]);break;
+    default: actions.push("posing");break;
+  }
+  return actions
 }

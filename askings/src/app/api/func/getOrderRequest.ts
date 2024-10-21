@@ -7,7 +7,7 @@ const getOrderRequest = (index:number) => {
   const faces   = getFacesRequest  ()
   const hairs   = getHairsRequest  ()
   const bodies  = getBodiesRequest ()
-  const genital = getGenitalRequest()
+  const genital = getGenitalRequest(basis.model)
   return LABEL_TEXT.reqHeader.join() +
   `{\n`+ 
   `  "BASIS_DATA": {\n`+

@@ -25,7 +25,20 @@ const FacesSettings = (props:{orderSelect:number}) => {
 
 
   useEffect(()=>{
-    setDisplay([ faceOptionPrompt, hairsStylePrompt, bangsStylePrompt, hairOptionPrompt, ])
+    const faceLine = [
+      face.looks      .prompt,
+      face.personality.prompt,
+      face.eyesShape  .prompt,
+      faceOptionPrompt,
+    ].filter((item)=>item!=="").join(", ")
+    const hairLine = [
+      hair.hairsSize.prompt,
+      hairsStylePrompt,
+      hair.bangsSize.prompt,
+      bangsStylePrompt,
+      hairOptionPrompt,
+    ].filter((item)=>item!=="").join(", ")
+    setDisplay([ faceLine, hairLine ])
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
         return (idx === orderSelect)
@@ -41,6 +54,10 @@ const FacesSettings = (props:{orderSelect:number}) => {
       })
     }))
   },[
+    face            ,
+    hair            ,
+    orderSelect     ,
+    setDataList     ,
     faceOptionPrompt,
     hairsStylePrompt,
     bangsStylePrompt,
@@ -53,7 +70,7 @@ const FacesSettings = (props:{orderSelect:number}) => {
       <DividerLine/>
       <Layout><MText bold text={"Face"} /></Layout>
       <IndentLayout vertical>
-        <OrderWithPrompt label={"Her Looks:"      } order={face.looks    .order} prompt={face.looks    .prompt}/>
+        <OrderWithPrompt label={"Her Looks:"      } order={face.looks      .order} prompt={face.looks      .prompt}/>
         <OrderWithPrompt label={"Her Personality:"} order={face.personality.order} prompt={face.personality.prompt}/>
         <OrderWithPrompt label={"Eyes Shapes:"    } order={face.eyesShape  .order} prompt={face.eyesShape  .prompt}/>
         <DividerLine noLine/>

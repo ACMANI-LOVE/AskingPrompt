@@ -3,7 +3,7 @@ import { convertJsonStrings } from "@/util"
 import { getBasisInitialProps, getFacesInitialProps, getBodiesInitialProps, getDetailsInitialProps, getOptionsInitialProps, getPromptsInitialProps } from "./getProperties"
 
 const getPromptProperty = (order?:string) => {
-  const data = convertJsonStrings(order ?? "{}") as any
+  const data = convertJsonStrings(order ?? "{}")
   const basisData  = data?.BASIS_DATA  ?? undefined
   const facesData  = data?.FACES_DATA  ?? undefined
   const bodiesData = data?.BODIES_DATA ?? undefined

@@ -1,6 +1,6 @@
 "use client"
-import { Box, createTheme, CssBaseline, Divider, ThemeProvider } from "@mui/material";
-import { ReactNode, useContext, useEffect } from "react";
+import { createTheme, CssBaseline, Divider, ThemeProvider } from "@mui/material";
+import { useContext, useEffect } from "react";
 import useTabGroup from "@/component/organs/tabGroup";
 import { ContextProvider, SelectContext } from "@/component/context";
 import AskingPanel from "@/component/template/askingPanel";

@@ -1,4 +1,4 @@
-import { Box, Card, Divider, FormControl, FormControlLabel, Icon, IconButton, Paper, Switch, TextField, Typography } from "@mui/material";
+import { Box, Card, Checkbox, Divider, FormControlLabel, Icon, IconButton, Paper, Switch, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@mui/material";
 import { BaseSyntheticEvent, ReactNode } from "react";
 import ForwardIcon from '@mui/icons-material/Forward';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
@@ -12,7 +12,8 @@ import WarningIcon from '@mui/icons-material/Warning';
 import DiscountIcon from '@mui/icons-material/Discount';
 import EditIcon from '@mui/icons-material/Edit';
 import CommentIcon from '@mui/icons-material/Comment';
-import { chkJsonStrings } from "@/util";
+import { chkJsonStrings, zeroPads } from "@/util";
+import { PosingDetailProps } from "@/const/cons_interfaces";
 // +---------+---------+---------+---------+---------+---------+---------+---------+---------+---------
 // Layout
 // +---------+---------+---------+---------+---------+---------+---------+---------+---------+---------
@@ -26,9 +27,9 @@ export const Layout = (props:{children:ReactNode, size?:number, vertical?:boolea
   return (<Box
     flex={size}
     display={"flex"}
-    gap={"0.25em"}
+    gap={"0.15em"}
     width={"100%"}
-    paddingY={(vertical)?"0.5em":"none" }
+    paddingY={(vertical)?"0.25em":"none" }
     paddingX={(vertical)?"none" :"0.5em"}
     flexDirection={(vertical)?"column":"row"}
     alignItems={(vertical&&center)?"center":"normal"}
@@ -44,9 +45,9 @@ export const Layout = (props:{children:ReactNode, size?:number, vertical?:boolea
     return (<Box
       flex={1}
       display={"flex"}
-      gap={"0.25em"}
+      gap={"0.15em"}
       width={"100%"}
-      paddingY={(vertical)?"0.5em":"none" }
+      paddingY={(vertical)?"0.25em":"none" }
       paddingX={(vertical)?"none" :"0.5em"}
       flexDirection={(vertical)?"column":"row"}
       alignItems={"baseline"}
@@ -75,9 +76,9 @@ const {
 } = props
   return (<Box
     display={"flex"}
-    gap={"0.25em"}
-    paddingInlineStart={"2em"}
-    paddingInlineEnd={"0.5em"}
+    gap={"0.15em"}
+    paddingInlineStart={"1.5em"}
+    paddingInlineEnd={"0.25em"}
     flexDirection={(vertical)?"column":"row"}>{children}</Box>)
 }
 export const PaperLayout = (props:{children:ReactNode, vertical?:boolean}) => {
@@ -88,11 +89,11 @@ export const PaperLayout = (props:{children:ReactNode, vertical?:boolean}) => {
   return (<Paper ><Box
     flex={1}
     display={"flex"}
-    gap={"0.25em"}
+    gap={"0.15em"}
     width={"100%"}
-    paddingY={(vertical)?"0.5em":"none" }
+    paddingY={(vertical)?"0.25em":"none" }
     paddingX={"0.25em"}
-    paddingInlineEnd={"1.5em"}
+    paddingInlineEnd={"1em"}
     flexDirection={(vertical)?"column":"row"}
   >{children}</Box></Paper>)
 }
@@ -121,14 +122,24 @@ export const DownloadingIcon = (props:{onClick:()=>void, children:ReactNode}) =>
   {props.children}
 </IconButton>
 
-export const ToggleSwitch = (props:{label:string, value:boolean, onChange:()=>void, disabled?:boolean}) => <FormControlLabel
+export const ToggleSwitch = (props:{label:string, value:boolean, onChange:()=>void, disabled?:boolean}) => { return (<FormControlLabel
     checked={props.value}
     onChange={()=>props.onChange()}
     disabled={props.disabled}
     label={<SText text={props.label}/>}
     labelPlacement={"start"}
     control={<Switch size={"medium"} color={"primary"} />}
-  ></FormControlLabel>
+  ></FormControlLabel>)
+}
+export const CheckBoxes = (props:{label:string, value:boolean, onChange:()=>void, disabled?:boolean}) => { return (<FormControlLabel
+    checked={props.value}
+    onChange={()=>props.onChange()}
+    disabled={props.disabled}
+    label={<SText text={props.label}/>}
+    labelPlacement={"start"}
+    control={<Checkbox size={"medium"} color={"primary"} />}
+  ></FormControlLabel>)
+}
 
 export const DividerLine  = (props:{vertical?:boolean, noLine?:boolean}) => { return (<Box
   paddingX={(props.vertical)?"none":"0.5em"}
@@ -209,4 +220,49 @@ export const PromptField = (props:{value:string, onChange: (e:BaseSyntheticEvent
         sx: { paddingY:"2px", overflow: 'auto', fontSize: 10, lineHeight: '1.2' },
       },
     }}/>)
+}
+
+export const SingleLineTable = (props:{ label:string, data:string[] }) => {
+  return (<Box padding={"0.25em"} flex={1}>
+    <Table><TableBody>
+      <TableRow>
+        <TableCell sx={{padding:"0"}} size={"small"} key={`label`}><SText bold text={props.label}/></TableCell>
+        {props.data.map((item,idx)=><TableCell sx={{padding:"0"}} size={"small"} key={`body${idx}` }><SText text={item}/></TableCell>)}
+      </TableRow>
+    </TableBody></Table>
+  </Box>)
+}
+export const PosingLineTable = (props:{ data:PosingDetailProps[] }) => {
+  return (<Box padding={"0.25em"} flex={1}>
+  <Table><TableBody>
+    <TableRow>
+      <TableCell sx={{padding:"0"}} size={"small"} key={`label`}><SText text={"Posing:"}/></TableCell>
+      {props.data.map((_,idx)=><TableCell sx={{padding:"0"}} size={"small"} key={`label${idx}`}><SText text={`#${zeroPads(idx+1)}:`}/></TableCell>)}
+    </TableRow>
+    <TableRow>
+      <TableCell sx={{padding:"0"}} size={"small"} key={`label`}><SText text={"pose"}/></TableCell>
+      {props.data.map((item,idx)=><TableCell sx={{padding:"0"}} size={"small"} key={`body${idx}`}><SText text={item.posing}/></TableCell>)}
+    </TableRow>
+    <TableRow>
+      <TableCell sx={{padding:"0"}} size={"small"} key={`label`}><SText text={"pose"}/></TableCell>
+      {props.data.map((item,idx)=><TableCell sx={{padding:"0"}} size={"small"} key={`body${idx}`}><SText text={item.direction}/></TableCell>)}
+    </TableRow>
+    <TableRow>
+      <TableCell sx={{padding:"0"}} size={"small"} key={`label`}><SText text={"pose"}/></TableCell>
+      {props.data.map((item,idx)=><TableCell sx={{padding:"0"}} size={"small"} key={`body${idx}`}><SText text={item.angle}/></TableCell>)}
+    </TableRow>
+    <TableRow>
+      <TableCell sx={{padding:"0"}} size={"small"} key={`label`}><SText text={"pose"}/></TableCell>
+      {props.data.map((item,idx)=><TableCell sx={{padding:"0"}} size={"small"} key={`body${idx}`}><SText text={item.focus}/></TableCell>)}
+    </TableRow>
+    <TableRow>
+      <TableCell sx={{padding:"0"}} size={"small"} key={`label`}><SText text={"pose"}/></TableCell>
+      {props.data.map((item,idx)=><TableCell sx={{padding:"0"}} size={"small"} key={`body${idx}`}><SText text={item.handsOption}/></TableCell>)}
+    </TableRow>
+    <TableRow>
+      <TableCell sx={{padding:"0"}} size={"small"} key={`label`}><SText text={"pose"}/></TableCell>
+      {props.data.map((item,idx)=><TableCell sx={{padding:"0"}} size={"small"} key={`body${idx}`}><SText text={item.legsOption}/></TableCell>)}
+    </TableRow>
+    </TableBody></Table>
+  </Box>)
 }

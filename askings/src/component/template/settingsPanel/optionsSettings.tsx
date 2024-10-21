@@ -39,20 +39,39 @@ const OptionsSettings = (props:{orderSelect:number}) => {
       setFaceWinked    (randBool())
       setFaceTongue    (randBool())
     }
+  },[ faceRandom, ])
+  useEffect(()=>{
     if (genitalRandom) {
       setGenitalPubHair(randBool())
       setGenitalInverts(randBool())
     }
+  },[ genitalRandom, ])
+  useEffect(()=>{
     if (malesRandom  ) {
       setMalesSheath   (randBool())
     }
-  },[
-    faceRandom,
-    genitalRandom,
-    malesRandom,
-  ])
+  },[ malesRandom, ])
   useEffect(()=>{
-    setDisplay([optionPrompt])
+    const basisLine   = [
+      (basisSimple) ? "simple background" : "",
+      (basisSolo  ) ? "solo" : "",
+      (basisCute  ) ? "cute" : "",
+    ].filter((item)=>item!=="").join(", ")
+    const faceLine    = [
+      (faceWinked) ? "winking"    : "",
+      (faceTongue) ? "tongue out" : "",
+    ].filter((item)=>item!=="").join(", ")
+    const genitalLine = [
+      (genitalPubHair) ? "public hair"    : "",
+      (genitalInverts) ? "invert nipples" : "",
+    ].filter((item)=>item!=="").join(", ")
+    const malesLine   = [
+      (malesSheath) ? "sheath penis" : "",
+    ].filter((item)=>item!=="").join(", ")
+    const additional  = [
+      optionPrompt,
+    ].filter((item)=>item!=="").join(", ")
+    setDisplay([basisLine, faceLine, genitalLine, malesLine, additional,])
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
         return (idx === orderSelect)
@@ -85,6 +104,8 @@ const OptionsSettings = (props:{orderSelect:number}) => {
       })
     }))
   },[
+    orderSelect   ,
+    setDataList   ,
     basisSimple   ,
     basisSolo     ,
     basisCute     ,

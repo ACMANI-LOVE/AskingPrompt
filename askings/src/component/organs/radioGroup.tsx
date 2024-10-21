@@ -1,6 +1,5 @@
 import { RadioGroup, Box, FormControlLabel, Radio } from "@mui/material"
 import { ReactNode, useState } from "react"
-import { MText } from "../atoms/text"
 
 interface RadioGroupProps {
   initial:number

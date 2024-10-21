@@ -21,7 +21,16 @@ const BasisSettings = (props:{orderSelect:number}) => {
   const [display, setDisplay] = useState(LABEL_TEXT.empty)
 
   useEffect(()=>{
-    setDisplay([ basisPrompt , locatePrompt, ])
+    const basisLine  = [
+      basisPrompt,
+    ].filter((item)=>item!=="").join(", ")
+    const locateLine = [
+      scene.period .prompt,
+      scene.weather.prompt,
+      scene.times  .prompt,
+      locatePrompt
+    ].filter((item)=>item!=="").join(", ")
+    setDisplay([ basisLine , locateLine, ])
     setDataList(prev=>({ ...prev,
       settingList: prev.settingList.map((prevListItem,idx)=>{
         return (idx === orderSelect)
@@ -35,6 +44,9 @@ const BasisSettings = (props:{orderSelect:number}) => {
       })
     }))
   },[
+    setDataList ,
+    scene,
+    orderSelect ,
     basisPrompt ,
     locatePrompt,
   ])

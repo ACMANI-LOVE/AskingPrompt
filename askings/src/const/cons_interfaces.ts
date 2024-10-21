@@ -143,7 +143,7 @@ export interface FacesSettingsProps  {
 }
 export interface BodiesSettingsProps {
   body: {
-    figures :string
+    figures :PromptDataType
     boobSize:PromptDataType
     bodySize:PromptDataType
     buttSize:PromptDataType
@@ -212,19 +212,20 @@ export interface DetailsSettingsProps {
   }
 }
 export interface PromptsSettingsProps{
+  additional:string
   promptTier:number
   posingList:PosingDetailProps[]
-  emotesList:string[]
-  actionList:string[]
+  emotesList:string[][]
+  actionList:string[][]
   promptList:string[]
 }
 // +~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~
 
 export interface PosingDetailProps {
-  posing   : string;
-  hands    : string;
-  legs     : string;
-  direction: string;
-  angle    : string;
-  focus    : string;
+  posing     : string;
+  direction  : string;
+  angle      : string;
+  focus      : string;
+  legsOption : string;
+  handsOption: string;
 }

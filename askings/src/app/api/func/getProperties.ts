@@ -1,6 +1,6 @@
-import { BasisSettingsProps, FacesSettingsProps, BodiesSettingsProps, OptionsSettingsProps, DetailsSettingsProps, PromptsSettingsProps, PromptDataType, BasisOrders, BodiesOrders, DetailsOrders, FacesOrders, OptionsOrders } from "@/const/cons_interfaces"
-import { parseNum, randBool } from "@/util"
-import { getModelData, getLooksData, getPersonalityData, getHairsSizeData, getFigureData, getMaleGenital, getMalesSize, getPeriodData, getBangsSizeData, getBodySizeData, getBoobSizeData, getButtSizeData, getEyesShapeData, getTimesData, getWeatherData } from "./getPrompts"
+import { BasisSettingsProps, FacesSettingsProps, BodiesSettingsProps, OptionsSettingsProps, DetailsSettingsProps, PromptsSettingsProps, BasisOrders, BodiesOrders, DetailsOrders, FacesOrders, OptionsOrders } from "@/const/cons_interfaces"
+import { randBool } from "@/util"
+import { getModelData, getLooksData, getPersonalityData, getHairsSizeData, getFigureData, getMaleGenital, getMalesSize, getPeriodData, getBangsSizeData, getBodySizeData, getBoobSizeData, getButtSizeData, getEyesShapeData, getTimesData, getWeatherData, getEmotesData, getActionData, getPosingData } from "./getPrompts"
 import LABEL_TEXT from "@/const/LABEL_TEXT"
 
 export const getBasisInitialProps   = (data:BasisOrders  ):BasisSettingsProps   => {
@@ -64,7 +64,7 @@ export const getBodiesInitialProps  = (data:BodiesOrders ):BodiesSettingsProps  
   const bodiesSettings  = data?.bodiesSettings
   const genitalSettings = data?.genitalSettings
   const figures     = getFigureData (bodiesSettings?.figures )
-  const index       = parseNum(figures.prompt,2)
+  const index       = (figures.prompt!=="no data") ? (figures.prompt==="") ? 0 : 1 : 2
   const boobSize    = getBoobSizeData(bodiesSettings?.boobSize)[index]
   const bodySize    = getBodySizeData(bodiesSettings?.bodySize)[index]
   const buttSize    = getButtSizeData(bodiesSettings?.buttSize)[index]
@@ -72,7 +72,7 @@ export const getBodiesInitialProps  = (data:BodiesOrders ):BodiesSettingsProps  
   const malesSize   = getMalesSize   (genitalSettings?.malesSize  )
   const props:BodiesSettingsProps  = {
     body: {
-      figures : figures.order ?? LABEL_TEXT.empty,
+      figures : figures ,
       boobSize: boobSize,
       bodySize: bodySize,
       buttSize: buttSize,
@@ -153,12 +153,14 @@ export const getOptionsInitialProps = (data:OptionsOrders):OptionsSettingsProps 
   return props;
 }
 export const getPromptsInitialProps = ():PromptsSettingsProps => {
+  const products = Array.from({length:5})
   const props:PromptsSettingsProps = {
     promptTier: 0,
-    posingList: [],
-    emotesList: [],
-    actionList: [],
-    promptList: []
+    posingList: products.map(() => getPosingData() ),
+    emotesList: products.map(() => getEmotesData(0)),
+    actionList: products.map(() => getActionData(0)),
+    promptList: products.map(() => ""),
+    additional: "",
   }
   return props;
 }

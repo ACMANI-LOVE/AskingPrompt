@@ -67,7 +67,7 @@ export const chkJsonStrings = (
 
 export const convertJsonStrings = (
   value: string,
-):object => {
+) => {
   try {
     const parseData = JSON.parse(value);
     return value && value !== '{}'

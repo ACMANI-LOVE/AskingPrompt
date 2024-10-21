@@ -13,7 +13,7 @@ const AskingPanel = () => {
 
   const ordersItem   = dataList.orderList  [selection.orderSelect  ]
   const requestItem  = dataList.requestList[selection.requestSelect]
-  const requestLabel = dataList.orderList.map((order,idx)=><Layout center>
+  const requestLabel = dataList.orderList.map((order,idx)=><Layout key={`reqLbl${idx}`} center>
     <MText bold text={`REQ:#${zeroPads(idx+1)}`}/>
     <OrderChecker order={order}/>
   </Layout>)

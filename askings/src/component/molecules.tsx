@@ -1,5 +1,5 @@
 import { BaseSyntheticEvent } from "react"
-import { BaseLineLayout, ColorDisplay, ConstantIcon, DisplayedIcon, DividerLine, EdgeLayout, EditableIcon, IndentLayout, Layout, MText, PromptField, SText, ToggleSwitch } from "./atoms"
+import { BaseLineLayout, ColorDisplay, ConstantIcon, DisplayedIcon, DividerLine, EdgeLayout, EditableIcon, IndentLayout, Layout, MText, PromptField, SText } from "./atoms"
 
 export const LabelText = (props:{text:string, editable?:boolean}) => {
   const { text, editable = false } = props

@@ -1,6 +1,14 @@
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 // Cons:EnumData
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
+// モデル
+export const Tiers = {
+  Undefined :0, //
+  Safe      :1, //Level:1
+  Nude      :2, //Level:2
+  Nasty     :3, //Level:3
+  Hard      :4, //Level:4
+} as const;
 // BASIS SETTINGS ~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~
 // モデル
 export const Models = {
@@ -104,13 +112,14 @@ export const GenitalSize = {
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 // Types:EnumData
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
+export type TiersTypes       = (typeof Tiers      ) [keyof typeof Tiers     ];
 // BASIS SETTINGS ~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~
 export type ModelsTypes      = (typeof Models     ) [keyof typeof Models     ];
 export type PeriodTypes      = (typeof Period     ) [keyof typeof Period     ];
 export type TimesTypes       = (typeof Times      ) [keyof typeof Times      ];
-export type WeatherTypes    = (typeof Weather   ) [keyof typeof Weather   ];
+export type WeatherTypes     = (typeof Weather    ) [keyof typeof Weather    ];
 // FACES SETTINGS ~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~
-export type LooksTypes     = (typeof Looks    ) [keyof typeof Looks    ];
+export type LooksTypes       = (typeof Looks      ) [keyof typeof Looks      ];
 export type PersonalityTypes = (typeof Personality) [keyof typeof Personality];
 export type EyesShapeTypes   = (typeof EyesShape  ) [keyof typeof EyesShape  ];
 export type HairSizeTypes    = (typeof HairSize   ) [keyof typeof HairSize   ];
@@ -122,11 +131,12 @@ export type GenitalSizeTypes = (typeof GenitalSize) [keyof typeof GenitalSize];
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
 // Getter:EnumData
 // +=========+=========+=========+=========+=========+=========+=========+=========+=========+=========
+export const getTiersEnum       = (enums:number) => Object.values(Tiers      ).includes(enums as TiersTypes      ) ? enums as TiersTypes       : Tiers      .Undefined
 // BASIS SETTINGS ~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~
 export const getModelEnum       = (enums:number) => Object.values(Models     ).includes(enums as ModelsTypes     ) ? enums as ModelsTypes      : Models     .Undefined
 export const getPeriodEnum      = (enums:number) => Object.values(Period     ).includes(enums as PeriodTypes     ) ? enums as PeriodTypes      : Period     .Undefined
 export const getTimesEnum       = (enums:number) => Object.values(Times      ).includes(enums as TimesTypes      ) ? enums as TimesTypes       : Times      .Undefined
-export const getWeatherEnum    = (enums:number) => Object.values(Weather   ).includes(enums as WeatherTypes   ) ? enums as WeatherTypes    : Weather   .Undefined
+export const getWeatherEnum     = (enums:number) => Object.values(Weather    ).includes(enums as WeatherTypes    ) ? enums as WeatherTypes     : Weather    .Undefined
 // FACES SETTINGS ~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~+~~~~~~~~~
 export const getLooksEnum       = (enums:number) => Object.values(Looks      ).includes(enums as LooksTypes      ) ? enums as LooksTypes       : Looks      .Undefined
 export const getPersonalityEnum = (enums:number) => Object.values(Personality).includes(enums as PersonalityTypes) ? enums as PersonalityTypes : Personality.Undefined
