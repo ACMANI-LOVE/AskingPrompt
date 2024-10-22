@@ -4,8 +4,8 @@
 export const ORDERS = 7;
 export const ITEMS  = 5;
 // =========+=========+=========+=========+=========+=========+=========+=========+=========+=========+
-const t1emote = [ "no expression", "light smile", "looking pleasure", ]
-const t2emote = [ "light smile", "looking pleasure", "smile", "horny", "embarrassed", "panting", "annoyed", ]
+const t1emote = [ "no expression", "light smile", "looks pleasure", ]
+const t2emote = [ "light smile", "looks pleasure", "smile", "horny", "embarrassed", "panting", "annoyed", ]
 const t3emote = [ "horny", "embarrassed", "expected", "panting", "surprised", "ahegao", ]
 const t1action = [ "posing", ]
 const t2action = [ "posing", "masturbation", "spread pussy", "spread anus",]

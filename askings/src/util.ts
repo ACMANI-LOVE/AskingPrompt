@@ -6,6 +6,9 @@ import { ORDERS } from "./init/init";
 export function zeroPads(data:number, size?:number) {
   return (data).toString().padStart(size ?? 2,"0")
 }
+export function parseNum(data:string, err?:number) {
+  return isNaN(Number(data)) ? err ?? 0 : Number(data)
+}
 // +=========+=========+=========+=========+=========
 // random Manage
 // +=========+=========+=========+=========+=========
@@ -64,7 +67,7 @@ export const chkJsonStrings = (
 
 export const convertJsonStrings = (
   value: string,
-):object => {
+) => {
   try {
     const parseData = JSON.parse(value);
     return value && value !== '{}'
