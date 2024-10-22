@@ -164,10 +164,10 @@ export const ColorDisplay = (props:{code:string}) => {
 // Label Text
 // +---------+---------+---------+---------+---------+---------+---------+---------+---------+---------
 interface TextProps {text:string,bold?:boolean,noPadding?:boolean}
-export const TText = (props:TextProps) => <Typography variant={"h4"}      fontWeight={(props.bold)?"bold":"0"} height={"none"} alignItems={"baseline"} lineHeight={(props.noPadding)?1:1.5} >{props.text}</Typography>
-export const LText = (props:TextProps) => <Typography variant={"h6"}      fontWeight={(props.bold)?"bold":"0"} height={"none"} alignItems={"baseline"} lineHeight={(props.noPadding)?1:1.5} >{props.text}</Typography>
-export const MText = (props:TextProps) => <Typography variant={"body2"}   fontWeight={(props.bold)?"bold":"0"} height={"none"} alignItems={"baseline"} lineHeight={(props.noPadding)?1:1.5} >{props.text}</Typography>
-export const SText = (props:TextProps) => <Typography variant={"caption"} fontWeight={(props.bold)?"bold":"0"} height={"none"} alignItems={"baseline"} lineHeight={(props.noPadding)?1:1.5} >{props.text}</Typography>
+export const TText = (props:TextProps) => <Typography variant={"h4"}      whiteSpace={"pre-wrap"} fontWeight={(props.bold)?"bold":"0"} height={"none"} alignItems={"baseline"} lineHeight={(props.noPadding)?1:1.5} >{props.text}</Typography>
+export const LText = (props:TextProps) => <Typography variant={"h6"}      whiteSpace={"pre-wrap"} fontWeight={(props.bold)?"bold":"0"} height={"none"} alignItems={"baseline"} lineHeight={(props.noPadding)?1:1.5} >{props.text}</Typography>
+export const MText = (props:TextProps) => <Typography variant={"body2"}   whiteSpace={"pre-wrap"} fontWeight={(props.bold)?"bold":"0"} height={"none"} alignItems={"baseline"} lineHeight={(props.noPadding)?1:1.5} >{props.text}</Typography>
+export const SText = (props:TextProps) => <Typography variant={"caption"} whiteSpace={"pre-wrap"} fontWeight={(props.bold)?"bold":"0"} height={"none"} alignItems={"baseline"} lineHeight={(props.noPadding)?1:1.5} >{props.text}</Typography>
 
 export const DspColor = (props:{colorCode:string}) => {
   const hexPattern = /^#([0-9A-F]{3}){1,2}$/i;
