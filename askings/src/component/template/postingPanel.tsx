@@ -1,5 +1,5 @@
 import { BaseSyntheticEvent, useState } from "react"
-import { CheckBoxes, DividerLine, EdgeLayout, IndentLayout, Layout, LText, MText, PaperLayout, SText, ToggleSwitch } from "../atoms"
+import { CheckBoxes, DividerLine, EdgeLayout, IndentLayout, Layout, LText, PaperLayout, SText, ToggleSwitch } from "../atoms"
 import { LabelText, LabelWithField, LabelWithOrder } from "../molecules"
 
 const PostingPanel = () => {
