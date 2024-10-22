@@ -7,6 +7,7 @@ import AskingPanel from "@/component/template/askingPanel";
 import MakingPanel from "@/component/template/makingPanel";
 import { Layout, TText } from "@/component/atoms";
 import LABEL_TEXT from "@/const/LABEL_TEXT";
+import PostingPanel from "@/component/template/postingPanel";
 
 export default function Home() {
   const {selection, setSelection} = useContext(SelectContext)
@@ -14,7 +15,7 @@ export default function Home() {
   const panelList = [
     { label:"Asking Prompts", panel:<AskingPanel/> },
     { label:"Making Prompts", panel:<MakingPanel/> },
-    { label:"PostingManager", panel:<AskingPanel/> },
+    { label:"PostingManager", panel:<PostingPanel/> },
   ]
   const menuLabel = panelList.map((item)=>item.label)
 
