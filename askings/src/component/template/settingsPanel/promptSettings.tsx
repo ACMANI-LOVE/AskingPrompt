@@ -8,7 +8,7 @@ import useSnackBar from "@/component/organs/snackBar"
 import useTabGroup from "@/component/organs/tabGroup"
 import { Tiers } from "@/const/enum_requests"
 import { zeroPads } from "@/util"
-import { useState, useContext, useEffect, BaseSyntheticEvent, useRef } from "react"
+import { useState, useContext, useEffect, BaseSyntheticEvent } from "react"
 
 const PromptsSettings = (props:{orderSelect:number}) => {
   const { orderSelect } = props
