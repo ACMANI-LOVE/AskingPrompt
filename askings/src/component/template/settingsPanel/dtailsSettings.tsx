@@ -15,7 +15,7 @@ const DetailsSettings = (props:{orderSelect:number}) => {
   const [hairPrompt   , setHairPrompt   ] = useState(input.hairColor   )
   const [eyesPrompt   , setEyesPrompt   ] = useState(input.eyesColor   )
   const [genitalPrompt, setGenitalPrompt] = useState(input.genitalColor)
-  const [skinPrompt   , setSkinPrompt   ] = useState(input.skinColor   )
+  const [skinPrompt   , setSkinPrompt   ] = useState(input.skinInput   )
   const [outfitPrompt , setOutfitPrompt ] = useState(input.outfitInput )
   const [equipsPrompt , setEquipsPrompt ] = useState(input.equipsInput )
 
@@ -54,12 +54,12 @@ const DetailsSettings = (props:{orderSelect:number}) => {
         ? { ...prevListItem,
           detailsProps: { ...prevListItem.detailsProps,
             input: { ...prevListItem.detailsProps?.input,
-              hair   :hairPrompt   ,
-              eyes   :eyesPrompt   ,
-              genital:genitalPrompt,
-              skin   :skinPrompt   ,
-              outfit :outfitPrompt ,
-              equips :equipsPrompt ,
+              hairColor   :hairPrompt   ,
+              eyesColor   :eyesPrompt   ,
+              skinInput   :genitalPrompt,
+              genitalColor:skinPrompt   ,
+              outfitInput :outfitPrompt ,
+              equipsInput :equipsPrompt ,
           }}
         } : prevListItem
       })

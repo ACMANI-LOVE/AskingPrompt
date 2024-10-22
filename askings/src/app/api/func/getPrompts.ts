@@ -160,12 +160,12 @@ export const getMalesSize       = (data:number):PromptDataType   => {
   const enums = getGenitalSizeEnum(data)
   const order = getMalesSizeOrder(data)
   switch(enums) {
-    case GenitalSize.Undefined: return { prompt:"no data"      , order }
-    case GenitalSize.Normal   : return { prompt:"penis"        , order }
-    case GenitalSize.Thick    : return { prompt:"thick penis"  , order }
-    case GenitalSize.Long     : return { prompt:"long penis"   , order }
-    case GenitalSize.Huge     : return { prompt:"huge penis"   , order }
-    case GenitalSize.Hyper    : return { prompt:"hyper penis"  , order }
+    case GenitalSize.Undefined: return { prompt:"no data", order }
+    case GenitalSize.Normal   : return { prompt:""       , order }
+    case GenitalSize.Thick    : return { prompt:"thick"  , order }
+    case GenitalSize.Long     : return { prompt:"long"   , order }
+    case GenitalSize.Huge     : return { prompt:"huge"   , order }
+    case GenitalSize.Hyper    : return { prompt:"hyper"  , order }
     default: return { prompt:"none", order }
   }
 }

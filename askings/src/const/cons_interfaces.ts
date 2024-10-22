@@ -205,10 +205,10 @@ export interface DetailsSettingsProps {
   input:{
     hairColor   :string
     eyesColor   :string
-    skinColor   :string
+    skinInput   :string
     genitalColor:string
-    outfitInput:string
-    equipsInput:string
+    outfitInput :string
+    equipsInput :string
   }
 }
 export interface PromptsSettingsProps{

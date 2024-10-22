@@ -114,7 +114,7 @@ export const getDetailsInitialProps = (data:DetailsOrders):DetailsSettingsProps 
     input: {
       hairColor   : "",
       eyesColor   : "",
-      skinColor   : "",
+      skinInput   : "",
       genitalColor: "",
       outfitInput : "",
       equipsInput : ""
