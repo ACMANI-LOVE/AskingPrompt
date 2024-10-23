@@ -56,8 +56,8 @@ const DetailsSettings = (props:{orderSelect:number}) => {
             input: { ...prevListItem.detailsProps?.input,
               hairColor   :hairPrompt   ,
               eyesColor   :eyesPrompt   ,
-              skinInput   :genitalPrompt,
-              genitalColor:skinPrompt   ,
+              skinInput   :skinPrompt   ,
+              genitalColor:genitalPrompt,
               outfitInput :outfitPrompt ,
               equipsInput :equipsPrompt ,
           }}
