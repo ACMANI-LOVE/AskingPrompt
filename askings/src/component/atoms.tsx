@@ -142,11 +142,14 @@ export const CheckBoxes = (props:{label:string, value:boolean, onChange:()=>void
 }
 
 export const DividerLine  = (props:{vertical?:boolean, noLine?:boolean}) => { return (<Box
+  display={"flex"}
   paddingX={(props.vertical)?"none":"0.5em"}
   paddingY={(props.vertical)?"0.5em":"none"} >{
     (props.noLine)
       ? <Box></Box>
-      : <Divider flexItem orientation={(props.vertical)?"vertical":"horizontal"}/>
+      : (props.vertical)
+        ?<Divider flexItem orientation="vertical"  />
+        :<Divider flexItem orientation="horizontal"/>
   }</Box>)
 }
 
