@@ -75,7 +75,9 @@ const useGetPromptText = (props:{ init:string[], orderSelect:number, promptSelec
     (tier === Tiers.Nasty) ? [
       (randBool()) ? "drool"       : "",
       (randBool()) ? "pussy juice" : "",
-      (randBool()) ? "squirt" : "pee" + " splash",
+      (options.males.genital.prompt!=="yes")
+        ? (randBool()) ? "squirt" : "pee" + " splash"
+        : "excessive precum",
     ].filter(item=>item!=="").join(", ") : "",
     (tier === Tiers.Hard ) ? [
       (randBool()) ? "drool"       : "",

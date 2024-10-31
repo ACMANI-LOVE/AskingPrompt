@@ -204,8 +204,8 @@ export const getEmotesData = (tiers:number) => {
   switch(tiersLv) {
     case Tiers.Safe : emoteLottery(["no expression","light smile","horny"]);break;
     case Tiers.Nude : emoteLottery(["light smile","smile","looking pleasure","horny","embarrassed"]);break;
-    case Tiers.Nasty: emoteLottery(["smile","horny","embarrassed","looking pleasure","surprised","annoyed","panting"]);break;
-    case Tiers.Hard : emoteLottery(["horny","embarrassed","looking pleasure","surprised","annoyed","panting","ahegao","panting"]);break;
+    case Tiers.Nasty: emoteLottery(["smile","horny","embarrassed","looking pleasure","surprised","upset","panting"]);break;
+    case Tiers.Hard : emoteLottery(["horny","embarrassed","looking pleasure","surprised","upset","panting","ahegao","panting"]);break;
     default: emotes.push("no expression");break;
   }
   return emotes
@@ -218,7 +218,7 @@ export const getActionData = (tiers:number) => {
     case Tiers.Safe : actionLottery(["posing","bouncing"]);break;
     case Tiers.Nude : actionLottery(["posing","bouncing","dancing"]);break;
     case Tiers.Nasty: actionLottery(["bouncing","dancing","masturbation", "spread pussy", "spread anus",]);break;
-    case Tiers.Hard : actionLottery(["fucking","blowjob","handjob","paizuri"]);break;
+    case Tiers.Hard : actionLottery(["fucking","masturbation","blowjob","handjob","paizuri"]);break;
     default: actions.push("posing");break;
   }
   return actions
