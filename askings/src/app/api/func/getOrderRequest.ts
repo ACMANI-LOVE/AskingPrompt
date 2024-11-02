@@ -55,15 +55,15 @@ const getOrderRequest = (index:number) => {
   `  },\n`+
   `  "COLORS_DATA": {\n`+
   `    "colorsSettings": {\n`+
-  `      "hairColor"        : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
-  `      "eyesColor"        : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
-  `      "skinMainColor"    : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
-  `      "skinAccentColor"  : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
-  `      "outfitMainColor"  : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
-  `      "outfitAccentColor": "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
-  `      "equipsMainColor"  : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
-  `      "equipsAccentColor": "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
-  `      "randomAccentColor": "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
+  `      "randomColorAlpha"    : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
+  `      "randomColorBeta"     : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
+  `      "randomColorGamma1"   : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
+  `      "randomColorGamma2"   : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
+  `      "randomColorDelta1"   : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
+  `      "randomColorDelta2"   : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
+  `      "randomColorEpsilon1" : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
+  `      "randomColorEpsilon2" : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
+  `      "randomColorZeta"     : "", //未決定: カラーコードを記載。色情報は自由に決めてよい\n`+
   `    }\n`+
   `  }\n`+
   `}\n`+

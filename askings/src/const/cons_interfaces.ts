@@ -84,15 +84,15 @@ export interface DetailsOrders {
     equips  : string,
   }
   colorsData: {
-    hairColor        : string,
-    eyesColor        : string,
-    skinMainColor    : string,
-    skinAccentColor  : string,
-    outfitMainColor  : string,
-    outfitAccentColor: string,
-    equipsMainColor  : string,
-    equipsAccentColor: string,
-    randomAccentColor: string,
+    randomColorAlpha    : string,
+    randomColorBeta     : string,
+    randomColorGamma1   : string,
+    randomColorGamma2   : string,
+    randomColorDelta1   : string,
+    randomColorDelta2   : string,
+    randomColorEpsilon1 : string,
+    randomColorEpsilon2 : string,
+    randomColorZeta     : string,
   }
 }
 export interface OptionsOrders {
